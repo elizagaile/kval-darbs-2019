@@ -1,0 +1,10 @@
+C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\2bezje\2bezje\obj\Debug\2bezje.csprojAssemblyReference.cache
+C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\2bezje\2bezje\obj\Debug\_2bezje.Form1.resources
+C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\2bezje\2bezje\obj\Debug\_2bezje.Properties.Resources.resources
+C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\2bezje\2bezje\obj\Debug\2bezje.csproj.GenerateResource.cache
+C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\2bezje\2bezje\obj\Debug\2bezje.csproj.CoreCompileInputs.cache
+C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\2bezje\2bezje\bin\Debug\2bezje.exe.config
+C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\2bezje\2bezje\bin\Debug\2bezje.exe
+C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\2bezje\2bezje\bin\Debug\2bezje.pdb
+C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\2bezje\2bezje\obj\Debug\2bezje.exe
+C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\2bezje\2bezje\obj\Debug\2bezje.pdb

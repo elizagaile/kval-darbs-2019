@@ -27,7 +27,6 @@ namespace _4points
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
-            
             // See if we are already drawing a polygon.
             if (cPoints != null && cPoints.Count < 4)
             {
@@ -125,22 +124,24 @@ namespace _4points
 
         private void button1_Click(object sender, EventArgs e)
         {
+            List<Label> lblListC = new List<Label> { lblC1, lblC2, lblC3, lblC4 };
+            for (int i = 0; i < 4; i++)
+            {
+                lblListC[i].Text = "C" + (i + 1);
+            }
             cPoints = null;
             pictureBox1.Invalidate();
-            lblC1.Text = "C1";
-            lblC2.Text = "C2";
-            lblC3.Text = "C3";
-            lblC4.Text = "C4";
         }
 
         private void cValues()
         {
+            List<Label> lblListC = new List<Label> { lblC1, lblC2, lblC3, lblC4 };
             if (cPoints != null && cPoints.Count == 4)
             {
-                lblC1.Text = "C1 = (" + cPoints[0].X + ";" + cPoints[0].Y + ")";
-                lblC2.Text = "C2 = (" + cPoints[1].X + ";" + cPoints[1].Y + ")";
-                lblC3.Text = "C3 = (" + cPoints[2].X + ";" + cPoints[2].Y + ")";
-                lblC4.Text = "C4 = (" + cPoints[3].X + ";" + cPoints[3].Y + ")";
+                for (int i = 0; i < 4; i++)
+                {
+                    lblListC[i].Text = "C" + (i + 1) + " = (" + cPoints[i].X + ";" + cPoints[i].Y + ")";
+                }
             }
         }
     }

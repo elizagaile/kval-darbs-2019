@@ -8,7 +8,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MathNet.Numerics.LinearAlgebra;
-using MathNet.Numerics.LinearAlgebra.Double;
 
 namespace caur_4
 {
@@ -137,7 +136,6 @@ namespace caur_4
                 btnListC[i].Text = "C" + (i + 1);
                 btnListP[i].Text = "P" + (i + 1);
             }
-            
         }
 
         private void cValues()
@@ -279,6 +277,5 @@ namespace caur_4
             lblParam.Text = "CHORD LENGTH";
             pictureBox1.Invalidate();
         }
-
     }
 }
