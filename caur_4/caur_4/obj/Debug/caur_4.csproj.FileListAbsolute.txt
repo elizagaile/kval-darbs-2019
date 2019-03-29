@@ -1,0 +1,14 @@
+C:\Users\eliza\source\repos\caur_4\caur_4\obj\Debug\caur_4.csprojAssemblyReference.cache
+C:\Users\eliza\source\repos\caur_4\caur_4\obj\Debug\caur_4.Properties.Resources.resources
+C:\Users\eliza\source\repos\caur_4\caur_4\obj\Debug\caur_4.csproj.GenerateResource.cache
+C:\Users\eliza\source\repos\caur_4\caur_4\obj\Debug\caur_4.csproj.CoreCompileInputs.cache
+C:\Users\eliza\source\repos\caur_4\caur_4\obj\Debug\caur_4.Form1.resources
+C:\Users\eliza\source\repos\caur_4\caur_4\bin\Debug\caur_4.exe.config
+C:\Users\eliza\source\repos\caur_4\caur_4\bin\Debug\caur_4.exe
+C:\Users\eliza\source\repos\caur_4\caur_4\bin\Debug\caur_4.pdb
+C:\Users\eliza\source\repos\caur_4\caur_4\obj\Debug\caur_4.exe
+C:\Users\eliza\source\repos\caur_4\caur_4\obj\Debug\caur_4.pdb
+C:\Users\eliza\source\repos\caur_4\caur_4\bin\Debug\CSML.dll
+C:\Users\eliza\source\repos\caur_4\caur_4\obj\Debug\caur_4.csproj.CopyComplete
+C:\Users\eliza\source\repos\caur_4\caur_4\bin\Debug\MathNet.Numerics.dll
+C:\Users\eliza\source\repos\caur_4\caur_4\bin\Debug\MathNet.Numerics.xml
