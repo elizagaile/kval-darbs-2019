@@ -80,7 +80,7 @@ namespace _2bezje
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.SmoothingMode =
-        System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
             Pen bezierPen = new Pen(Brushes.Black);
 
