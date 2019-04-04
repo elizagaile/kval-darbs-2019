@@ -11,3 +11,16 @@ C:\Users\eliza\source\repos\type_coord\type_coord\bin\Debug\MathNet.Numerics.xml
 C:\Users\eliza\source\repos\type_coord\type_coord\obj\Debug\type_coord.csproj.CopyComplete
 C:\Users\eliza\source\repos\type_coord\type_coord\obj\Debug\type_coord.exe
 C:\Users\eliza\source\repos\type_coord\type_coord\obj\Debug\type_coord.pdb
+C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\type_coord\type_coord\bin\Debug\type_coord.exe.config
+C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\type_coord\type_coord\bin\Debug\type_coord.exe
+C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\type_coord\type_coord\bin\Debug\type_coord.pdb
+C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\type_coord\type_coord\bin\Debug\MathNet.Numerics.dll
+C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\type_coord\type_coord\bin\Debug\MathNet.Numerics.xml
+C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\type_coord\type_coord\obj\Debug\type_coord.csprojAssemblyReference.cache
+C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\type_coord\type_coord\obj\Debug\type_coord.Form1.resources
+C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\type_coord\type_coord\obj\Debug\type_coord.Properties.Resources.resources
+C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\type_coord\type_coord\obj\Debug\type_coord.csproj.GenerateResource.cache
+C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\type_coord\type_coord\obj\Debug\type_coord.csproj.CoreCompileInputs.cache
+C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\type_coord\type_coord\obj\Debug\type_coord.csproj.CopyComplete
+C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\type_coord\type_coord\obj\Debug\type_coord.exe
+C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\type_coord\type_coord\obj\Debug\type_coord.pdb
