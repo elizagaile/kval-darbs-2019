@@ -1,0 +1,13 @@
+C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\BezierTool\BezierTool\bin\Debug\BezierTool.exe.config
+C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\BezierTool\BezierTool\bin\Debug\BezierTool.exe
+C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\BezierTool\BezierTool\bin\Debug\BezierTool.pdb
+C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\BezierTool\BezierTool\obj\Debug\BezierTool.csprojAssemblyReference.cache
+C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\BezierTool\BezierTool\obj\Debug\BezierTool.Form1.resources
+C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\BezierTool\BezierTool\obj\Debug\BezierTool.Properties.Resources.resources
+C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\BezierTool\BezierTool\obj\Debug\BezierTool.csproj.GenerateResource.cache
+C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\BezierTool\BezierTool\obj\Debug\BezierTool.csproj.CoreCompileInputs.cache
+C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\BezierTool\BezierTool\obj\Debug\BezierTool.exe
+C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\BezierTool\BezierTool\obj\Debug\BezierTool.pdb
+C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\BezierTool\BezierTool\bin\Debug\MathNet.Numerics.dll
+C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\BezierTool\BezierTool\bin\Debug\MathNet.Numerics.xml
+C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\BezierTool\BezierTool\obj\Debug\BezierTool.csproj.CopyComplete
