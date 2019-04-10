@@ -39,7 +39,6 @@ namespace BezierTool
         int PointRadius = 2;
         int LocalRadius = 7;
 
-
         private void btnBackground_Click(object sender, EventArgs e)
         {
             try
@@ -67,8 +66,8 @@ namespace BezierTool
             DragType = BezierType.nothing;
             AddType = BezierType.cPoints;
             ModifyType = BezierType.nothing;
-
-            pictureBox1.Invalidate();
+            MovingPoint = null;
+            cPoints = null;
         }
 
         private void btn_pPointsAdd_Click(object sender, EventArgs e)
@@ -76,15 +75,16 @@ namespace BezierTool
             DragType = BezierType.nothing;
             AddType = BezierType.pPoints;
             ModifyType = BezierType.nothing;
-
-            pictureBox1.Invalidate();
+            MovingPoint = null;
+            pPoints = null;//?
+            cPoints = null;//?
         }
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
-
             if (AddType == BezierType.cPoints && rbtn_MouseAdd.Checked == true)
             {
+
                 if (cPoints == null)
                 {
                     AllLines.Add(BezierType.cPoints);
@@ -100,15 +100,12 @@ namespace BezierTool
                     cPoints.Add(e.Location);
                 }
 
-                if (cPoints.Count == 4)
-                {
-                    cPoints = null;
-                    AddType = BezierType.nothing;
-                }
+                pictureBox1.Invalidate();
             }
 
             if (AddType == BezierType.pPoints && rbtn_MouseAdd.Checked == true)
             {
+
                 if (pPoints == null)
                 {
                     AllLines.Add(BezierType.pPoints);
@@ -116,14 +113,17 @@ namespace BezierTool
                     pPointsAll.Add(pPoints);
                     pPoints.Add(e.Location);
 
-                    cPoints = new List<Point>();
-                    cPointsAll.Add(cPoints);
+                    //cPoints = new List<Point>();
+                    //cPointsAll.Add(cPoints);
+                    cPointsAll.Add(null);
                 }
 
                 else if (pPoints.Count < 4 && pPoints[pPoints.Count - 1] != e.Location)
                 {
                     pPoints.Add(e.Location);
                 }
+
+                pictureBox1.Invalidate();
             }
 
             if (cPointsAll != null && DragType == BezierType.cPoints)
@@ -144,6 +144,8 @@ namespace BezierTool
                         }
                     }
                 }
+
+                pictureBox1.Invalidate();
             }
 
             if (pPointsAll != null && DragType == BezierType.pPoints)
@@ -161,11 +163,11 @@ namespace BezierTool
                             }
                         }
                     }
-                    
                 }
-            }
 
-            pictureBox1.Invalidate();
+                pictureBox1.Invalidate();
+            }
+            
         }
 
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
@@ -178,8 +180,8 @@ namespace BezierTool
 
             if (ModifyType == BezierType.pPoints)
             {
-                error.Text = "" + MovingPoint.Item1 + " " + MovingPoint.Item2;
                 pPointsAll[MovingPoint.Item1][MovingPoint.Item2] = e.Location;
+                getcPoints(MovingPoint.Item1);
                 pictureBox1.Invalidate();
             }
 
@@ -195,19 +197,15 @@ namespace BezierTool
         {
             if (DragType == BezierType.cPoints)
             {
-                cPointsAll[MovingPoint.Item1][MovingPoint.Item2] = e.Location;
                 ModifyType = BezierType.nothing;
                 pictureBox1.Invalidate();
             }
 
             if (DragType == BezierType.pPoints)
             {
-                pPointsAll[MovingPoint.Item1][MovingPoint.Item2] = e.Location;
                 ModifyType = BezierType.nothing;
                 pictureBox1.Invalidate();
             }
-
-            pictureBox1.Invalidate();
         }
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
@@ -216,33 +214,37 @@ namespace BezierTool
 
             if (cPointsAll != null)
             {
-                foreach (List<Point> cList in cPointsAll)
+                if (cPoints != null)
                 {
-                    foreach (Point c in cList)
+                    if (cPoints.Count < 4 && AddType == BezierType.cPoints)
                     {
-                        e.Graphics.DrawEllipse(Pens.Red, c.X - PointRadius, c.Y - PointRadius, 2 * PointRadius, 2 * PointRadius);
-                    }
-
-                    
-
-                    if (cList.Count < 4 && AddType == BezierType.cPoints)
-                    {
-                        error.Text = "ye";
                         using (Pen dashed_pen = new Pen(Color.LightGray))
                         {
                             dashed_pen.DashPattern = new float[] { 5, 5 };
                             e.Graphics.DrawLine(dashed_pen, cPoints[cPoints.Count - 1], NewcPoint);
                         }
                     }
+                }
+                
 
-                    if (cList.Count > 1)
+                foreach (List<Point> cList in cPointsAll)
+                {
+                    if (cList != null)
                     {
-                        e.Graphics.DrawLines(Pens.LightGray, cList.ToArray());
-                    }
+                        foreach (Point c in cList)
+                        {
+                                e.Graphics.DrawEllipse(Pens.Red, c.X - PointRadius, c.Y - PointRadius, 2 * PointRadius, 2 * PointRadius);
+                        }
 
-                    if (cList.Count == 4)
-                    {
-                        e.Graphics.DrawBezier(Pens.Black, cList[0], cList[1], cList[2], cList[3]);
+                        if (cList.Count > 1)
+                        {
+                            e.Graphics.DrawLines(Pens.LightGray, cList.ToArray());
+                        }
+
+                        if (cList.Count == 4)
+                        {
+                            e.Graphics.DrawBezier(Pens.Black, cList[0], cList[1], cList[2], cList[3]);
+                        }
                     }
                 }
             }
@@ -257,17 +259,12 @@ namespace BezierTool
                         {
                             e.Graphics.FillEllipse(Brushes.Black, p.X - PointRadius, p.Y - PointRadius, 2 * PointRadius, 2 * PointRadius);
                         }
-
-                        if (pPointsAll[i].Count == 4)
+                        if (pPointsAll[i].Count == 4 && cPointsAll[i] == null)
                         {
                             getcPoints(i);
-                            pPoints = null;
-                            cPoints = null;
-                            AddType = BezierType.nothing;
                         }
                     }
                 }
-                
             }
         }
 
@@ -401,24 +398,12 @@ namespace BezierTool
 
         private void btn_cPointsModify_Click(object sender, EventArgs e)
         {
-            if (AddType != BezierType.nothing)
-            {
-                return;
-            }
-
             DragType = BezierType.cPoints;
-            pictureBox1.Invalidate();
         }
 
         private void btn_pPointsModify_Click(object sender, EventArgs e)
         {
-            if (AddType != BezierType.nothing)
-            {
-                return;
-            }
-
             DragType = BezierType.pPoints;
-            //pictureBox1.Invalidate();
         }
 
         private void btn_DoneModify_Click(object sender, EventArgs e)
@@ -445,10 +430,6 @@ namespace BezierTool
 
             pictureBox1.Invalidate();
         }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
+        
     }
 }

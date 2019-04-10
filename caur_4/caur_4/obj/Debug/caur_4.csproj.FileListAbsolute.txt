@@ -25,3 +25,16 @@ C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\caur_4\caur_4\obj\Debug\caur_4
 C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\caur_4\caur_4\obj\Debug\caur_4.csproj.CopyComplete
 C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\caur_4\caur_4\obj\Debug\caur_4.exe
 C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\caur_4\caur_4\obj\Debug\caur_4.pdb
+C:\Users\Eliza Gaile\source\repos\kval-darbs-2019\caur_4\caur_4\bin\Debug\caur_4.exe.config
+C:\Users\Eliza Gaile\source\repos\kval-darbs-2019\caur_4\caur_4\bin\Debug\caur_4.exe
+C:\Users\Eliza Gaile\source\repos\kval-darbs-2019\caur_4\caur_4\bin\Debug\caur_4.pdb
+C:\Users\Eliza Gaile\source\repos\kval-darbs-2019\caur_4\caur_4\bin\Debug\MathNet.Numerics.dll
+C:\Users\Eliza Gaile\source\repos\kval-darbs-2019\caur_4\caur_4\bin\Debug\MathNet.Numerics.xml
+C:\Users\Eliza Gaile\source\repos\kval-darbs-2019\caur_4\caur_4\obj\Debug\caur_4.csprojAssemblyReference.cache
+C:\Users\Eliza Gaile\source\repos\kval-darbs-2019\caur_4\caur_4\obj\Debug\caur_4.Form1.resources
+C:\Users\Eliza Gaile\source\repos\kval-darbs-2019\caur_4\caur_4\obj\Debug\caur_4.Properties.Resources.resources
+C:\Users\Eliza Gaile\source\repos\kval-darbs-2019\caur_4\caur_4\obj\Debug\caur_4.csproj.GenerateResource.cache
+C:\Users\Eliza Gaile\source\repos\kval-darbs-2019\caur_4\caur_4\obj\Debug\caur_4.csproj.CoreCompileInputs.cache
+C:\Users\Eliza Gaile\source\repos\kval-darbs-2019\caur_4\caur_4\obj\Debug\caur_4.csproj.CopyComplete
+C:\Users\Eliza Gaile\source\repos\kval-darbs-2019\caur_4\caur_4\obj\Debug\caur_4.exe
+C:\Users\Eliza Gaile\source\repos\kval-darbs-2019\caur_4\caur_4\obj\Debug\caur_4.pdb
