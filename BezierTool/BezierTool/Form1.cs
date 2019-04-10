@@ -31,14 +31,13 @@ namespace BezierTool
         BezierType ModifyType = BezierType.nothing;
         BezierType DragType = BezierType.nothing;
 
-        Tuple<int, int> MovingPoint = new Tuple<int, int>(0,0);
+        Tuple<int, int> MovingPoint = null;
 
         private List<BezierType> AllLines = new List<BezierType>();
 
         String imageLocation = "";
         int PointRadius = 2;
         int LocalRadius = 7;
-
 
         private void btnBackground_Click(object sender, EventArgs e)
         {
@@ -66,28 +65,34 @@ namespace BezierTool
         {
             DragType = BezierType.nothing;
             AddType = BezierType.cPoints;
-
-            pictureBox1.Invalidate();
+            ModifyType = BezierType.nothing;
+            MovingPoint = null;
+            cPoints = null;
         }
 
         private void btn_pPointsAdd_Click(object sender, EventArgs e)
         {
             DragType = BezierType.nothing;
             AddType = BezierType.pPoints;
-
-            pictureBox1.Invalidate();
+            ModifyType = BezierType.nothing;
+            MovingPoint = null;
+            pPoints = null;//?
+            cPoints = null;//?
         }
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
             if (AddType == BezierType.cPoints && rbtn_MouseAdd.Checked == true)
             {
+
                 if (cPoints == null)
                 {
                     AllLines.Add(BezierType.cPoints);
                     cPoints = new List<Point>();
                     cPointsAll.Add(cPoints);
                     cPoints.Add(e.Location);
+
+                    pPointsAll.Add(null);
                 }
 
                 else if (cPoints.Count < 4 && cPoints[cPoints.Count - 1] != e.Location)
@@ -95,21 +100,22 @@ namespace BezierTool
                     cPoints.Add(e.Location);
                 }
 
-                if (cPoints.Count == 4)
-                {
-                    cPoints = null;
-                    AddType = BezierType.nothing;
-                }
+                pictureBox1.Invalidate();
             }
 
             if (AddType == BezierType.pPoints && rbtn_MouseAdd.Checked == true)
             {
+
                 if (pPoints == null)
                 {
                     AllLines.Add(BezierType.pPoints);
                     pPoints = new List<Point>();
                     pPointsAll.Add(pPoints);
                     pPoints.Add(e.Location);
+
+                    //cPoints = new List<Point>();
+                    //cPointsAll.Add(cPoints);
+                    cPointsAll.Add(null);
                 }
 
                 else if (pPoints.Count < 4 && pPoints[pPoints.Count - 1] != e.Location)
@@ -117,13 +123,7 @@ namespace BezierTool
                     pPoints.Add(e.Location);
                 }
 
-                if (pPoints.Count == 4)
-                {
-                    getcPoints();
-                    pPoints = null;
-                    cPoints = null;
-                    AddType = BezierType.nothing;
-                }
+                pictureBox1.Invalidate();
             }
 
             if (cPointsAll != null && DragType == BezierType.cPoints)
@@ -144,24 +144,30 @@ namespace BezierTool
                         }
                     }
                 }
+
+                pictureBox1.Invalidate();
             }
 
             if (pPointsAll != null && DragType == BezierType.pPoints)
             {
                 for (int i = 0; i < pPointsAll.Count; i++)
                 {
-                    for (int j = 0; j < pPointsAll[i].Count; j++)
+                    if (pPointsAll[i] != null)
                     {
-                        if (length(e.Location, pPointsAll[i][j]) < LocalRadius)
+                        for (int j = 0; j < pPointsAll[i].Count; j++)
                         {
-                            ModifyType = AllLines[i];
-                            MovingPoint = new Tuple<int, int>(i, j);
+                            if (length(e.Location, pPointsAll[i][j]) < LocalRadius)
+                            {
+                                ModifyType = AllLines[i];
+                                MovingPoint = new Tuple<int, int>(i, j);
+                            }
                         }
                     }
                 }
-            }
 
-            //pictureBox1.Invalidate();
+                pictureBox1.Invalidate();
+            }
+            
         }
 
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
@@ -169,32 +175,37 @@ namespace BezierTool
             if (ModifyType == BezierType.cPoints)
             {
                 cPointsAll[MovingPoint.Item1][MovingPoint.Item2] = e.Location;
+                pictureBox1.Invalidate();
             }
 
             if (ModifyType == BezierType.pPoints)
             {
                 pPointsAll[MovingPoint.Item1][MovingPoint.Item2] = e.Location;
+                getcPoints(MovingPoint.Item1);
+                pictureBox1.Invalidate();
             }
 
-            NewcPoint = e.Location;
-            pictureBox1.Invalidate();
+            if (AddType != BezierType.nothing)
+            {
+                NewcPoint = e.Location;
+                pictureBox1.Invalidate();
+            }
+            
         }
 
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
         {
             if (DragType == BezierType.cPoints)
             {
-                cPointsAll[MovingPoint.Item1][MovingPoint.Item2] = e.Location;
                 ModifyType = BezierType.nothing;
+                pictureBox1.Invalidate();
             }
 
             if (DragType == BezierType.pPoints)
             {
-                pPointsAll[MovingPoint.Item1][MovingPoint.Item2] = e.Location;
                 ModifyType = BezierType.nothing;
+                pictureBox1.Invalidate();
             }
-
-            pictureBox1.Invalidate();
         }
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
@@ -203,19 +214,9 @@ namespace BezierTool
 
             if (cPointsAll != null)
             {
-                if (cPointsAll.Count > 0)
+                if (cPoints != null)
                 {
-error.Text = "" + cPointsAll[0][0];
-                }
-                
-                foreach (List<Point> cList in cPointsAll)
-                {
-                    foreach (Point c in cList)
-                    {
-                        e.Graphics.DrawEllipse(Pens.Red, c.X - PointRadius, c.Y - PointRadius, 2 * PointRadius, 2 * PointRadius);
-                    }
-
-                    if (cList.Count < 4)
+                    if (cPoints.Count < 4 && AddType == BezierType.cPoints)
                     {
                         using (Pen dashed_pen = new Pen(Color.LightGray))
                         {
@@ -223,26 +224,45 @@ error.Text = "" + cPointsAll[0][0];
                             e.Graphics.DrawLine(dashed_pen, cPoints[cPoints.Count - 1], NewcPoint);
                         }
                     }
+                }
+                
 
-                    if (cList.Count > 1)
+                foreach (List<Point> cList in cPointsAll)
+                {
+                    if (cList != null)
                     {
-                        e.Graphics.DrawLines(Pens.LightGray, cList.ToArray());
-                    }
+                        foreach (Point c in cList)
+                        {
+                                e.Graphics.DrawEllipse(Pens.Red, c.X - PointRadius, c.Y - PointRadius, 2 * PointRadius, 2 * PointRadius);
+                        }
 
-                    if (cList.Count == 4)
-                    {
-                        e.Graphics.DrawBezier(Pens.Black, cList[0], cList[1], cList[2], cList[3]);
+                        if (cList.Count > 1)
+                        {
+                            e.Graphics.DrawLines(Pens.LightGray, cList.ToArray());
+                        }
+
+                        if (cList.Count == 4)
+                        {
+                            e.Graphics.DrawBezier(Pens.Black, cList[0], cList[1], cList[2], cList[3]);
+                        }
                     }
                 }
             }
 
             if (pPointsAll != null)
             {
-                foreach (List<Point> pList in pPointsAll)
+                for (int i = 0; i< pPointsAll.Count; i++)
                 {
-                    foreach (Point p in pList)
+                    if (pPointsAll[i] != null)
                     {
-                        e.Graphics.FillEllipse(Brushes.Black, p.X - PointRadius, p.Y - PointRadius, 2 * PointRadius, 2 * PointRadius);
+                        foreach (Point p in pPointsAll[i])
+                        {
+                            e.Graphics.FillEllipse(Brushes.Black, p.X - PointRadius, p.Y - PointRadius, 2 * PointRadius, 2 * PointRadius);
+                        }
+                        if (pPointsAll[i].Count == 4 && cPointsAll[i] == null)
+                        {
+                            getcPoints(i);
+                        }
                     }
                 }
             }
@@ -266,18 +286,20 @@ error.Text = "" + cPointsAll[0][0];
             return Math.Sqrt(Math.Pow(a.X - b.X, 2) + Math.Pow(a.Y - b.Y, 2));
         }
 
-        private void getcPoints()
+        private void getcPoints(int i)
         {
+            List<Point> pList = pPointsAll[i];
+
             var M = Matrix<double>.Build;
 
             double[,] matrixM = new double[4, 4]
                 { { 1, 0, 0, 0 }, { -3, 3, 0, 0 }, { 3, -6, 3, 0 }, { -1, 3, -3, 1 } };
 
-            double[,] matrixP = new double[pPoints.Count, 2];
-            for (int i = 0; i < pPoints.Count; i++)
+            double[,] matrixP = new double[pList.Count, 2];
+            for (int j = 0; j < pList.Count; j++)
             {
-                matrixP[i, 0] = pPoints[i].X;
-                matrixP[i, 1] = pPoints[i].Y;
+                matrixP[j, 0] = pList[j].X;
+                matrixP[j, 1] = pList[j].Y;
             }
 
             var p = M.DenseOfArray(matrixP);
@@ -288,12 +310,12 @@ error.Text = "" + cPointsAll[0][0];
 
             if (rbtn_Uniform.Checked == true)
             {
-                sPoints = sPointsUniform();
+                sPoints = sPointsUniform(pList);
             }
 
             else if (rbtn_Chord.Checked == true)
             {
-                sPoints = sPointsChord();
+                sPoints = sPointsChord(pList);
             }
 
             var s = M.DenseOfArray(sMatrix(sPoints));
@@ -305,61 +327,55 @@ error.Text = "" + cPointsAll[0][0];
             var r2 = r1 * s_tr;
 
             var c = r2 * p;
-
+            
             if (MovingPoint == null)
             {
-                //error.Text = "mm";
                 cPoints = new List<Point>();
-
-                for (int i = 0; i < 4; i++)
+                for (int j = 0; j < 4; j++)
                 {
-                    Point tmp = new Point(Convert.ToInt32(c[i, 0]), Convert.ToInt32(c[i, 1]));
+                    Point tmp = new Point(Convert.ToInt32(c[j, 0]), Convert.ToInt32(c[j, 1]));
                     cPoints.Add(tmp);
                 }
-
-                cPointsAll.Add(cPoints);
-                AllLines.Add(BezierType.pPoints);
+                cPointsAll[i] = cPoints;
             }
 
             else
             {
-                error.Text = "gg";
-                for (int i = 0; i < 4; i++)
+                for (int j = 0; j < 4; j++)
                 {
-                    Point tmp = new Point(Convert.ToInt32(c[i, 0]), Convert.ToInt32(c[i, 1]));
-                    cPointsAll[MovingPoint.Item1][i] = tmp;
+                    Point tmp = new Point(Convert.ToInt32(c[j, 0]), Convert.ToInt32(c[j, 1]));
+                    cPointsAll[i][j] = tmp;
                 }
             }
-            
         }
 
-        private List<double> sPointsUniform()
+        private List<double> sPointsUniform(List<Point> pList)
         {
             List<double> sPoints = new List<double>();
 
-            for (int i = 0; i < pPoints.Count; i++)
+            for (int i = 0; i < pList.Count; i++)
             {
-                double s = (double)i / (pPoints.Count - 1);
+                double s = (double)i / (pList.Count - 1);
                 sPoints.Add(s);
             }
             return (sPoints);
         }
 
-        private List<double> sPointsChord()
+        private List<double> sPointsChord(List<Point> pList)
         {
             List<double> sPoints = new List<double>();
             List<double> dPoints = new List<double>();
             dPoints.Add(0);
 
-            for (int i = 1; i < pPoints.Count; i++)
+            for (int i = 1; i < pList.Count; i++)
             {
-                double d = dPoints[i - 1] + length(pPoints[i - 1], pPoints[i]);
+                double d = dPoints[i - 1] + length(pList[i - 1], pList[i]);
                 dPoints.Add(d);
             }
 
-            for (int i = 0; i < pPoints.Count; i++)
+            for (int i = 0; i < pList.Count; i++)
             {
-                double s = dPoints[i] / dPoints[pPoints.Count - 1];
+                double s = dPoints[i] / dPoints[pList.Count - 1];
                 sPoints.Add(s);
             }
 
@@ -382,24 +398,12 @@ error.Text = "" + cPointsAll[0][0];
 
         private void btn_cPointsModify_Click(object sender, EventArgs e)
         {
-            if (AddType != BezierType.nothing)
-            {
-                return;
-            }
-
             DragType = BezierType.cPoints;
-            pictureBox1.Invalidate();
         }
 
         private void btn_pPointsModify_Click(object sender, EventArgs e)
         {
-            if (AddType != BezierType.nothing)
-            {
-                return;
-            }
-
             DragType = BezierType.pPoints;
-            //pictureBox1.Invalidate();
         }
 
         private void btn_DoneModify_Click(object sender, EventArgs e)
@@ -417,6 +421,8 @@ error.Text = "" + cPointsAll[0][0];
             cPointsAll = new List<List<Point>>();
             pPoints = null;
             pPointsAll = new List<List<Point>>();
+            AllLines = new List<BezierType>();
+            MovingPoint = null;
             rbtn_MouseAdd.Checked = true;
             rbtn_MouseModify.Checked = true;
             imageLocation = "";
@@ -424,5 +430,6 @@ error.Text = "" + cPointsAll[0][0];
 
             pictureBox1.Invalidate();
         }
+        
     }
 }

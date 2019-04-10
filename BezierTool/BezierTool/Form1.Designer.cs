@@ -50,8 +50,8 @@
             this.group_ModifyInput = new System.Windows.Forms.GroupBox();
             this.btn_DoneModify = new System.Windows.Forms.Button();
             this.group_Param = new System.Windows.Forms.GroupBox();
-            this.rbtn_Uniform = new System.Windows.Forms.RadioButton();
             this.rbtn_Chord = new System.Windows.Forms.RadioButton();
+            this.rbtn_Uniform = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.group_AddInput.SuspendLayout();
             this.group_AddType.SuspendLayout();
@@ -294,6 +294,16 @@
             this.group_Param.TabStop = false;
             this.group_Param.Text = "Paramterization:";
             // 
+            // rbtn_Chord
+            // 
+            this.rbtn_Chord.AutoSize = true;
+            this.rbtn_Chord.Location = new System.Drawing.Point(6, 55);
+            this.rbtn_Chord.Name = "rbtn_Chord";
+            this.rbtn_Chord.Size = new System.Drawing.Size(131, 24);
+            this.rbtn_Chord.TabIndex = 1;
+            this.rbtn_Chord.Text = "Chord Length";
+            this.rbtn_Chord.UseVisualStyleBackColor = true;
+            // 
             // rbtn_Uniform
             // 
             this.rbtn_Uniform.AutoSize = true;
@@ -305,16 +315,6 @@
             this.rbtn_Uniform.TabStop = true;
             this.rbtn_Uniform.Text = "Uniform";
             this.rbtn_Uniform.UseVisualStyleBackColor = true;
-            // 
-            // rbtn_Chord
-            // 
-            this.rbtn_Chord.AutoSize = true;
-            this.rbtn_Chord.Location = new System.Drawing.Point(6, 55);
-            this.rbtn_Chord.Name = "rbtn_Chord";
-            this.rbtn_Chord.Size = new System.Drawing.Size(131, 24);
-            this.rbtn_Chord.TabIndex = 1;
-            this.rbtn_Chord.Text = "Chord Length";
-            this.rbtn_Chord.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
