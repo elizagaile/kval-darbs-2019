@@ -14,3 +14,6 @@ C:\Users\eliza\source\repos\compositeBezier\compositeBezier\obj\Debug\compositeB
 C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\compositeBezier\compositeBezier\obj\Debug\compositeBezier.csprojAssemblyReference.cache
 C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\compositeBezier\compositeBezier\obj\Debug\compositeBezier.exe
 C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\compositeBezier\compositeBezier\obj\Debug\compositeBezier.pdb
+C:\Users\Eliza Gaile\source\repos\kval-darbs-2019\compositeBezier\compositeBezier\obj\Debug\compositeBezier.csprojAssemblyReference.cache
+C:\Users\Eliza Gaile\source\repos\kval-darbs-2019\compositeBezier\compositeBezier\obj\Debug\compositeBezier.exe
+C:\Users\Eliza Gaile\source\repos\kval-darbs-2019\compositeBezier\compositeBezier\obj\Debug\compositeBezier.pdb

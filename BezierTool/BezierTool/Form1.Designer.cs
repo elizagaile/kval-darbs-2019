@@ -46,6 +46,7 @@
             this.rbtn_TypeModify = new System.Windows.Forms.RadioButton();
             this.group_AddInput = new System.Windows.Forms.GroupBox();
             this.group_AddType = new System.Windows.Forms.GroupBox();
+            this.btn_DoneComposite = new System.Windows.Forms.Button();
             this.group_ModifyType = new System.Windows.Forms.GroupBox();
             this.group_ModifyInput = new System.Windows.Forms.GroupBox();
             this.btn_DoneModify = new System.Windows.Forms.Button();
@@ -96,7 +97,7 @@
             // 
             // btn_cPointsAdd
             // 
-            this.btn_cPointsAdd.Location = new System.Drawing.Point(6, 33);
+            this.btn_cPointsAdd.Location = new System.Drawing.Point(6, 25);
             this.btn_cPointsAdd.Name = "btn_cPointsAdd";
             this.btn_cPointsAdd.Size = new System.Drawing.Size(159, 37);
             this.btn_cPointsAdd.TabIndex = 4;
@@ -106,7 +107,7 @@
             // 
             // btn_pPointsAdd
             // 
-            this.btn_pPointsAdd.Location = new System.Drawing.Point(6, 76);
+            this.btn_pPointsAdd.Location = new System.Drawing.Point(6, 68);
             this.btn_pPointsAdd.Name = "btn_pPointsAdd";
             this.btn_pPointsAdd.Size = new System.Drawing.Size(159, 37);
             this.btn_pPointsAdd.TabIndex = 5;
@@ -116,21 +117,23 @@
             // 
             // btn_LeastSquaresAdd
             // 
-            this.btn_LeastSquaresAdd.Location = new System.Drawing.Point(6, 119);
+            this.btn_LeastSquaresAdd.Location = new System.Drawing.Point(6, 111);
             this.btn_LeastSquaresAdd.Name = "btn_LeastSquaresAdd";
             this.btn_LeastSquaresAdd.Size = new System.Drawing.Size(159, 37);
             this.btn_LeastSquaresAdd.TabIndex = 6;
             this.btn_LeastSquaresAdd.Text = "Least Squares";
             this.btn_LeastSquaresAdd.UseVisualStyleBackColor = true;
+            this.btn_LeastSquaresAdd.Click += new System.EventHandler(this.btn_LeastSquaresAdd_Click);
             // 
             // btn_CompositeAdd
             // 
-            this.btn_CompositeAdd.Location = new System.Drawing.Point(6, 162);
+            this.btn_CompositeAdd.Location = new System.Drawing.Point(6, 154);
             this.btn_CompositeAdd.Name = "btn_CompositeAdd";
             this.btn_CompositeAdd.Size = new System.Drawing.Size(159, 37);
             this.btn_CompositeAdd.TabIndex = 7;
             this.btn_CompositeAdd.Text = "Composite";
             this.btn_CompositeAdd.UseVisualStyleBackColor = true;
+            this.btn_CompositeAdd.Click += new System.EventHandler(this.btn_CompositeAdd_Click);
             // 
             // rbtn_MouseAdd
             // 
@@ -240,22 +243,33 @@
             // 
             // group_AddType
             // 
+            this.group_AddType.Controls.Add(this.btn_DoneComposite);
             this.group_AddType.Controls.Add(this.btn_cPointsAdd);
             this.group_AddType.Controls.Add(this.btn_pPointsAdd);
             this.group_AddType.Controls.Add(this.btn_LeastSquaresAdd);
             this.group_AddType.Controls.Add(this.btn_CompositeAdd);
             this.group_AddType.Location = new System.Drawing.Point(1115, 13);
             this.group_AddType.Name = "group_AddType";
-            this.group_AddType.Size = new System.Drawing.Size(171, 205);
+            this.group_AddType.Size = new System.Drawing.Size(171, 246);
             this.group_AddType.TabIndex = 20;
             this.group_AddType.TabStop = false;
             this.group_AddType.Text = "New Bezier of type:";
+            // 
+            // btn_DoneComposite
+            // 
+            this.btn_DoneComposite.Location = new System.Drawing.Point(6, 197);
+            this.btn_DoneComposite.Name = "btn_DoneComposite";
+            this.btn_DoneComposite.Size = new System.Drawing.Size(67, 34);
+            this.btn_DoneComposite.TabIndex = 8;
+            this.btn_DoneComposite.Text = "Done";
+            this.btn_DoneComposite.UseVisualStyleBackColor = true;
+            this.btn_DoneComposite.Click += new System.EventHandler(this.btn_DoneComposite_Click);
             // 
             // group_ModifyType
             // 
             this.group_ModifyType.Controls.Add(this.btn_cPointsModify);
             this.group_ModifyType.Controls.Add(this.btn_pPointsModify);
-            this.group_ModifyType.Location = new System.Drawing.Point(1115, 240);
+            this.group_ModifyType.Location = new System.Drawing.Point(1115, 265);
             this.group_ModifyType.Name = "group_ModifyType";
             this.group_ModifyType.Size = new System.Drawing.Size(171, 114);
             this.group_ModifyType.TabIndex = 21;
@@ -266,7 +280,7 @@
             // 
             this.group_ModifyInput.Controls.Add(this.rbtn_MouseModify);
             this.group_ModifyInput.Controls.Add(this.rbtn_TypeModify);
-            this.group_ModifyInput.Location = new System.Drawing.Point(1292, 240);
+            this.group_ModifyInput.Location = new System.Drawing.Point(1292, 265);
             this.group_ModifyInput.Name = "group_ModifyInput";
             this.group_ModifyInput.Size = new System.Drawing.Size(140, 114);
             this.group_ModifyInput.TabIndex = 22;
@@ -275,7 +289,7 @@
             // 
             // btn_DoneModify
             // 
-            this.btn_DoneModify.Location = new System.Drawing.Point(1115, 360);
+            this.btn_DoneModify.Location = new System.Drawing.Point(1115, 385);
             this.btn_DoneModify.Name = "btn_DoneModify";
             this.btn_DoneModify.Size = new System.Drawing.Size(317, 37);
             this.btn_DoneModify.TabIndex = 23;
@@ -289,7 +303,7 @@
             this.group_Param.Controls.Add(this.rbtn_Uniform);
             this.group_Param.Location = new System.Drawing.Point(1292, 134);
             this.group_Param.Name = "group_Param";
-            this.group_Param.Size = new System.Drawing.Size(140, 84);
+            this.group_Param.Size = new System.Drawing.Size(140, 125);
             this.group_Param.TabIndex = 24;
             this.group_Param.TabStop = false;
             this.group_Param.Text = "Paramterization:";
@@ -374,6 +388,7 @@
         private System.Windows.Forms.GroupBox group_Param;
         private System.Windows.Forms.RadioButton rbtn_Chord;
         private System.Windows.Forms.RadioButton rbtn_Uniform;
+        private System.Windows.Forms.Button btn_DoneComposite;
     }
 }
 
