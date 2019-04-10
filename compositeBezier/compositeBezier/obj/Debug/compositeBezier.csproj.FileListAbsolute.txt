@@ -1,0 +1,16 @@
+C:\Users\eliza\source\repos\compositeBezier\compositeBezier\obj\Debug\compositeBezier.csprojAssemblyReference.cache
+C:\Users\eliza\source\repos\compositeBezier\compositeBezier\obj\Debug\compositeBezier.Form1.resources
+C:\Users\eliza\source\repos\compositeBezier\compositeBezier\obj\Debug\compositeBezier.Properties.Resources.resources
+C:\Users\eliza\source\repos\compositeBezier\compositeBezier\obj\Debug\compositeBezier.csproj.GenerateResource.cache
+C:\Users\eliza\source\repos\compositeBezier\compositeBezier\obj\Debug\compositeBezier.csproj.CoreCompileInputs.cache
+C:\Users\eliza\source\repos\compositeBezier\compositeBezier\bin\Debug\compositeBezier.exe.config
+C:\Users\eliza\source\repos\compositeBezier\compositeBezier\bin\Debug\compositeBezier.exe
+C:\Users\eliza\source\repos\compositeBezier\compositeBezier\bin\Debug\compositeBezier.pdb
+C:\Users\eliza\source\repos\compositeBezier\compositeBezier\obj\Debug\compositeBezier.exe
+C:\Users\eliza\source\repos\compositeBezier\compositeBezier\obj\Debug\compositeBezier.pdb
+C:\Users\eliza\source\repos\compositeBezier\compositeBezier\bin\Debug\MathNet.Numerics.dll
+C:\Users\eliza\source\repos\compositeBezier\compositeBezier\bin\Debug\MathNet.Numerics.xml
+C:\Users\eliza\source\repos\compositeBezier\compositeBezier\obj\Debug\compositeBezier.csproj.CopyComplete
+C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\compositeBezier\compositeBezier\obj\Debug\compositeBezier.csprojAssemblyReference.cache
+C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\compositeBezier\compositeBezier\obj\Debug\compositeBezier.exe
+C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\compositeBezier\compositeBezier\obj\Debug\compositeBezier.pdb
