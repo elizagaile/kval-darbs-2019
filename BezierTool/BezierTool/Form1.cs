@@ -35,6 +35,9 @@ namespace BezierTool
 
         private List<BezierType> AllLines = new List<BezierType>();
 
+        enum MoveType { leftClick, rightClick, nothing };
+        private List<MoveType> MovedLine = new List<MoveType>();
+
         String imageLocation = "";
         int PointRadius = 2;
         int LocalRadius = 7;
@@ -115,6 +118,7 @@ namespace BezierTool
                     cPoints.Add(e.Location);
 
                     pPointsAll.Add(null);
+                    MovedLine.Add(MoveType.nothing);
                 }
 
                 else if (cPoints.Count < 4 && cPoints[cPoints.Count - 1] != e.Location)
@@ -135,6 +139,7 @@ namespace BezierTool
                     pPointsAll.Add(pPoints);
                     pPoints.Add(e.Location);
                     cPointsAll.Add(null);
+                    MovedLine.Add(MoveType.nothing);
                 }
 
                 else if (pPoints.Count < 4 && pPoints[pPoints.Count - 1] != e.Location)
@@ -154,6 +159,7 @@ namespace BezierTool
                     pPointsAll.Add(pPoints);
                     pPoints.Add(e.Location);
                     cPointsAll.Add(null);
+                    MovedLine.Add(MoveType.nothing);
                 }
 
                 else if (pPoints.Count < maxPointCount && pPoints[pPoints.Count - 1] != e.Location)
@@ -175,6 +181,7 @@ namespace BezierTool
                     pPointsAll.Add(pPoints);
                     pPoints.Add(e.Location);
                     cPointsAll.Add(null);
+                    MovedLine.Add(MoveType.nothing);
                 }
 
                 else if (pPoints.Count < maxPointCount && pPoints[pPoints.Count - 1] != e.Location && pPoints.Count <= maxPointCount)
@@ -200,12 +207,31 @@ namespace BezierTool
                                 ModifyType = BezierType.nothing;
                             }
 
-                            if (ModifyType == BezierType.LastSquares)
+                            else if (ModifyType == BezierType.LastSquares)
                             {
                                 MessageBox.Show("It's not allowed to move curve's <Least Squares> control points!", "Error");
                                 ModifyType = BezierType.nothing;
                             }
-                            MovingPoint = new Tuple<int, int>(i, j);
+
+                            else if (ModifyType == BezierType.Composite && j % 3 != 0 )
+                            {
+                                MovingPoint = new Tuple<int, int>(i, j);
+
+                                if (e.Button == MouseButtons.Left)
+                                {
+                                    MovedLine[i] = MoveType.leftClick;
+                                }
+
+                                else if (e.Button == MouseButtons.Right)
+                                {
+                                    MovedLine[i] = MoveType.rightClick;
+                                }
+                            }
+
+                            else if (ModifyType == BezierType.cPoints )
+                            {
+                                MovingPoint = new Tuple<int, int>(i, j);
+                            }
                         }
                     }
                 }
@@ -224,28 +250,79 @@ namespace BezierTool
                             if (length(e.Location, pPointsAll[i][j]) < LocalRadius)
                             {
                                 ModifyType = AllLines[i];
-                                MovingPoint = new Tuple<int, int>(i, j);
+                                if (ModifyType != BezierType.Composite)
+                                {
+                                    MovingPoint = new Tuple<int, int>(i, j);
+                                }
+
+                                error.Text = "ya";
+
+                                if (ModifyType == BezierType.Composite)
+                                {
+                                    MessageBox.Show("It's not allowed to move curve's <Composite> points!", "Error");
+                                    ModifyType = BezierType.nothing;
+                                }
                             }
                         }
                     }
                 }
-
                 pictureBox1.Invalidate();
             }
         }
 
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
+            int i = 0;
+            int j = 0;
+
+            if (MovingPoint != null)
+            {
+                i = MovingPoint.Item1;
+                j = MovingPoint.Item2;
+            }
+
             if (ModifyType == BezierType.cPoints)
             {
-                cPointsAll[MovingPoint.Item1][MovingPoint.Item2] = e.Location;
+                cPointsAll[i][j] = e.Location;
+                pictureBox1.Invalidate();
+            }
+
+            if (ModifyType == BezierType.Composite && DragType == BezierType.cPoints)
+            {
+                if (MovedLine[i] == MoveType.leftClick)
+                {
+                    cPointsAll[i][j] = e.Location;;
+
+                    if (j % 3 == 1 && j != 1)
+                    {
+                        changecPoint(j, j - 1, j - 2);
+                    }
+
+                    if (j % 3 == 2 && j != cPointsAll[i].Count - 2)
+                    {
+                        changecPoint(j, j + 1, j + 2);
+                    }
+                }
+
+                if (MovedLine[i] == MoveType.rightClick)
+                {
+                    if (j % 3 == 1 && j != 1)
+                    {
+                        changeStraight(e.Location, cPointsAll[i][j - 1], cPointsAll[i][j - 2]);
+                    }
+
+                    if (j % 3 == 2 && j != cPointsAll[i].Count - 2)
+                    {
+                        changeStraight(e.Location, cPointsAll[i][j + 1], cPointsAll[i][j + 2]);
+                    }
+                }
                 pictureBox1.Invalidate();
             }
 
             if (ModifyType == BezierType.pPoints || ModifyType == BezierType.LastSquares)
             {
-                pPointsAll[MovingPoint.Item1][MovingPoint.Item2] = e.Location;
-                getcPoints(MovingPoint.Item1);
+                pPointsAll[i][j] = e.Location;
+                getcPoints(i);
                 pictureBox1.Invalidate();
             }
 
@@ -269,6 +346,60 @@ namespace BezierTool
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+            if (pPointsAll != null)
+            {
+                for (int i = 0; i< pPointsAll.Count; i++)
+                {
+                    if (pPointsAll[i] != null)
+                    {
+                        foreach (Point p in pPointsAll[i])
+                        {
+                            e.Graphics.FillEllipse(Brushes.Black, p.X - PointRadius, p.Y - PointRadius, 2 * PointRadius, 2 * PointRadius);
+                        }
+
+                        if (AddType == BezierType.pPoints && pPointsAll[i].Count == 4 && cPointsAll[i] == null)
+                        {
+                            getcPoints(i);
+                        }
+
+                        if (AddType == BezierType.LastSquares && pPointsAll[i].Count >= 4 && pPointsAll[i].Count <= maxPointCount)
+                        {
+                            getcPoints(i);
+                        }
+
+                        if (AllLines[i] == BezierType.Composite && pPointsAll[i].Count >= 3 && MovedLine[i] == MoveType.nothing)
+                        {
+                            cPointsAll[i] = new List<Point>();
+                            cPointsAll[i].Add(pPointsAll[i][0]);
+                            addFirstcPoint(i);
+
+                            for (int j = 0; j < pPointsAll[i].Count - 2; j++)
+                            {
+                                cPointsAll[i].Add(firstHandle(pPointsAll[i][j], pPointsAll[i][j + 1], pPointsAll[i][j + 2]));
+                                cPointsAll[i].Add(pPointsAll[i][j + 1]);
+                                cPointsAll[i].Add(secondHandle(pPointsAll[i][j], pPointsAll[i][j + 1], pPointsAll[i][j + 2]));
+                            }
+
+                            if (cPointsAll[i].Count < pPointsAll[i].Count * 3 - 2 && i != AllLines.Count - 1)
+                            {
+                                addLastcPoints(i);
+                            }
+
+                            if (CompositeDone == true && i == AllLines.Count - 1)
+                            {
+                                addLastcPoints(i);
+                            }
+                        }
+
+                        if (AllLines[i] == BezierType.Composite && CompositeDone == true && pPointsAll[i].Count == 2 && MovedLine[i] == MoveType.nothing)
+                        {
+                            cPointsAll[i] = new List<Point>();
+                            addOnlycPoints(i);
+                        }
+                    }
+                }
+            }
 
             if (cPointsAll != null)
             {
@@ -333,59 +464,7 @@ namespace BezierTool
                 }
             }
 
-            if (pPointsAll != null)
-            {
-                for (int i = 0; i< pPointsAll.Count; i++)
-                {
-                    if (pPointsAll[i] != null)
-                    {
-                        foreach (Point p in pPointsAll[i])
-                        {
-                            e.Graphics.FillEllipse(Brushes.Black, p.X - PointRadius, p.Y - PointRadius, 2 * PointRadius, 2 * PointRadius);
-                        }
-
-                        if (AddType == BezierType.pPoints && pPointsAll[i].Count == 4 && cPointsAll[i] == null)
-                        {
-                            getcPoints(i);
-                        }
-
-                        if (AddType == BezierType.LastSquares && pPointsAll[i].Count >= 4 && pPointsAll[i].Count <= maxPointCount)
-                        {
-                            getcPoints(i);
-                        }
-
-                        if (AllLines[i] == BezierType.Composite && pPointsAll[i].Count >= 3)
-                        {
-                            cPointsAll[i] = new List<Point>();
-                            cPointsAll[i].Add(pPointsAll[i][0]);
-                            addFirstcPoint(i);
-
-                            for (int j = 0; j < pPointsAll[i].Count - 2; j++)
-                            {
-                                cPointsAll[i].Add(firstHandle(pPointsAll[i][j], pPointsAll[i][j + 1], pPointsAll[i][j + 2]));
-                                cPointsAll[i].Add(pPointsAll[i][j + 1]);
-                                cPointsAll[i].Add(secondHandle(pPointsAll[i][j], pPointsAll[i][j + 1], pPointsAll[i][j + 2]));
-                            }
-
-                            if (cPointsAll[i].Count < pPointsAll[i].Count * 3 - 2 && i != AllLines.Count - 1)
-                            {
-                                addLastcPoints(i);
-                            }
-
-                            if (CompositeDone == true && i == AllLines.Count - 1)
-                            {
-                                addLastcPoints(i);
-                            }
-                        }
-
-                        if (AllLines[i] == BezierType.Composite && CompositeDone == true && pPointsAll[i].Count == 2)
-                        {
-                            cPointsAll[i] = new List<Point>();
-                            addOnlycPoints(i);
-                        }
-                    }
-                }
-            }
+            
         }
 
         private void cbox_ShowBackground_CheckStateChanged(object sender, EventArgs e)
@@ -479,6 +558,42 @@ namespace BezierTool
             cPointsAll[i].Add(c3);
 
             pictureBox1.Invalidate();
+        }
+
+        private void changecPoint(int a, int b, int c)
+        {
+            Point moving = new Point();
+            Point middle = new Point();
+            Point change = new Point();
+
+            moving = cPointsAll[MovingPoint.Item1][a];
+            middle = cPointsAll[MovingPoint.Item1][b];
+            change = cPointsAll[MovingPoint.Item1][c];
+
+            if (middle == moving)
+            {
+                middle.X++;
+                middle.Y++;
+            }
+
+            double prop = length(middle, change) / length(moving, middle);
+
+            change.X = Convert.ToInt32(middle.X + prop * (middle.X - moving.X));
+            change.Y = Convert.ToInt32(middle.Y + prop * (middle.Y - moving.Y));
+
+            cPointsAll[MovingPoint.Item1][c] = change;
+        }
+
+        private void changeStraight(Point toMove, Point middle, Point prev)
+        {
+            Point res = new Point();
+
+            double prop = length(middle, toMove) / length(prev, middle);
+
+            res.X = Convert.ToInt32(middle.X + prop * (middle.X - prev.X));
+            res.Y = Convert.ToInt32(middle.Y + prop * (middle.Y - prev.Y));
+
+            cPointsAll[MovingPoint.Item1][MovingPoint.Item2] = res;
         }
 
         private Point firstHandle(Point a, Point b, Point c)
@@ -644,6 +759,7 @@ namespace BezierTool
             pPoints = null;
             pPointsAll = new List<List<Point>>();
             AllLines = new List<BezierType>();
+            MovedLine = new List<MoveType>();
             MovingPoint = null;
             rbtn_MouseAdd.Checked = true;
             rbtn_MouseModify.Checked = true;
