@@ -49,16 +49,25 @@
             this.btn_DoneComposite = new System.Windows.Forms.Button();
             this.group_ModifyType = new System.Windows.Forms.GroupBox();
             this.group_ModifyInput = new System.Windows.Forms.GroupBox();
-            this.btn_DoneModify = new System.Windows.Forms.Button();
             this.group_Param = new System.Windows.Forms.GroupBox();
             this.rbtn_Chord = new System.Windows.Forms.RadioButton();
             this.rbtn_Uniform = new System.Windows.Forms.RadioButton();
+            this.btn_cPointsOutput = new System.Windows.Forms.Button();
+            this.group_GetCoordinates = new System.Windows.Forms.GroupBox();
+            this.btn_pPointsOutput = new System.Windows.Forms.Button();
+            this.group_Output = new System.Windows.Forms.GroupBox();
+            this.rbtn_ScreenOutput = new System.Windows.Forms.RadioButton();
+            this.rbtn_FileOutput = new System.Windows.Forms.RadioButton();
+            this.btn_ResetScreenOutput = new System.Windows.Forms.Button();
+            this.listBox_ScreenOutput = new System.Windows.Forms.ListBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.group_AddInput.SuspendLayout();
             this.group_AddType.SuspendLayout();
             this.group_ModifyType.SuspendLayout();
             this.group_ModifyInput.SuspendLayout();
             this.group_Param.SuspendLayout();
+            this.group_GetCoordinates.SuspendLayout();
+            this.group_Output.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -79,7 +88,7 @@
             // 
             this.btn_Background.Location = new System.Drawing.Point(1115, 923);
             this.btn_Background.Name = "btn_Background";
-            this.btn_Background.Size = new System.Drawing.Size(303, 36);
+            this.btn_Background.Size = new System.Drawing.Size(317, 36);
             this.btn_Background.TabIndex = 1;
             this.btn_Background.Text = "Upload Background Image";
             this.btn_Background.UseVisualStyleBackColor = true;
@@ -89,7 +98,7 @@
             // 
             this.btn_Reset.Location = new System.Drawing.Point(1115, 1011);
             this.btn_Reset.Name = "btn_Reset";
-            this.btn_Reset.Size = new System.Drawing.Size(303, 37);
+            this.btn_Reset.Size = new System.Drawing.Size(317, 37);
             this.btn_Reset.TabIndex = 2;
             this.btn_Reset.Text = "Reset All";
             this.btn_Reset.UseVisualStyleBackColor = true;
@@ -170,7 +179,7 @@
             // error
             // 
             this.error.AutoSize = true;
-            this.error.Location = new System.Drawing.Point(1193, 519);
+            this.error.Location = new System.Drawing.Point(1111, 900);
             this.error.Name = "error";
             this.error.Size = new System.Drawing.Size(18, 20);
             this.error.TabIndex = 12;
@@ -259,7 +268,7 @@
             // 
             this.btn_DoneComposite.Location = new System.Drawing.Point(6, 197);
             this.btn_DoneComposite.Name = "btn_DoneComposite";
-            this.btn_DoneComposite.Size = new System.Drawing.Size(67, 34);
+            this.btn_DoneComposite.Size = new System.Drawing.Size(67, 37);
             this.btn_DoneComposite.TabIndex = 8;
             this.btn_DoneComposite.Text = "Done";
             this.btn_DoneComposite.UseVisualStyleBackColor = true;
@@ -286,16 +295,6 @@
             this.group_ModifyInput.TabIndex = 22;
             this.group_ModifyInput.TabStop = false;
             this.group_ModifyInput.Text = "Modify points:";
-            // 
-            // btn_DoneModify
-            // 
-            this.btn_DoneModify.Location = new System.Drawing.Point(1115, 385);
-            this.btn_DoneModify.Name = "btn_DoneModify";
-            this.btn_DoneModify.Size = new System.Drawing.Size(317, 37);
-            this.btn_DoneModify.TabIndex = 23;
-            this.btn_DoneModify.Text = "Done";
-            this.btn_DoneModify.UseVisualStyleBackColor = true;
-            this.btn_DoneModify.Click += new System.EventHandler(this.btn_DoneModify_Click);
             // 
             // group_Param
             // 
@@ -330,13 +329,102 @@
             this.rbtn_Uniform.Text = "Uniform";
             this.rbtn_Uniform.UseVisualStyleBackColor = true;
             // 
+            // btn_cPointsOutput
+            // 
+            this.btn_cPointsOutput.Location = new System.Drawing.Point(6, 25);
+            this.btn_cPointsOutput.Name = "btn_cPointsOutput";
+            this.btn_cPointsOutput.Size = new System.Drawing.Size(159, 37);
+            this.btn_cPointsOutput.TabIndex = 25;
+            this.btn_cPointsOutput.Text = "cPoints";
+            this.btn_cPointsOutput.UseVisualStyleBackColor = true;
+            this.btn_cPointsOutput.Click += new System.EventHandler(this.btn_cPointsOutput_Click);
+            // 
+            // group_GetCoordinates
+            // 
+            this.group_GetCoordinates.Controls.Add(this.btn_pPointsOutput);
+            this.group_GetCoordinates.Controls.Add(this.btn_cPointsOutput);
+            this.group_GetCoordinates.Location = new System.Drawing.Point(1115, 386);
+            this.group_GetCoordinates.Name = "group_GetCoordinates";
+            this.group_GetCoordinates.Size = new System.Drawing.Size(171, 114);
+            this.group_GetCoordinates.TabIndex = 26;
+            this.group_GetCoordinates.TabStop = false;
+            this.group_GetCoordinates.Text = "Get coordinates";
+            // 
+            // btn_pPointsOutput
+            // 
+            this.btn_pPointsOutput.Location = new System.Drawing.Point(6, 68);
+            this.btn_pPointsOutput.Name = "btn_pPointsOutput";
+            this.btn_pPointsOutput.Size = new System.Drawing.Size(159, 37);
+            this.btn_pPointsOutput.TabIndex = 26;
+            this.btn_pPointsOutput.Text = "pPoints";
+            this.btn_pPointsOutput.UseVisualStyleBackColor = true;
+            this.btn_pPointsOutput.Click += new System.EventHandler(this.btn_pPointsOutput_Click);
+            // 
+            // group_Output
+            // 
+            this.group_Output.Controls.Add(this.rbtn_FileOutput);
+            this.group_Output.Controls.Add(this.rbtn_ScreenOutput);
+            this.group_Output.Location = new System.Drawing.Point(1292, 386);
+            this.group_Output.Name = "group_Output";
+            this.group_Output.Size = new System.Drawing.Size(140, 114);
+            this.group_Output.TabIndex = 27;
+            this.group_Output.TabStop = false;
+            this.group_Output.Text = "Output to";
+            // 
+            // rbtn_ScreenOutput
+            // 
+            this.rbtn_ScreenOutput.AutoSize = true;
+            this.rbtn_ScreenOutput.Checked = true;
+            this.rbtn_ScreenOutput.Location = new System.Drawing.Point(6, 25);
+            this.rbtn_ScreenOutput.Name = "rbtn_ScreenOutput";
+            this.rbtn_ScreenOutput.Size = new System.Drawing.Size(107, 24);
+            this.rbtn_ScreenOutput.TabIndex = 0;
+            this.rbtn_ScreenOutput.TabStop = true;
+            this.rbtn_ScreenOutput.Text = "On screen";
+            this.rbtn_ScreenOutput.UseVisualStyleBackColor = true;
+            // 
+            // rbtn_FileOutput
+            // 
+            this.rbtn_FileOutput.AutoSize = true;
+            this.rbtn_FileOutput.Location = new System.Drawing.Point(6, 55);
+            this.rbtn_FileOutput.Name = "rbtn_FileOutput";
+            this.rbtn_FileOutput.Size = new System.Drawing.Size(79, 24);
+            this.rbtn_FileOutput.TabIndex = 1;
+            this.rbtn_FileOutput.Text = ".txt file";
+            this.rbtn_FileOutput.UseVisualStyleBackColor = true;
+            // 
+            // btn_ResetScreenOutput
+            // 
+            this.btn_ResetScreenOutput.BackColor = System.Drawing.Color.Firebrick;
+            this.btn_ResetScreenOutput.ForeColor = System.Drawing.Color.White;
+            this.btn_ResetScreenOutput.Location = new System.Drawing.Point(1395, 506);
+            this.btn_ResetScreenOutput.Name = "btn_ResetScreenOutput";
+            this.btn_ResetScreenOutput.Size = new System.Drawing.Size(37, 36);
+            this.btn_ResetScreenOutput.TabIndex = 29;
+            this.btn_ResetScreenOutput.Text = "⨉";
+            this.btn_ResetScreenOutput.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btn_ResetScreenOutput.UseVisualStyleBackColor = false;
+            this.btn_ResetScreenOutput.Click += new System.EventHandler(this.btn_ResetScreenOutput_Click);
+            // 
+            // listBox_ScreenOutput
+            // 
+            this.listBox_ScreenOutput.FormattingEnabled = true;
+            this.listBox_ScreenOutput.ItemHeight = 20;
+            this.listBox_ScreenOutput.Location = new System.Drawing.Point(1115, 506);
+            this.listBox_ScreenOutput.Name = "listBox_ScreenOutput";
+            this.listBox_ScreenOutput.Size = new System.Drawing.Size(278, 124);
+            this.listBox_ScreenOutput.TabIndex = 30;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1444, 1060);
+            this.ClientSize = new System.Drawing.Size(1439, 1060);
+            this.Controls.Add(this.listBox_ScreenOutput);
+            this.Controls.Add(this.btn_ResetScreenOutput);
+            this.Controls.Add(this.group_Output);
+            this.Controls.Add(this.group_GetCoordinates);
             this.Controls.Add(this.group_Param);
-            this.Controls.Add(this.btn_DoneModify);
             this.Controls.Add(this.group_ModifyInput);
             this.Controls.Add(this.group_ModifyType);
             this.Controls.Add(this.group_AddType);
@@ -357,6 +445,9 @@
             this.group_ModifyInput.PerformLayout();
             this.group_Param.ResumeLayout(false);
             this.group_Param.PerformLayout();
+            this.group_GetCoordinates.ResumeLayout(false);
+            this.group_Output.ResumeLayout(false);
+            this.group_Output.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -384,11 +475,18 @@
         private System.Windows.Forms.GroupBox group_AddType;
         private System.Windows.Forms.GroupBox group_ModifyType;
         private System.Windows.Forms.GroupBox group_ModifyInput;
-        private System.Windows.Forms.Button btn_DoneModify;
         private System.Windows.Forms.GroupBox group_Param;
         private System.Windows.Forms.RadioButton rbtn_Chord;
         private System.Windows.Forms.RadioButton rbtn_Uniform;
         private System.Windows.Forms.Button btn_DoneComposite;
+        private System.Windows.Forms.Button btn_cPointsOutput;
+        private System.Windows.Forms.GroupBox group_GetCoordinates;
+        private System.Windows.Forms.Button btn_pPointsOutput;
+        private System.Windows.Forms.GroupBox group_Output;
+        private System.Windows.Forms.RadioButton rbtn_FileOutput;
+        private System.Windows.Forms.RadioButton rbtn_ScreenOutput;
+        private System.Windows.Forms.Button btn_ResetScreenOutput;
+        private System.Windows.Forms.ListBox listBox_ScreenOutput;
     }
 }
 
