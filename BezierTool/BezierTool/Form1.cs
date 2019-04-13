@@ -175,7 +175,7 @@ namespace BezierTool
         }
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
-            //Mouse has been pressed inside picturebox. This can be for adding control points or points on the line, for moving points with mouse
+            //Mouse has been pressed inside pictureBox1. This can be for adding control points or points on the line, for moving points with mouse
             //or for selecting a line to output its points coordinates
         {
 
@@ -197,7 +197,6 @@ namespace BezierTool
                 pictureBox1.Invalidate();
             }
 
-            
 
             if (cPointsAll != null && DragType == BezierType.cPoints && rbtn_MouseModify.Checked == true )
             //if we want to drag a control point
@@ -263,6 +262,7 @@ namespace BezierTool
 
 
             if (cPointsAll != null && OutputPointsType == BezierType.cPoints && rbtn_ScreenOutput.Checked == true)
+            // if we want to output coordinates of a line's control points on screen
             {
                 findLocalPoint(cPointsAll, e.Location);
 
@@ -281,6 +281,7 @@ namespace BezierTool
             }
 
             if (pPointsAll != null && OutputPointsType == BezierType.pPoints && rbtn_ScreenOutput.Checked == true)
+            //if we want to output coordinates of known line points on screen
             {
                 findLocalPoint(cPointsAll, e.Location);
                 
@@ -320,8 +321,17 @@ namespace BezierTool
         }
 
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
+            //Mouse is moving inside pictureBox1. This is used to draw dashed line when adding new points for <4 cPoints> line
+            // or it can be used for modifying a line by mouse.
         {
-            int i = 0;
+            if (AddType == BezierType.cPoints)
+            // if we are adding a new control point for <4 cPoints> line 
+            {
+                NewcPoint = e.Location;
+                pictureBox1.Invalidate();
+            }
+
+            int i = 0;//need to set a value for code to work, chose 0 arbitrary
             int j = 0;
 
             if (MovingPoint != null)
@@ -331,36 +341,46 @@ namespace BezierTool
             }
 
             if (ModifyType == BezierType.cPoints)
+            // for type <4 cPoints> line we can just change coordinates
             {
                 cPointsAll[i][j] = e.Location;
                 pictureBox1.Invalidate();
             }
 
             if (ModifyType == BezierType.composite && DragType == BezierType.cPoints)
+            // if we change type <Composite> line's control points, we need to make sure the line stays C2 continuous
             {
                 if (MovedLine[i] == MoveType.leftClick)
+                // using left click, we can drag the control point anywhere, but the 'opposite' control point moves aswell
+                //to maintain continuity
                 {
-                    cPointsAll[i][j] = e.Location;;
+                    cPointsAll[i][j] = e.Location;
 
                     if (j % 3 == 1 && j != 1)
+                    //starting from the fifth control point, every third point's opposite control point is two points before
                     {
                         changecPoint(j, j - 1, j - 2);
                     }
 
                     if (j % 3 == 2 && j != cPointsAll[i].Count - 2)
+                    //starting from the third control point, every third point's opposite control point is two points after
                     {
                         changecPoint(j, j + 1, j + 2);
                     }
                 }
 
                 if (MovedLine[i] == MoveType.rightClick)
+                // using right click no other control points will move, but to maintain continuity, we can only move the
+                // control point in straight line away from its opposite point
                 {
                     if (j % 3 == 1 && j != 1)
+                    //starting from the fifth control point, every third point's opposite control point is two points before
                     {
                         changeStraight(e.Location, cPointsAll[i][j - 1], cPointsAll[i][j - 2]);
                     }
 
                     if (j % 3 == 2 && j != cPointsAll[i].Count - 2)
+                    //starting from the third control point, every third point's opposite control point is two points after
                     {
                         changeStraight(e.Location, cPointsAll[i][j + 1], cPointsAll[i][j + 2]);
                     }
@@ -369,18 +389,12 @@ namespace BezierTool
             }
 
             if (ModifyType == BezierType.pPoints || ModifyType == BezierType.leastSquares)
+            //if we change type <4 pPoints> or <Least Squares> line points, we need to re-calculate its sontrol points
             {
                 pPointsAll[i][j] = e.Location;
                 getcPoints(i);
                 pictureBox1.Invalidate();
             }
-
-            if (AddType == BezierType.cPoints)
-            {
-                NewcPoint = e.Location;
-                pictureBox1.Invalidate();
-            }
-            
         }
 
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
