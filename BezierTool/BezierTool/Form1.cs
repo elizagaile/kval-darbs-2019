@@ -54,7 +54,7 @@ namespace BezierTool
         int LocalRadius = 7; //radius of neiborghood, used when selecting a point with mouse, chosen arbitrary
         int maxPointCount = 15; //maximum count of points to choose for lines <Least Squares> and <Composite>, chosen arbitrary
 
-        bool CompositeDone = false;//indicates, if the last line of type <Composite> needs to be finished;
+        bool CompositeDone = false;//indicates if the last line of type <Composite> needs to be finished;
 
         private void btnBackground_Click(object sender, EventArgs e)
             //uploads background image
@@ -148,6 +148,7 @@ namespace BezierTool
                 pPoints.Add(MouseLocation);
                 cPointsAll.Add(null);
                 MovedLine.Add(MoveType.nothing);
+                CompositeDone = false;
 
                 return;
             }
@@ -160,6 +161,12 @@ namespace BezierTool
             
             if (type == BezierType.pPoints && pPoints.Count >= 4)
             //type <4 pPoints can't have more than 4 chosen points on line)
+            {
+                return;
+            }
+
+            if (type == BezierType.composite && CompositeDone == true)
+            // can't add points to a <Composite> line that has been finished
             {
                 return;
             }
@@ -301,14 +308,18 @@ namespace BezierTool
         }
 
         private void findLocalPoint(List<List<Point>> PointsAll, Point MouseLocation)
+            //find if there is a control or line point near mouse location
         {
             for (int i = 0; i < PointsAll.Count; i++)
+            // go through every list of points in the given list
             {
                 if (PointsAll[i] != null)
                 {
                     for (int j = 0; j < PointsAll[i].Count; j++)
+                    // go through every point in the list
                     {
                         if ( length(MouseLocation, PointsAll[i][j]) < LocalRadius )
+                        //mouse if in a neighborhood of some point, so we asume it this point was clicked
                         {
                             ModifyType = AllLines[i];
                             MovingPoint = new Tuple<int, int>(i, j);
@@ -389,7 +400,7 @@ namespace BezierTool
             }
 
             if (ModifyType == BezierType.pPoints || ModifyType == BezierType.leastSquares)
-            //if we change type <4 pPoints> or <Least Squares> line points, we need to re-calculate its sontrol points
+            //if we change type <4 pPoints> or <Least Squares> line points, we need to re-calculate its control points
             {
                 pPointsAll[i][j] = e.Location;
                 getcPoints(i);
@@ -398,6 +409,7 @@ namespace BezierTool
         }
 
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
+            //Mouse button was released after pressing it in pictureBox1. If a point was being dragged by mouse, the dragging stops.
         {
             if (DragType != BezierType.nothing)
             {
@@ -407,58 +419,51 @@ namespace BezierTool
         }
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
+            //Draws all graphics in this programm - all bezier functions, straight lines and points, and calls for functions to get needed control points
         {
-            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;//makes lines look smoother
 
             if (pPointsAll != null)
             {
                 for (int i = 0; i< pPointsAll.Count; i++)
+                //go through every list of line points
                 {
                     if (pPointsAll[i] != null)
                     {
                         foreach (Point p in pPointsAll[i])
+                        //draw a black point for every line point
                         {
                             e.Graphics.FillEllipse(Brushes.Black, p.X - PointRadius, p.Y - PointRadius, 2 * PointRadius, 2 * PointRadius);
                         }
 
                         if (AddType == BezierType.pPoints && pPointsAll[i].Count == 4 && cPointsAll[i] == null)
+                        //if there are four line points for <4 pPoints> line, but we haven't yet calculated control points, calculate them
                         {
                             getcPoints(i);
                         }
 
-                        if (AddType == BezierType.leastSquares && pPointsAll[i].Count >= 4 && pPointsAll[i].Count <= maxPointCount)
+                        if (AddType == BezierType.leastSquares && pPointsAll[i].Count >= 4)
+                        //if there are at least four line points for <Least Square> line, calculate control points
                         {
                             getcPoints(i);
                         }
 
-                        if (AllLines[i] == BezierType.composite && pPointsAll[i].Count >= 3 && MovedLine[i] == MoveType.nothing)
+                        if (AllLines[i] == BezierType.composite && MovedLine[i] == MoveType.nothing)
+                        // if we want to draw a <Composite> line which hasn't been moved
                         {
-                            cPointsAll[i] = new List<Point>();
-                            cPointsAll[i].Add(pPointsAll[i][0]);
-                            addFirstcPoint(i);
-
-                            for (int j = 0; j < pPointsAll[i].Count - 2; j++)
+                            if (CompositeDone == true && pPointsAll[i].Count ==2)
+                             //finish and draw a <Composite> line with only two line points
                             {
-                                cPointsAll[i].Add(firstHandle(pPointsAll[i][j], pPointsAll[i][j + 1], pPointsAll[i][j + 2]));
-                                cPointsAll[i].Add(pPointsAll[i][j + 1]);
-                                cPointsAll[i].Add(secondHandle(pPointsAll[i][j], pPointsAll[i][j + 1], pPointsAll[i][j + 2]));
+                                cPointsAll[i] = new List<Point>();
+                                addOnlycPoints(i);
                             }
 
-                            if (cPointsAll[i].Count < pPointsAll[i].Count * 3 - 2 && i != AllLines.Count - 1)
+                            else if (pPointsAll[i].Count >= 3)
+                            //if a line has more than 3 line points, we can calculate its control points
                             {
-                                addLastcPoints(i);
+                                cPointsAll[i] = new List<Point>();
+                                addcPointsComposite(i);
                             }
-
-                            if (CompositeDone == true && i == AllLines.Count - 1)
-                            {
-                                addLastcPoints(i);
-                            }
-                        }
-
-                        if (AllLines[i] == BezierType.composite && CompositeDone == true && pPointsAll[i].Count == 2 && MovedLine[i] == MoveType.nothing)
-                        {
-                            cPointsAll[i] = new List<Point>();
-                            addOnlycPoints(i);
                         }
                     }
                 }
@@ -467,6 +472,7 @@ namespace BezierTool
             if (cPointsAll != null)
             {
                 if (cPoints != null)
+                //if we are selecting points for <4 cPoints> line, draw a dashed line from mouse location to previous control point
                 {
                     if (cPoints.Count < 4 && AddType == BezierType.cPoints)
                     {
@@ -479,16 +485,21 @@ namespace BezierTool
                 }
                 
                 for (int i = 0; i < cPointsAll.Count; i++)
+                // go through every list of control points
                 {
                     if (cPointsAll[i] != null)
                     {
+                        //Drawing control points:
+
                         if (AllLines[i] == BezierType.pPoints)
+                        //for <4 pPoints> draw only middle control points, because end points ar both control points and line points
                         {
                             e.Graphics.DrawEllipse(Pens.Red, cPointsAll[i][1].X - PointRadius, cPointsAll[i][1].Y - PointRadius, 2 * PointRadius, 2 * PointRadius);
                             e.Graphics.DrawEllipse(Pens.Red, cPointsAll[i][2].X - PointRadius, cPointsAll[i][2].Y - PointRadius, 2 * PointRadius, 2 * PointRadius);
                         }
 
-                        else if (AllLines[i] != BezierType.composite)
+                        else if (AllLines[i] == BezierType.cPoints || AllLines[i] == BezierType.leastSquares)
+                        // for <4 cPoints> and <Least Squares> draw all control points
                         {
                             foreach (Point c in cPointsAll[i])
                             {
@@ -496,17 +507,8 @@ namespace BezierTool
                             }
                         }
 
-                        if (AllLines[i] != BezierType.composite && cPointsAll[i].Count > 1)
-                        {
-                            e.Graphics.DrawLines(Pens.LightGray, cPointsAll[i].ToArray());
-
-                            if (cPointsAll[i].Count == 4)
-                            {
-                                e.Graphics.DrawBezier(Pens.Black, cPointsAll[i][0], cPointsAll[i][1], cPointsAll[i][2], cPointsAll[i][3]);
-                            }
-                        }
-
-                        else
+                        else if (AllLines[i] == BezierType.composite)
+                        // for <Composite> draw only those control points, which are not line points - every third line point starting from the first is also a control point
                         {
                             for (int j = 0; j < cPointsAll[i].Count - 1; j++)
                             {
@@ -514,10 +516,39 @@ namespace BezierTool
                                 {
                                     e.Graphics.DrawEllipse(Pens.Red, cPointsAll[i][j + 1].X - PointRadius, cPointsAll[i][j + 1].Y - PointRadius, 2 * PointRadius, 2 * PointRadius);
                                 }
-
-                                e.Graphics.DrawLine(Pens.LightGray, cPointsAll[i][j], cPointsAll[i][j + 1]);
                             }
+                        }
 
+
+                        //Drawing control point polygons / "handle" lines
+                        
+                        if (cPointsAll[i].Count > 1 && (AllLines[i] == BezierType.cPoints || AllLines[i] == BezierType.leastSquares || AllLines[i] == BezierType.pPoints))
+                        {
+                            e.Graphics.DrawLines(Pens.LightGray, cPointsAll[i].ToArray());
+                        }
+
+                        else if (AllLines[i] == BezierType.composite)
+                        //for <Composite> lines, draw only handles
+                        {
+                            for (int j = 0; j < cPointsAll[i].Count - 1; j++)
+                            {
+                                if (j % 3 != 1)
+                                {
+                                    e.Graphics.DrawLine(Pens.LightGray, cPointsAll[i][j], cPointsAll[i][j + 1]);
+                                }
+                            }
+                        }
+
+
+                        //Drawing all bezier lines:
+
+                        if (cPointsAll[i].Count == 4 && (AllLines[i] == BezierType.cPoints || AllLines[i] == BezierType.leastSquares || AllLines[i] == BezierType.pPoints))
+                        {
+                            e.Graphics.DrawBezier(Pens.Black, cPointsAll[i][0], cPointsAll[i][1], cPointsAll[i][2], cPointsAll[i][3]);
+                        }
+
+                        else if (AllLines[i] == BezierType.composite)
+                        {
                             for (int j = 0; j < cPointsAll[i].Count - 3; j += 3)
                             {
                                 e.Graphics.DrawBezier(Pens.Black, cPointsAll[i][j], cPointsAll[i][j + 1], cPointsAll[i][j + 2], cPointsAll[i][j + 3]);
@@ -526,8 +557,37 @@ namespace BezierTool
                     }
                 }
             }
+        }
 
-            
+        private void addcPointsComposite( int i)
+            //calculate control points for a <Composite> line with three or more line points
+        {
+            cPointsAll[i].Add(pPointsAll[i][0]);//first control point is first line point
+            addFirstcPoint(i);//add first control point that isn't a line point
+
+            for (int j = 2; j < pPointsAll[i].Count; j++)
+                //we can add three new controlpoints for every line point starting with the third line point. 
+                //Every line point is also a control point and for every but first andl last point, we get two control points - "handles"
+            {
+                cPointsAll[i].Add(firstHandle(pPointsAll[i][j - 2], pPointsAll[i][j - 1], pPointsAll[i][j]));
+                cPointsAll[i].Add(pPointsAll[i][j - 1]);
+                cPointsAll[i].Add(secondHandle(pPointsAll[i][j - 2], pPointsAll[i][j - 1], pPointsAll[i][j]));
+            }
+
+            if (i != AllLines.Count - 1 && cPointsAll[i].Count < pPointsAll[i].Count * 3 - 2)
+            //if a <Composite> line isn't the last drawn line, it must be finished. 
+            //That means, it should have three times (every point is a control point and has two "handles") minus two (each end point dont have one handle) more control points than line points
+            {
+                addLastcPoints(i);
+            }
+
+            else if (i == AllLines.Count - 1 && CompositeDone == true)
+            //if the last drawn <Composite> line is marked as done, calculate and add last control points
+            {
+                addLastcPoints(i);
+            }
+
+            return;
         }
 
         private void cbox_ShowBackground_CheckStateChanged(object sender, EventArgs e)
@@ -831,7 +891,7 @@ namespace BezierTool
             error.Text = "";
             listBox_ScreenOutput.DataSource = null;
             cbox_ShowBackground.Checked = false;
-            CompositeDone = true;
+            CompositeDone = false;
             OutputPointsType = BezierType.nothing;
 
             pictureBox1.Invalidate();
