@@ -591,6 +591,7 @@ namespace BezierTool
         }
 
         private void cbox_ShowBackground_CheckStateChanged(object sender, EventArgs e)
+            //make uploaded background picture visable or invisible
         {
             if (cbox_ShowBackground.Checked == false)
             {
@@ -604,100 +605,141 @@ namespace BezierTool
         }
 
         private double length(Point a, Point b)
+            //get length between two points
         {
             return Math.Sqrt(Math.Pow(a.X - b.X, 2) + Math.Pow(a.Y - b.Y, 2));
         }
 
         private void addFirstcPoint(int i)
+            //add first control point thats not a line point for <Composite> line with at least three line points
         {
-            Point c0 = new Point();
             Point c1 = new Point();
             Point c2 = new Point();
             Point c3 = new Point();
+            Point c4 = new Point();
 
-            c0 = pPointsAll[i][0];
-            c2 = firstHandle(pPointsAll[i][0], pPointsAll[i][1], pPointsAll[i][2]);
-            c3 = pPointsAll[i][1];
+            //control point location is calculated from first, third and fourth control points of the  <Composite> line
 
-            double tmp = (c2.X - c3.X) * (c0.X - c3.X) + (c2.Y - c3.Y) * (c0.Y - c3.Y);
-            double prop = 1 - 2 * tmp / (Math.Pow(length(c0, c3), 2));
+            c1 = pPointsAll[i][0];
+            c3 = firstHandle(pPointsAll[i][0], pPointsAll[i][1], pPointsAll[i][2]);
+            c4 = pPointsAll[i][1];
 
-            c1.X = Convert.ToInt32(prop * (c0.X - c3.X) + c2.X);
-            c1.Y = Convert.ToInt32(prop * (c0.Y - c3.Y) + c2.Y);
+            //We can look at these calculations as vector operations. First we calculate dot product of vectors C4C3 and C1C4:
+            double dot = (c3.X - c4.X) * (c1.X - c4.X) + (c3.Y - c4.Y) * (c1.Y - c4.Y);
 
-            cPointsAll[i].Add(c1);
+            //We need to find how long the vector from C2 to C3 needs to be, so that the middle control points are symmetrical.
+            //The symmetry can be achieved, if the C3C2 vector is parallel to C4C1 and has the length of 
+            //length(C4C1) - 2*length(projection of vector C4C3 on to C4C1). One projection length for each side.
+            //Using projection formula, we get: proportion = |C4C1| - 2 * dot / |C4C1| . We will multiply this proportion by unit vector
+            //parallel to vector C4C1, which can be expressed as C4C1 / |C4C1|. If we devide our proportion with |C4C1| from the unit vector,
+            //we get: proportion = 1 - 2 * dot / |C4C1|^2
+
+            //That means, the length of the vector we will add equals 
+            double prop = 1 - 2 * dot / (Math.Pow(length(c1, c4), 2));
+
+            //Lastly, to point C3 we add vector parallel to C1C4 scaled by the needed length - variable "prop":
+            c2.X = Convert.ToInt32(c3.X + prop * (c1.X - c4.X));
+            c2.Y = Convert.ToInt32(c3.Y + prop * (c1.Y - c4.Y));
+
+            //We have achieved a "symmetrical" point to third control point, both of these points are on the same side of the bezier line.
+
+            cPointsAll[i].Add(c2);
 
             return;
         }
 
         private void addLastcPoints(int i)
+            //add two last control points to a <Composite> line that''
         {
-            Point c0 = new Point();
             Point c1 = new Point();
             Point c2 = new Point();
             Point c3 = new Point();
+            Point c4 = new Point();
 
-            c0 = pPointsAll[i][pPointsAll[i].Count - 2];
-            c1 = cPointsAll[i][cPointsAll[i].Count - 1];
-            c3 = pPointsAll[i][pPointsAll[i].Count - 1];
+            //control point location is calculated from first, second and fourth control point of the last segment in the <Comoposite> line
 
-            double tmp = (c1.X - c3.X) * (c0.X - c3.X) + (c1.Y - c3.Y) * (c0.Y - c3.Y);
-            double prop = 1 - 2 * tmp / (Math.Pow(length(c0, c3), 2));
+            c1 = pPointsAll[i][pPointsAll[i].Count - 2];
+            c2 = cPointsAll[i][cPointsAll[i].Count - 1];
+            c4 = pPointsAll[i][pPointsAll[i].Count - 1];
 
-            c2.X = Convert.ToInt32(prop * (c0.X - c3.X) + c1.X);
-            c2.Y = Convert.ToInt32(prop * (c0.Y - c3.Y) + c1.Y);
+            //We can look at these calculations as vector operations. First we calculate dot product of vectors C4C2 and C1C4:
+            double dot = (c2.X - c4.X) * (c1.X - c4.X) + (c2.Y - c4.Y) * (c1.Y - c4.Y);
 
-            cPointsAll[i].Add(c2);
+            //To find how long the vector from C2 to C3 needs to be, we find the the proportion:
+            //(for more information on the calculation, see function addFirstcPoint();)
+            double prop = 1 - 2 * dot / (Math.Pow(length(c1, c4), 2));
+
+            //Lastly, to point C2 we add vector parallel to C1C4 scaled by the needed length - variable "prop":
+            c3.X = Convert.ToInt32(prop * (c1.X - c4.X) + c2.X);
+            c3.Y = Convert.ToInt32(prop * (c1.Y - c4.Y) + c2.Y);
+
+            //We have achieved a "symmetrical" point to second control point, both of these points are on the same side of the bezier line.
+
+            //We add the calculated point as wall as the last control point - the last line point:
             cPointsAll[i].Add(c3);
+            cPointsAll[i].Add(c4);
 
             pictureBox1.Invalidate();
         }
 
         private void addOnlycPoints(int i)
+            //add all control points to a <Composite> line thats marked as "done", but has only two line points
         {
-            Point c0 = new Point();
             Point c1 = new Point();
             Point c2 = new Point();
             Point c3 = new Point();
+            Point c4 = new Point();
 
-            c0 = pPointsAll[i][0];
-            c3 = pPointsAll[i][1];
+            //the first and last control points are the line points:
+            c1 = pPointsAll[i][0];
+            c4 = pPointsAll[i][1];
 
             double sin60 = Math.Sin(Math.PI / 3);
             double cos60 = Math.Cos(Math.PI / 3);
 
-            double x03 = 0.5 * (c3.X - c0.X);
-            double y03 = 0.5 * (c3.Y - c0.Y);
+            //Each control point will be line's C1C4 midpoint, rotated by 60 degrees. First we find the midpoint:
+            double x03 = 0.5 * (c4.X - c1.X);
+            double y03 = 0.5 * (c4.Y - c1.Y);
 
-            c1.X = Convert.ToInt32(cos60 * x03 - sin60 * y03 + c0.X);
-            c1.Y = Convert.ToInt32(sin60 * x03 + cos60 * y03 + c0.Y);
+            //Then we rotate the midpoint by 60 degrees.
+            c2.X = Convert.ToInt32(cos60 * x03 - sin60 * y03 + c1.X);
+            c2.Y = Convert.ToInt32(sin60 * x03 + cos60 * y03 + c1.Y);
 
-            c2.X = Convert.ToInt32(cos60 * -x03 - sin60 * -y03 + c3.X);
-            c2.Y = Convert.ToInt32(sin60 * -x03 + cos60 * -y03 + c3.Y);
+            //Change the signs for third control point, so the control points are on different sides of the bezier line:
+            c3.X = Convert.ToInt32(cos60 * -x03 - sin60 * -y03 + c4.X);
+            c3.Y = Convert.ToInt32(sin60 * -x03 + cos60 * -y03 + c4.Y);
 
-            cPointsAll[i].Add(c0);
             cPointsAll[i].Add(c1);
             cPointsAll[i].Add(c2);
             cPointsAll[i].Add(c3);
+            cPointsAll[i].Add(c4);
 
             pictureBox1.Invalidate();
         }
 
         private void changecPoint(int a, int b, int c)
+            //When moving a control point of a <Composite> line with left mouse button, 
+            //the opposite handle needs to moved as well to ensure C2 continuity
         {
-            Point moving = new Point();
-            Point middle = new Point();
-            Point change = new Point();
+            Point moving = new Point();// the point being dragged
+            Point middle = new Point();// the middle line point
+            Point change = new Point();// the opposite handle that needs to be moved
 
             moving = cPointsAll[MovingPoint.Item1][a];
             middle = cPointsAll[MovingPoint.Item1][b];
             change = cPointsAll[MovingPoint.Item1][c];
 
             if (middle == moving)
+            //in segment no two control points should have the same location, it doesn't make mathematical sense and makes an error
             {
                 middle.X++;
                 middle.Y++;
             }
+
+            //We can look at these calculations as vector operations. We want for vector middle-change to keep its length, 
+            //but change its direction so it starts from middle point and is parallel to moving-middle vector.
+            //To do that, we take unit vector from moving-middle (devide moving-middle with its length) and multiply that by 
+            //middle-change length. Finally, we add that to middle point.
 
             double prop = length(middle, change) / length(moving, middle);
 
@@ -708,8 +750,14 @@ namespace BezierTool
         }
 
         private void changeStraight(Point toMove, Point middle, Point prev)
+            //When moving a control point of a <Composite> line with right mouse button, it can be moved only in straight line away from the
+            //middle point. This ensures C2 continuity and that no other control point moves.
         {
             Point res = new Point();
+
+            //To move the control point in straight line, we take unit vector from the middle line point ("middle") to 
+            //the place control point was before moving ("prev") for which we know it was on the needed line. Than we multiply
+            //this unit vector by the distance mouse (toMove) is from middle point and add this vector to the middle point.
 
             double prop = length(middle, toMove) / length(prev, middle);
 
@@ -720,10 +768,16 @@ namespace BezierTool
         }
 
         private Point firstHandle(Point a, Point b, Point c)
+            //Calculate first handle (first middle control point) coordinates for <Composite> lines, to ensure C2 continuity.
         {
             Point res = new Point();
             double AB = length(a, b);
             double BC = length(b, c);
+
+            //Distance from first to second handle is half the distance from first given line point (a) to the last(c).
+            //The proportions of each handle is the same as proportion ab/bc, where b is the middle line point.
+            //Methods of calculation for distances can be different and there isn't one best method. 
+            //I have discovered that this method works nice most of the time and isn't expesive.
 
             res.X = b.X + Convert.ToInt32(0.5 * (a.X - c.X) * AB / (AB + BC));
             res.Y = b.Y + Convert.ToInt32(0.5 * (a.Y - c.Y) * AB / (AB + BC));
@@ -732,10 +786,13 @@ namespace BezierTool
         }
 
         private Point secondHandle(Point a, Point b, Point c)
+            //Calculate fsecond handle (second middle control point) coordinates for <Composite> lines, to ensure C2 continuity.
         {
             Point res = new Point();
             double AB = length(a, b);
             double BC = length(b, c);
+
+            //Calculations are very similar to those in function firstHandle.
 
             res.X = b.X + Convert.ToInt32(0.5 * (c.X - a.X) * BC / (AB + BC));
             res.Y = b.Y + Convert.ToInt32(0.5 * (c.Y - a.Y) * BC / (AB + BC));
@@ -744,14 +801,22 @@ namespace BezierTool
         }
 
         private void getcPoints(int i)
+            //Calculate control points for lines, where only line points are know - <4 pPoints> and <Least Squares>.
         {
             List<Point> pList = pPointsAll[i];
 
-            var M = Matrix<double>.Build;
+            //This method of curve fitting uses least squares method, so that distance errors from given line points to the Bezier curve 
+            // at respective t values is the smallest possible. For more calculation information see https://pomax.github.io/bezierinfo/#curvefitting.
+            //or my documentation???? man ir uzrakstits latexa pieradijums sajai metodei, nezinu, cik vajadzigi tas seit ir.
 
+            //We will represent Bezier curve in matrix form.
+
+            //Matrix M contains coefficients in an expanded Bezier curve function. We will only use cubic Bezier curves, therefor M always is:
+            var M = Matrix<double>.Build;
             double[,] matrixM = new double[4, 4]
                 { { 1, 0, 0, 0 }, { -3, 3, 0, 0 }, { 3, -6, 3, 0 }, { -1, 3, -3, 1 } };
 
+            //Matrix P contains coordinates of all line points:
             double[,] matrixP = new double[pList.Count, 2];
             for (int j = 0; j < pList.Count; j++)
             {
@@ -763,6 +828,8 @@ namespace BezierTool
             var m4 = M.DenseOfArray(matrixM);
             var m4_inv = m4.Inverse();
 
+            //Bezier curves are parametric, so we need appropriate t values for each line point to tie together coordinates with points o curve B(t). 
+            //This parametrization can be done in different ways; we will store the resulting t values in a list sPoints.
             List<double> sPoints = new List<double>();
 
             if (rbtn_Uniform.Checked == true)
@@ -786,6 +853,7 @@ namespace BezierTool
             var c = r2 * p;
             
             if (MovingPoint == null)
+            //if we are not modifying a line, this is the first time calculating control points
             {
                 cPoints = new List<Point>();
                 
@@ -798,6 +866,7 @@ namespace BezierTool
             }
 
             else
+            //else we need to replace the old control point coordinates by the new ones
             {
                 for (int j = 0; j < 4; j++)
                 {
@@ -805,12 +874,15 @@ namespace BezierTool
                     cPointsAll[i][j] = tmp;
                 }
             }
+
+            return;
         }
 
         private List<double> sPointsUniform(List<Point> pList)
+            //a way of Bezier curve parametrization, where t values are equally spaced
         {
             List<double> sPoints = new List<double>();
-
+            
             for (int i = 0; i < pList.Count; i++)
             {
                 double s = (double)i / (pList.Count - 1);
@@ -820,17 +892,23 @@ namespace BezierTool
         }
 
         private List<double> sPointsChord(List<Point> pList)
+            //a way of Bezier curve parametrization, where t values are aligned with distance along the polygon
         {
+            //At the first point, we're fixing t = 0, at the last point t = 1. Anywhere in between t value is equal to the distance
+            //along the polygon (made from control points), scaled to the [0,1] domain.
+
             List<double> sPoints = new List<double>();
             List<double> dPoints = new List<double>();
-            dPoints.Add(0);
 
+            //First we calculate point distance along the polygon:
+            dPoints.Add(0);
             for (int i = 1; i < pList.Count; i++)
             {
                 double d = dPoints[i - 1] + length(pList[i - 1], pList[i]);
                 dPoints.Add(d);
             }
 
+            //Then we scale these values to [0, 1] domain:
             for (int i = 0; i < pList.Count; i++)
             {
                 double s = dPoints[i] / dPoints[pList.Count - 1];
@@ -841,7 +919,9 @@ namespace BezierTool
         }
 
         private double[,] sMatrix(List<double> sPoints)
+            //Get and fill matrix S with calculated sPoints
         {
+            //In our error function (see references), we need to substitute symbolic t values in matrix T with the sPoint values we computed:
             double[,] sMatrix = new double[sPoints.Count, 4];
 
             for (int i = 0; i < sPoints.Count; i++)
@@ -855,25 +935,77 @@ namespace BezierTool
         }
 
         private void btn_cPointsModify_Click(object sender, EventArgs e)
+            //allow to drag existing control points by mouse
         {
             DragType = BezierType.cPoints;
-            AddType = BezierType.nothing;
-
+            AddType = BezierType.nothing; // to stop new point adding
         }
 
         private void btn_pPointsModify_Click(object sender, EventArgs e)
+            //allow to drag existing line points by mouse
         {
             DragType = BezierType.pPoints;
-            AddType = BezierType.nothing;
+            AddType = BezierType.nothing; // to stop new point adding
         }
 
-        private void btn_DoneModify_Click(object sender, EventArgs e)
+        private void btn_DoneComposite_Click(object sender, EventArgs e)
+            //finish the <Composite> line being drawed - draw last segment of it
         {
-            ModifyType = BezierType.nothing;
+            CompositeDone = true;
+            pictureBox1.Invalidate();
+        }
+
+        private void btn_cPointsOutput_Click(object sender, EventArgs e)
+            //enable option to output control point coordinates
+        {
+            OutputPointsType = BezierType.cPoints;
+            AddType = BezierType.nothing;
             DragType = BezierType.nothing;
+            ModifyType = BezierType.nothing;
+        }
+
+        private void btn_pPointsOutput_Click(object sender, EventArgs e)
+            //enable option to output line point coordinates
+        {
+            OutputPointsType = BezierType.pPoints;
+            AddType = BezierType.nothing;
+            DragType = BezierType.nothing;
+            ModifyType = BezierType.nothing;
+        }
+
+        private void OutputcPointsScreen( int i)
+            //output control points on screen
+        {
+            List <string> points = new List<string>();
+            for (int j = 0; j < cPointsAll[i].Count; j++)
+            {
+                string tmp = "C" + (j + 1) + " : " + cPointsAll[i][j] + "\n";
+                points.Add(tmp);
+            }
+            listBox_ScreenOutput.DataSource = points;
+        }
+
+        private void OutputpPointsScreen(int i)
+            //output control points on screen
+        {
+            List<string> points = new List<string>();
+            for (int j = 0; j < pPointsAll[i].Count; j++)
+            {
+                string tmp = "P" + (j + 1) + " : " + pPointsAll[i][j] + "\n";
+                points.Add(tmp);
+            }
+            listBox_ScreenOutput.DataSource = points;
+        }
+
+        private void btn_ResetScreenOutput_Click(object sender, EventArgs e)
+            //delete all content of point coordinates in screen output box
+        {
+            listBox_ScreenOutput.DataSource = null;
+            pictureBox1.Invalidate();
         }
 
         private void btn_Reset_Click(object sender, EventArgs e)
+            //reset form to its inial state, clean pictureBox1 and reset all settings
         {
             AddType = BezierType.nothing;
             ModifyType = BezierType.nothing;
@@ -894,56 +1026,6 @@ namespace BezierTool
             CompositeDone = false;
             OutputPointsType = BezierType.nothing;
 
-            pictureBox1.Invalidate();
-        }
-
-        private void btn_DoneComposite_Click(object sender, EventArgs e)
-        {
-            CompositeDone = true;
-            pictureBox1.Invalidate();
-        }
-
-        private void btn_cPointsOutput_Click(object sender, EventArgs e)
-        {
-            OutputPointsType = BezierType.cPoints;
-            AddType = BezierType.nothing;
-            DragType = BezierType.nothing;
-            ModifyType = BezierType.nothing;
-        }
-
-        private void btn_pPointsOutput_Click(object sender, EventArgs e)
-        {
-            OutputPointsType = BezierType.pPoints;
-            AddType = BezierType.nothing;
-            DragType = BezierType.nothing;
-            ModifyType = BezierType.nothing;
-        }
-
-        private void OutputcPointsScreen( int i)
-        {
-            List <string> points = new List<string>();
-            for (int j = 0; j < cPointsAll[i].Count; j++)
-            {
-                string tmp = "C" + (j + 1) + " : " + cPointsAll[i][j] + "\n";
-                points.Add(tmp);
-            }
-            listBox_ScreenOutput.DataSource = points;
-        }
-
-        private void OutputpPointsScreen(int i)
-        {
-            List<string> points = new List<string>();
-            for (int j = 0; j < pPointsAll[i].Count; j++)
-            {
-                string tmp = "P" + (j + 1) + " : " + pPointsAll[i][j] + "\n";
-                points.Add(tmp);
-            }
-            listBox_ScreenOutput.DataSource = points;
-        }
-
-        private void btn_ResetScreenOutput_Click(object sender, EventArgs e)
-        {
-            listBox_ScreenOutput.DataSource = null;
             pictureBox1.Invalidate();
         }
     }
