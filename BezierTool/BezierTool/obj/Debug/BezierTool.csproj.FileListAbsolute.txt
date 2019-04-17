@@ -24,3 +24,4 @@ C:\Users\Eliza Gaile\source\repos\kval-darbs-2019\BezierTool\BezierTool\obj\Debu
 C:\Users\Eliza Gaile\source\repos\kval-darbs-2019\BezierTool\BezierTool\obj\Debug\BezierTool.csproj.GenerateResource.cache
 C:\Users\Eliza Gaile\source\repos\kval-darbs-2019\BezierTool\BezierTool\obj\Debug\BezierTool.csproj.CoreCompileInputs.cache
 C:\Users\Eliza Gaile\source\repos\kval-darbs-2019\BezierTool\BezierTool\obj\Debug\BezierTool.csproj.CopyComplete
+C:\Users\Eliza Gaile\source\repos\kval-darbs-2019\BezierTool\BezierTool\obj\Debug\BezierTool.Form_KeyboardAdd.resources
