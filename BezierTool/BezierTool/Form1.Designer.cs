@@ -50,6 +50,7 @@
             this.group_ModifyType = new System.Windows.Forms.GroupBox();
             this.group_ModifyInput = new System.Windows.Forms.GroupBox();
             this.group_Param = new System.Windows.Forms.GroupBox();
+            this.btn_ChangeParam = new System.Windows.Forms.Button();
             this.rbtn_Chord = new System.Windows.Forms.RadioButton();
             this.rbtn_Uniform = new System.Windows.Forms.RadioButton();
             this.btn_cPointsOutput = new System.Windows.Forms.Button();
@@ -60,7 +61,6 @@
             this.rbtn_ScreenOutput = new System.Windows.Forms.RadioButton();
             this.btn_ResetScreenOutput = new System.Windows.Forms.Button();
             this.listBox_ScreenOutput = new System.Windows.Forms.ListBox();
-            this.btn_ChangeParam = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.group_AddInput.SuspendLayout();
             this.group_AddType.SuspendLayout();
@@ -309,6 +309,16 @@
             this.group_Param.TabStop = false;
             this.group_Param.Text = "Paramterization:";
             // 
+            // btn_ChangeParam
+            // 
+            this.btn_ChangeParam.Location = new System.Drawing.Point(6, 85);
+            this.btn_ChangeParam.Name = "btn_ChangeParam";
+            this.btn_ChangeParam.Size = new System.Drawing.Size(128, 37);
+            this.btn_ChangeParam.TabIndex = 2;
+            this.btn_ChangeParam.Text = "Choose line";
+            this.btn_ChangeParam.UseVisualStyleBackColor = true;
+            this.btn_ChangeParam.Click += new System.EventHandler(this.btn_ChangeParam_Click);
+            // 
             // rbtn_Chord
             // 
             this.rbtn_Chord.AutoSize = true;
@@ -418,16 +428,6 @@
             this.listBox_ScreenOutput.Size = new System.Drawing.Size(278, 124);
             this.listBox_ScreenOutput.TabIndex = 30;
             // 
-            // btn_ChangeParam
-            // 
-            this.btn_ChangeParam.Location = new System.Drawing.Point(6, 85);
-            this.btn_ChangeParam.Name = "btn_ChangeParam";
-            this.btn_ChangeParam.Size = new System.Drawing.Size(128, 37);
-            this.btn_ChangeParam.TabIndex = 2;
-            this.btn_ChangeParam.Text = "Choose line";
-            this.btn_ChangeParam.UseVisualStyleBackColor = true;
-            this.btn_ChangeParam.Click += new System.EventHandler(this.btn_ChangeParam_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -448,7 +448,7 @@
             this.Controls.Add(this.btn_Background);
             this.Controls.Add(this.pictureBox1);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Bezier Tool";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.group_AddInput.ResumeLayout(false);
             this.group_AddInput.PerformLayout();
