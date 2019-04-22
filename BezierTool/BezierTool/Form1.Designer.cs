@@ -172,9 +172,9 @@
             this.rbtn_FileAdd.AutoSize = true;
             this.rbtn_FileAdd.Location = new System.Drawing.Point(6, 85);
             this.rbtn_FileAdd.Name = "rbtn_FileAdd";
-            this.rbtn_FileAdd.Size = new System.Drawing.Size(95, 24);
+            this.rbtn_FileAdd.Size = new System.Drawing.Size(120, 24);
             this.rbtn_FileAdd.TabIndex = 10;
-            this.rbtn_FileAdd.Text = "From file";
+            this.rbtn_FileAdd.Text = "From .txt file";
             this.rbtn_FileAdd.UseVisualStyleBackColor = true;
             // 
             // error
@@ -246,7 +246,7 @@
             this.group_AddInput.Controls.Add(this.rbtn_FileAdd);
             this.group_AddInput.Location = new System.Drawing.Point(1292, 13);
             this.group_AddInput.Name = "group_AddInput";
-            this.group_AddInput.Size = new System.Drawing.Size(140, 115);
+            this.group_AddInput.Size = new System.Drawing.Size(146, 115);
             this.group_AddInput.TabIndex = 19;
             this.group_AddInput.TabStop = false;
             this.group_AddInput.Text = "Choose points:";
@@ -292,7 +292,7 @@
             this.group_ModifyInput.Controls.Add(this.rbtn_KeyboardModify);
             this.group_ModifyInput.Location = new System.Drawing.Point(1292, 271);
             this.group_ModifyInput.Name = "group_ModifyInput";
-            this.group_ModifyInput.Size = new System.Drawing.Size(140, 114);
+            this.group_ModifyInput.Size = new System.Drawing.Size(146, 114);
             this.group_ModifyInput.TabIndex = 22;
             this.group_ModifyInput.TabStop = false;
             this.group_ModifyInput.Text = "Modify points:";
@@ -304,7 +304,7 @@
             this.group_Param.Controls.Add(this.rbtn_Uniform);
             this.group_Param.Location = new System.Drawing.Point(1292, 134);
             this.group_Param.Name = "group_Param";
-            this.group_Param.Size = new System.Drawing.Size(140, 131);
+            this.group_Param.Size = new System.Drawing.Size(146, 131);
             this.group_Param.TabIndex = 24;
             this.group_Param.TabStop = false;
             this.group_Param.Text = "Paramterization:";
@@ -313,7 +313,7 @@
             // 
             this.btn_ChangeParam.Location = new System.Drawing.Point(6, 85);
             this.btn_ChangeParam.Name = "btn_ChangeParam";
-            this.btn_ChangeParam.Size = new System.Drawing.Size(128, 37);
+            this.btn_ChangeParam.Size = new System.Drawing.Size(134, 37);
             this.btn_ChangeParam.TabIndex = 2;
             this.btn_ChangeParam.Text = "Choose line";
             this.btn_ChangeParam.UseVisualStyleBackColor = true;
@@ -379,7 +379,7 @@
             this.group_Output.Controls.Add(this.rbtn_ScreenOutput);
             this.group_Output.Location = new System.Drawing.Point(1292, 391);
             this.group_Output.Name = "group_Output";
-            this.group_Output.Size = new System.Drawing.Size(140, 114);
+            this.group_Output.Size = new System.Drawing.Size(146, 114);
             this.group_Output.TabIndex = 27;
             this.group_Output.TabStop = false;
             this.group_Output.Text = "Output to";
@@ -410,7 +410,7 @@
             // 
             this.btn_ResetScreenOutput.BackColor = System.Drawing.Color.Firebrick;
             this.btn_ResetScreenOutput.ForeColor = System.Drawing.Color.White;
-            this.btn_ResetScreenOutput.Location = new System.Drawing.Point(1395, 511);
+            this.btn_ResetScreenOutput.Location = new System.Drawing.Point(1401, 511);
             this.btn_ResetScreenOutput.Name = "btn_ResetScreenOutput";
             this.btn_ResetScreenOutput.Size = new System.Drawing.Size(37, 36);
             this.btn_ResetScreenOutput.TabIndex = 29;
@@ -425,14 +425,14 @@
             this.listBox_ScreenOutput.ItemHeight = 20;
             this.listBox_ScreenOutput.Location = new System.Drawing.Point(1115, 511);
             this.listBox_ScreenOutput.Name = "listBox_ScreenOutput";
-            this.listBox_ScreenOutput.Size = new System.Drawing.Size(278, 124);
+            this.listBox_ScreenOutput.Size = new System.Drawing.Size(284, 124);
             this.listBox_ScreenOutput.TabIndex = 30;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1439, 1060);
+            this.ClientSize = new System.Drawing.Size(1450, 1060);
             this.Controls.Add(this.listBox_ScreenOutput);
             this.Controls.Add(this.btn_ResetScreenOutput);
             this.Controls.Add(this.group_Output);

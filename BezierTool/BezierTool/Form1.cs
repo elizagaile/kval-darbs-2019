@@ -354,7 +354,7 @@ namespace BezierTool
         {
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;//makes lines look smoother
 
-
+            error.Text = ""+cPointsAll.Count;
             if (pPointsAll != null)
             {
                 for (int i = 0; i < pPointsAll.Count; i++)
@@ -578,6 +578,83 @@ namespace BezierTool
 
                 pictureBox1.Invalidate();
             }
+
+            if (rbtn_FileAdd.Checked == true)
+            //if adding new line from a .txt file
+            {
+                string pathFile = "";
+                string text = "";
+
+                OpenFileDialog theDialog = new OpenFileDialog();
+                theDialog.Title = "Open Text File";
+                theDialog.Filter = "TXT files|*.txt";
+                theDialog.InitialDirectory = @"C:\";
+                if (theDialog.ShowDialog() == DialogResult.OK)
+                {
+                    pathFile = theDialog.FileName;
+                }
+
+                if (File.Exists(pathFile))
+                {
+                    using (StreamReader sr = new StreamReader(pathFile))
+                    {
+                        text = sr.ReadToEnd();//all text wil be saved in text enters are also saved
+                    }
+                }
+
+                else
+                {
+                    deleteLine();//te myb vajag labakus exceptions
+                    return;
+                }
+
+                cPointsAll.Add(textToPoints(text));
+
+                pPointsAll.Add(null);//adding empty list of pPoints, as <4 cPoints> won't have any, to keep correct counting
+                Parametrization.Add(ParamType.nothing);
+
+                pictureBox1.Invalidate();
+            }
+
+        }
+
+        private List<Point> textToPoints(string text)
+        {
+            cPoints = new List<Point>();
+            Point point = new Point();
+            string stringX = "";
+            string stringY = "";
+            int index = 0;
+
+            while (text.Length > 0)
+            {
+                index = text.IndexOf(' ');
+                stringX = text.Substring(0, index);
+                point.X = Convert.ToInt32(stringX);
+
+                text = text.Substring(index + 1);
+
+                
+                index = text.IndexOf('\n');
+
+                if (index != -1)
+                {
+                    stringY = text.Substring(0, index);
+                    text = text.Substring(index + 1);
+                }
+
+                else
+                {
+                    stringY = text;
+                    text = "";
+                }
+
+                point.Y = Convert.ToInt32(stringY);
+
+                cPoints.Add(point);
+            }
+
+            return cPoints;
         }
 
         private void btn_pPointsAdd_Click(object sender, EventArgs e)
@@ -598,20 +675,63 @@ namespace BezierTool
                     return;
                 }
 
-                ParamType paramType = ParamType.nothing; // need to asign value for code to work
-
                 if (rbtn_Uniform.Checked == true)
                 {
-                    paramType = ParamType.uniform;
+                    Parametrization.Add(ParamType.uniform);
                 }
 
                 else if (rbtn_Chord.Checked == true)
                 {
-                    paramType = ParamType.chord;
+                    Parametrization.Add(ParamType.chord);
                 }
 
                 cPointsAll.Add(null);
-                Parametrization.Add(paramType);
+
+                pictureBox1.Invalidate();
+            }
+
+            if (rbtn_FileAdd.Checked == true)
+            //if adding new line from a .txt file
+            {
+                string pathFile = "";
+                string text = "";
+
+                OpenFileDialog theDialog = new OpenFileDialog();
+                theDialog.Title = "Open Text File";
+                theDialog.Filter = "TXT files|*.txt";
+                theDialog.InitialDirectory = @"C:\";
+                if (theDialog.ShowDialog() == DialogResult.OK)
+                {
+                    pathFile = theDialog.FileName;
+                }
+
+                if (File.Exists(pathFile))
+                {
+                    using (StreamReader sr = new StreamReader(pathFile))
+                    {
+                        text = sr.ReadToEnd();//all text wil be saved in text enters are also saved
+                    }
+                }
+
+                else
+                {
+                    deleteLine();//te myb vajag labakus exceptions
+                    return;
+                }
+
+                pPointsAll.Add(textToPoints(text));
+
+                cPointsAll.Add(null);//adding empty list of pPoints, as <4 cPoints> won't have any, to keep correct counting
+
+                if (rbtn_Uniform.Checked == true)
+                {
+                    Parametrization.Add(ParamType.uniform);
+                }
+
+                else if (rbtn_Chord.Checked == true)
+                {
+                    Parametrization.Add(ParamType.chord);
+                }
 
                 pictureBox1.Invalidate();
             }
@@ -635,20 +755,63 @@ namespace BezierTool
                     return;
                 }
 
-                ParamType paramType = ParamType.nothing; // need to asign value for code to work
-
                 if (rbtn_Uniform.Checked == true)
                 {
-                    paramType = ParamType.uniform;
+                    Parametrization.Add(ParamType.uniform);
                 }
 
                 else if (rbtn_Chord.Checked == true)
                 {
-                    paramType = ParamType.chord;
+                    Parametrization.Add(ParamType.chord);
                 }
 
                 cPointsAll.Add(null);
-                Parametrization.Add(paramType);
+
+                pictureBox1.Invalidate();
+            }
+
+            if (rbtn_FileAdd.Checked == true)
+            //if adding new line from a .txt file
+            {
+                string pathFile = "";
+                string text = "";
+
+                OpenFileDialog theDialog = new OpenFileDialog();
+                theDialog.Title = "Open Text File";
+                theDialog.Filter = "TXT files|*.txt";
+                theDialog.InitialDirectory = @"C:\";
+                if (theDialog.ShowDialog() == DialogResult.OK)
+                {
+                    pathFile = theDialog.FileName;
+                }
+
+                if (File.Exists(pathFile))
+                {
+                    using (StreamReader sr = new StreamReader(pathFile))
+                    {
+                        text = sr.ReadToEnd();
+                    }
+                }
+
+                else
+                {
+                    deleteLine();//te myb vajag labakus exceptions
+                    return;
+                }
+
+                pPointsAll.Add(textToPoints(text));
+
+                cPointsAll.Add(null);
+
+                if (rbtn_Uniform.Checked == true)
+                {
+                    Parametrization.Add(ParamType.uniform);
+                }
+
+                else if (rbtn_Chord.Checked == true)
+                {
+                    Parametrization.Add(ParamType.chord);
+                }
 
                 pictureBox1.Invalidate();
             }
@@ -676,6 +839,44 @@ namespace BezierTool
                 Parametrization.Add(ParamType.nothing);
                 CompositeDone = true;
 
+                pictureBox1.Invalidate();
+            }
+
+            if (rbtn_FileAdd.Checked == true)
+            //if adding new line from a .txt file
+            {
+                string pathFile = "";
+                string text = "";
+
+                OpenFileDialog theDialog = new OpenFileDialog();
+                theDialog.Title = "Open Text File";
+                theDialog.Filter = "TXT files|*.txt";
+                theDialog.InitialDirectory = @"C:\";
+                if (theDialog.ShowDialog() == DialogResult.OK)
+                {
+                    pathFile = theDialog.FileName;
+                }
+
+                if (File.Exists(pathFile))
+                {
+                    using (StreamReader sr = new StreamReader(pathFile))
+                    {
+                        text = sr.ReadToEnd();
+                    }
+                }
+
+                else
+                {
+                    deleteLine();//te myb vajag labakus exceptions
+                    return;
+                }
+
+                pPointsAll.Add(textToPoints(text));
+
+                cPointsAll.Add(null);
+                Parametrization.Add(ParamType.nothing);
+                CompositeDone = true;
+                
                 pictureBox1.Invalidate();
             }
         }
