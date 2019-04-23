@@ -13,13 +13,19 @@ namespace BezierTool
         private List<Point> pPoints = null;
         Form1.BezierType addType = Form1.AddType;
         public static bool lineAdded = false; //to determine if a line was drawn successfully
-        int counter = 1;
-        string type = "";
+        int counter = 1; //count of input points
+        string type = ""; //point type - "C" for control points, "P" for line points
 
         public Form_KeyboardAdd()
             //initialization
         {
             InitializeComponent();
+
+            //for scrolling point list:
+            tableLayoutPanel1.HorizontalScroll.Maximum = 0;
+            tableLayoutPanel1.AutoScroll = false;
+            tableLayoutPanel1.VerticalScroll.Visible = false;
+            tableLayoutPanel1.AutoScroll = true;
 
             //make labels according to input type:
 
@@ -37,15 +43,10 @@ namespace BezierTool
                 type = "P";
             }
 
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 4; i++)//for every line, start with 4 points
             {
                 makeRow();
             }
-
-            tableLayoutPanel1.HorizontalScroll.Maximum = 0;
-            tableLayoutPanel1.AutoScroll = false;
-            tableLayoutPanel1.VerticalScroll.Visible = false;
-            tableLayoutPanel1.AutoScroll = true;
 
             if (addType == Form1.BezierType.cPoints || addType == Form1.BezierType.pPoints)
             {
@@ -58,10 +59,10 @@ namespace BezierTool
                 btn_AddRow.Visible = true;
                 btn_DeleteRow.Visible = true;
             }
-
         }
 
         private void makeRow()
+            //add new row to form
         {
             Label newLabel = new Label();
             string tmp = type + counter;
@@ -69,15 +70,15 @@ namespace BezierTool
             tableLayoutPanel1.RowCount = tableLayoutPanel1.RowCount + 1;
             tableLayoutPanel1.Controls.Add(newLabel);
 
-            TextBox newxPoint = new TextBox();
+            TextBox newxPoint = new TextBox();//new textbox for x coordinate
             newxPoint.Name = "input_x" + counter;
             tableLayoutPanel1.Controls.Add(newxPoint);
 
-            TextBox newyPoint = new TextBox();
+            TextBox newyPoint = new TextBox();//new textbox for y coordinate
             newyPoint.Name = "input_y" + counter;
             tableLayoutPanel1.Controls.Add(newyPoint);
 
-            Label newEmpty = new Label();
+            Label newEmpty = new Label();//table has an empty column where scroll bar goes on top
             newEmpty.Text = "";
             tableLayoutPanel1.Controls.Add(newEmpty);
 
@@ -92,7 +93,7 @@ namespace BezierTool
         }
 
         private void btn_ResetInput_Click(object sender, EventArgs e)
-            //clean input values
+            //reset typed input values
         {
             for (int i = 0; i < InputValues.Count; i++)
             {
@@ -112,116 +113,68 @@ namespace BezierTool
                 }
             }
 
+            List<Point> pointList = new List<Point>();
+            int x, y;
+
+            for (int i = 0; i < InputValues.Count; i += 2)
+            //put all values from text boxes to control point list
+            {
+                x = Convert.ToInt32(InputValues[i].Text);
+                y = Convert.ToInt32(InputValues[i + 1].Text);
+                Point tmp = new Point(x, y);
+
+                pointList.Add(tmp);
+            }
+
             if (addType == Form1.BezierType.cPoints)
             {
-                cPoints = new List<Point>();
-                int x, y;
-
-                for (int i = 0; i < InputValues.Count ; i += 2)
-                //put all values from text boxes to control point list
-                {
-                    x = Convert.ToInt32(InputValues[i].Text);
-                    y = Convert.ToInt32(InputValues[i + 1].Text);
-                    Point tmp = new Point(x, y);
-
-                    cPoints.Add(tmp);
-                }
-
-                Form1.cPointsAll.Add(cPoints);
-                lineAdded = true;//line was added successfully
+                Form1.cPointsAll[Form1.cPointsAll.Count - 1] = pointList;
+                lineAdded = true; //line was added successfully
             }
 
-            if (addType == Form1.BezierType.pPoints)
+            else if (addType == Form1.BezierType.pPoints || addType == Form1.BezierType.leastSquares || addType == Form1.BezierType.composite)
             {
-                pPoints = new List<Point>();
-                int x, y;
-
-                for (int i = 0; i < InputValues.Count; i += 2)
-                //put all values from text boxes to line point list
-                {
-                    x = Convert.ToInt32(InputValues[i].Text);
-                    y = Convert.ToInt32(InputValues[i + 1].Text);
-                    Point tmp = new Point(x, y);
-
-                    pPoints.Add(tmp);
-                }
-
-                Form1.pPointsAll.Add(pPoints);
-                lineAdded = true;//line was added successfully
+                Form1.pPointsAll[Form1.pPointsAll.Count - 1] = pointList;
+                lineAdded = true; //line was added successfully
             }
-
-            if (addType == Form1.BezierType.leastSquares)
-            {
-                pPoints = new List<Point>();
-                int x, y;
-
-                for (int i = 0; i < InputValues.Count; i += 2)
-                //put all values from text boxes to line point list
-                {
-                    x = Convert.ToInt32(InputValues[i].Text);
-                    y = Convert.ToInt32(InputValues[i + 1].Text);
-                    Point tmp = new Point(x, y);
-
-                    pPoints.Add(tmp);
-                }
-
-                Form1.pPointsAll.Add(pPoints);
-                lineAdded = true;//line was added successfully
-
-            }
-
-            if (addType == Form1.BezierType.composite)
-            {
-                pPoints = new List<Point>();
-                int x, y;
-
-                for (int i = 0; i < InputValues.Count; i += 2)
-                //put all values from text boxes to line point list
-                {
-                    x = Convert.ToInt32(InputValues[i].Text);
-                    y = Convert.ToInt32(InputValues[i + 1].Text);
-                    Point tmp = new Point(x, y);
-
-                    pPoints.Add(tmp);
-                }
-
-                Form1.pPointsAll.Add(pPoints);
-                lineAdded = true;//line was added successfully
-            }
-
-                this.Close();
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            makeRow();
+            
+            this.Close();
         }
 
         private void btn_DeleteRow_Click(object sender, EventArgs e)
+            //delete input row
         {
-            if (addType == Form1.BezierType.leastSquares && tableLayoutPanel1.RowCount <= 9)
+            if (addType == Form1.BezierType.leastSquares && tableLayoutPanel1.RowCount <= 9) //4 rows minimum plus 5 rows from design equals 9 rows
             {
                 MessageBox.Show("<Least Squares> lines can't have less than 4 points!");
                 return;
             }
 
-            if (addType == Form1.BezierType.composite && tableLayoutPanel1.RowCount <= 7)
+            if (addType == Form1.BezierType.composite && tableLayoutPanel1.RowCount <= 7) //2 rows minimum plus 5 rows from design equals 7 rows
             {
                 MessageBox.Show("<Composite> lines can't have less than 2 points!");
                 return;
             }
 
-            for (int i = 0; i < 4; i ++)
+            for (int i = 0; i < tableLayoutPanel1.ColumnCount; i ++)
+            // remove all controls from row
             {
                 int count = tableLayoutPanel1.Controls.Count;
                 tableLayoutPanel1.Controls.RemoveAt(count - 1);
             }
 
+            //remove textboxes from input list
             InputValues.RemoveAt(InputValues.Count - 1);
             InputValues.RemoveAt(InputValues.Count - 1);
 
             tableLayoutPanel1.RowCount --;
             counter --;
+        }
+
+        private void btn_AddRow_Click(object sender, EventArgs e)
+            //add new row
+        {
+            makeRow();
         }
     }
 }

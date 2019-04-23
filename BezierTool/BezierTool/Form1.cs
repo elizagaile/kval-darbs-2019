@@ -55,7 +55,7 @@ namespace BezierTool
 
         int PointRadius = 2; //radius for control points and specific points on lines, chosen arbitrary
         int LocalRadius = 7; //radius of neiborghood, used when selecting a point with mouse, chosen arbitrary
-        int maxPointCount = 15; //maximum count of points to choose for lines <Least Squares> and <Composite>, chosen arbitrary
+        int maxPointCount = 25; //maximum count of points to choose for lines <Least Squares> and <Composite>, chosen arbitrary
 
         bool CompositeDone = false;//indicates if the last line of type <Composite> needs to be finished;
         bool ChangeParam = false;//indicates if option to change parametrization is enabled
@@ -74,7 +74,7 @@ namespace BezierTool
                     AddcPoint(BezierType.cPoints, e.Location);
                 }
 
-                else
+                else if (AddType == BezierType.pPoints || AddType == BezierType.leastSquares || AddType == BezierType.composite)
                 //for <4 pPoints>, <Least Squares> or <Composite> type lines we can add only line points
                 {
                     AddpPoint(AddType, e.Location);
@@ -124,7 +124,6 @@ namespace BezierTool
                 }
 
                 pictureBox1.Invalidate();
-
             }
 
             if (pPointsAll != null && DragType == BezierType.pPoints && rbtn_MouseModify.Checked == true)
@@ -235,15 +234,9 @@ namespace BezierTool
                 int i = MovingPoint.Item1;
                 ParamType paramType = Parametrization[i];
 
-                if (AllLines[i] == BezierType.cPoints)
+                if (AllLines[i] == BezierType.cPoints || AllLines[i] == BezierType.composite)
                 {
-                    error.Text = "<4 cPoints> lines doesn't use parametrization!";
-                    return;
-                }
-
-                if (AllLines[i] == BezierType.composite)
-                {
-                    error.Text = "<Composite> lines doesn't use parametrization!";
+                    error.Text = "<" + AllLines[i] + "> lines doesn't use parametrization!";
                     return;
                 }
 
@@ -289,7 +282,15 @@ namespace BezierTool
                 pictureBox1.Invalidate();
             }
 
-            if (ModifyType == BezierType.composite && DragType == BezierType.cPoints)
+            else if ((ModifyType == BezierType.pPoints || ModifyType == BezierType.leastSquares) && DragType == BezierType.pPoints)
+            //if we change type <4 pPoints> or <Least Squares> line points, we need to re-calculate its control points
+            {
+                pPointsAll[i][j] = e.Location;
+                getcPoints(i);
+                pictureBox1.Invalidate();
+            }
+
+            else if (ModifyType == BezierType.composite && DragType == BezierType.cPoints)
             // if we change type <Composite> line's control points, we need to make sure the line stays C2 continuous
             {
                 if (MovedLine[i] == MoveType.leftClick)
@@ -329,14 +330,6 @@ namespace BezierTool
                 }
                 pictureBox1.Invalidate();
             }
-
-            if ((ModifyType == BezierType.pPoints || ModifyType == BezierType.leastSquares) && DragType == BezierType.pPoints)
-            //if we change type <4 pPoints> or <Least Squares> line points, we need to re-calculate its control points
-            {
-                pPointsAll[i][j] = e.Location;
-                getcPoints(i);
-                pictureBox1.Invalidate();
-            }
         }
 
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
@@ -354,137 +347,135 @@ namespace BezierTool
         {
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;//makes lines look smoother
 
-            error.Text = ""+cPointsAll.Count;
-            if (pPointsAll != null)
+            if (cPointsAll == null || pPointsAll == null)
             {
-                for (int i = 0; i < pPointsAll.Count; i++)
-                //go through every list of line points
+                return;
+            }
+
+            if (cPoints != null)
+            //if we are selecting points for <4 cPoints> line, draw a dashed line from mouse location to previous control point
+            {
+                if (cPoints.Count < 4 && AddType == BezierType.cPoints)
                 {
-                    if (pPointsAll[i] != null)
+                    using (Pen dashed_pen = new Pen(Color.LightGray))
                     {
-                        foreach (Point p in pPointsAll[i])
-                        //draw a black point for every line point
-                        {
-                            e.Graphics.FillEllipse(Brushes.Black, p.X - PointRadius, p.Y - PointRadius, 2 * PointRadius, 2 * PointRadius);
-                        }
-
-                        if (AllLines[i] == BezierType.pPoints && pPointsAll[i].Count == 4 && cPointsAll[i] == null)
-                        //if there are four line points for <4 pPoints> line, but we haven't yet calculated control points, calculate them
-                        {
-                            getcPoints(i);
-                        }
-
-                        if (AllLines[i] == BezierType.leastSquares && pPointsAll[i].Count >= 4)
-                        //if there are at least four line points for <Least Square> line, calculate control points
-                        {
-                            getcPoints(i);
-                        }
-
-                        if (AllLines[i] == BezierType.composite && MovedLine[i] == MoveType.nothing)
-                        // if we want to draw a <Composite> line which hasn't been moved
-                        {
-                            if (CompositeDone == true && pPointsAll[i].Count == 2)
-                            //finish and draw a <Composite> line with only two line points
-                            {
-                                cPointsAll[i] = new List<Point>();
-                                addOnlycPoints(i);
-                            }
-
-                            else if (pPointsAll[i].Count >= 3)
-                            //if a line has more than 3 line points, we can calculate its control points
-                            {
-                                cPointsAll[i] = new List<Point>();
-                                addcPointsComposite(i);
-                            }
-                        }
+                        dashed_pen.DashPattern = new float[] { 5, 5 };
+                        e.Graphics.DrawLine(dashed_pen, cPoints[cPoints.Count - 1], NewcPoint);
                     }
                 }
             }
 
-            if (cPointsAll != null)
+            for (int i = 0; i < pPointsAll.Count; i++)
+            //go through every list of line points
             {
-                if (cPoints != null)
-                //if we are selecting points for <4 cPoints> line, draw a dashed line from mouse location to previous control point
+                if (pPointsAll[i] != null)
                 {
-                    if (cPoints.Count < 4 && AddType == BezierType.cPoints)
+                    foreach (Point p in pPointsAll[i])
+                    //draw a black point for every line point
                     {
-                        using (Pen dashed_pen = new Pen(Color.LightGray))
+                        e.Graphics.FillEllipse(Brushes.Black, p.X - PointRadius, p.Y - PointRadius, 2 * PointRadius, 2 * PointRadius);
+                    }
+
+                    if (AllLines[i] == BezierType.pPoints && pPointsAll[i].Count == 4 && cPointsAll[i] == null)
+                    //if there are four line points for <4 pPoints> line, but we haven't yet calculated control points, calculate them
+                    {
+                        getcPoints(i);
+                    }
+
+                    if (AllLines[i] == BezierType.leastSquares && pPointsAll[i].Count >= 4)
+                    //if there are at least four line points for <Least Square> line, calculate control points
+                    {
+                        getcPoints(i);
+                    }
+
+                    if (AllLines[i] == BezierType.composite && MovedLine[i] == MoveType.nothing)
+                    // if we want to draw a <Composite> line which hasn't been moved
+                    {
+                        if (CompositeDone == true && pPointsAll[i].Count == 2)
+                        //finish and draw a <Composite> line with only two line points
                         {
-                            dashed_pen.DashPattern = new float[] { 5, 5 };
-                            e.Graphics.DrawLine(dashed_pen, cPoints[cPoints.Count - 1], NewcPoint);
+                            cPointsAll[i] = new List<Point>();
+                            addOnlycPoints(i);
+                        }
+
+                        else if (pPointsAll[i].Count >= 3)
+                        //if a <Composite> line has more than 3 line points, we can calculate its control points
+                        {
+                            cPointsAll[i] = new List<Point>();
+                            addcPointsComposite(i);
                         }
                     }
                 }
-
-                for (int i = 0; i < cPointsAll.Count; i++)
-                // go through every list of control points
+            }
+            
+            for (int i = 0; i < cPointsAll.Count; i++)
+            // go through every list of control points
+            {
+                if (cPointsAll[i] != null)
                 {
-                    if (cPointsAll[i] != null)
+                    //Drawing control points:
+
+                    if (AllLines[i] == BezierType.cPoints || AllLines[i] == BezierType.leastSquares)
+                    // for <4 cPoints> and <Least Squares> draw all control points
                     {
-                        //Drawing control points:
-
-                        if (AllLines[i] == BezierType.pPoints)
-                        //for <4 pPoints> draw only middle control points, because end points ar both control points and line points
+                        foreach (Point c in cPointsAll[i])
                         {
-                            e.Graphics.DrawEllipse(Pens.Red, cPointsAll[i][1].X - PointRadius, cPointsAll[i][1].Y - PointRadius, 2 * PointRadius, 2 * PointRadius);
-                            e.Graphics.DrawEllipse(Pens.Red, cPointsAll[i][2].X - PointRadius, cPointsAll[i][2].Y - PointRadius, 2 * PointRadius, 2 * PointRadius);
+                            e.Graphics.DrawEllipse(Pens.Red, c.X - PointRadius, c.Y - PointRadius, 2 * PointRadius, 2 * PointRadius);
                         }
+                    }
 
-                        else if (AllLines[i] == BezierType.cPoints || AllLines[i] == BezierType.leastSquares)
-                        // for <4 cPoints> and <Least Squares> draw all control points
+                    else if (AllLines[i] == BezierType.pPoints)
+                    //for <4 pPoints> draw only middle control points, because end points ar both control points and line points
+                    {
+                        e.Graphics.DrawEllipse(Pens.Red, cPointsAll[i][1].X - PointRadius, cPointsAll[i][1].Y - PointRadius, 2 * PointRadius, 2 * PointRadius);
+                        e.Graphics.DrawEllipse(Pens.Red, cPointsAll[i][2].X - PointRadius, cPointsAll[i][2].Y - PointRadius, 2 * PointRadius, 2 * PointRadius);
+                    }
+
+                    else if (AllLines[i] == BezierType.composite)
+                    // for <Composite> draw only those control points, which are not line points - every third line point starting from the first is also a control point
+                    {
+                        for (int j = 0; j < cPointsAll[i].Count - 1; j++)
                         {
-                            foreach (Point c in cPointsAll[i])
+                            if (j % 3 != 2)
                             {
-                                e.Graphics.DrawEllipse(Pens.Red, c.X - PointRadius, c.Y - PointRadius, 2 * PointRadius, 2 * PointRadius);
+                                e.Graphics.DrawEllipse(Pens.Red, cPointsAll[i][j + 1].X - PointRadius, cPointsAll[i][j + 1].Y - PointRadius, 2 * PointRadius, 2 * PointRadius);
                             }
                         }
+                    }
 
-                        else if (AllLines[i] == BezierType.composite)
-                        // for <Composite> draw only those control points, which are not line points - every third line point starting from the first is also a control point
+
+                    //Drawing control point polygons / "handle" lines
+
+                    if (cPointsAll[i].Count > 1 && (AllLines[i] == BezierType.cPoints || AllLines[i] == BezierType.leastSquares || AllLines[i] == BezierType.pPoints))
+                    {
+                        e.Graphics.DrawLines(Pens.LightGray, cPointsAll[i].ToArray());
+                    }
+
+                    else if (AllLines[i] == BezierType.composite)
+                    //for <Composite> lines, draw only handles
+                    {
+                        for (int j = 0; j < cPointsAll[i].Count - 1; j++)
                         {
-                            for (int j = 0; j < cPointsAll[i].Count - 1; j++)
+                            if (j % 3 != 1)
                             {
-                                if (j % 3 != 2)
-                                {
-                                    e.Graphics.DrawEllipse(Pens.Red, cPointsAll[i][j + 1].X - PointRadius, cPointsAll[i][j + 1].Y - PointRadius, 2 * PointRadius, 2 * PointRadius);
-                                }
+                                e.Graphics.DrawLine(Pens.LightGray, cPointsAll[i][j], cPointsAll[i][j + 1]);
                             }
                         }
+                    }
 
 
-                        //Drawing control point polygons / "handle" lines
+                    //Drawing all bezier lines:
 
-                        if (cPointsAll[i].Count > 1 && (AllLines[i] == BezierType.cPoints || AllLines[i] == BezierType.leastSquares || AllLines[i] == BezierType.pPoints))
+                    if (cPointsAll[i].Count == 4 && (AllLines[i] == BezierType.cPoints || AllLines[i] == BezierType.leastSquares || AllLines[i] == BezierType.pPoints))
+                    {
+                        e.Graphics.DrawBezier(Pens.Black, cPointsAll[i][0], cPointsAll[i][1], cPointsAll[i][2], cPointsAll[i][3]);
+                    }
+
+                    else if (AllLines[i] == BezierType.composite)
+                    {
+                        for (int j = 0; j < cPointsAll[i].Count - 3; j += 3)
                         {
-                            e.Graphics.DrawLines(Pens.LightGray, cPointsAll[i].ToArray());
-                        }
-
-                        else if (AllLines[i] == BezierType.composite)
-                        //for <Composite> lines, draw only handles
-                        {
-                            for (int j = 0; j < cPointsAll[i].Count - 1; j++)
-                            {
-                                if (j % 3 != 1)
-                                {
-                                    e.Graphics.DrawLine(Pens.LightGray, cPointsAll[i][j], cPointsAll[i][j + 1]);
-                                }
-                            }
-                        }
-
-
-                        //Drawing all bezier lines:
-
-                        if (cPointsAll[i].Count == 4 && (AllLines[i] == BezierType.cPoints || AllLines[i] == BezierType.leastSquares || AllLines[i] == BezierType.pPoints))
-                        {
-                            e.Graphics.DrawBezier(Pens.Black, cPointsAll[i][0], cPointsAll[i][1], cPointsAll[i][2], cPointsAll[i][3]);
-                        }
-
-                        else if (AllLines[i] == BezierType.composite)
-                        {
-                            for (int j = 0; j < cPointsAll[i].Count - 3; j += 3)
-                            {
-                                e.Graphics.DrawBezier(Pens.Black, cPointsAll[i][j], cPointsAll[i][j + 1], cPointsAll[i][j + 2], cPointsAll[i][j + 3]);
-                            }
+                            e.Graphics.DrawBezier(Pens.Black, cPointsAll[i][j], cPointsAll[i][j + 1], cPointsAll[i][j + 2], cPointsAll[i][j + 3]);
                         }
                     }
                 }
@@ -530,17 +521,36 @@ namespace BezierTool
         private void newLine(BezierType type)
             //start a new line
         {
-            AddType = type;
             AllLines.Add(type);
 
-            cPoints = null; //deletes previous list of control points
-            pPoints = null; //deletes previous list of known points on line
-            DragType = BezierType.nothing;//stops point's dragging by mouse if it was active
-            ModifyType = BezierType.nothing;//indicates a point will not be moved
-            MovingPoint = null;// indicates no point is selected for moving
+            cPoints = null;
+            pPoints = null;
+            DragType = BezierType.nothing;
+            ModifyType = BezierType.nothing;
+            MovingPoint = null;
             ChangingMode = false;
             CompositeDone = false;
             MovedLine.Add(MoveType.nothing);
+            cPointsAll.Add(null);
+            pPointsAll.Add(null);
+
+            if (type == BezierType.cPoints || type == BezierType.composite)
+            {
+                Parametrization.Add(ParamType.nothing);
+            }
+
+            else if (type == BezierType.pPoints || type == BezierType.leastSquares)
+            {
+                if (rbtn_Uniform.Checked == true)
+                {
+                    Parametrization.Add(ParamType.uniform);
+                }
+
+                else if (rbtn_Chord.Checked == true)
+                {
+                    Parametrization.Add(ParamType.chord);
+                }
+            }
 
             return;
         }
@@ -551,6 +561,9 @@ namespace BezierTool
             AddType = BezierType.nothing;
             AllLines.RemoveAt(AllLines.Count - 1);
             MovedLine.RemoveAt(MovedLine.Count - 1);
+            cPointsAll.RemoveAt(cPointsAll.Count - 1);
+            pPointsAll.RemoveAt(pPointsAll.Count - 1);
+            Parametrization.RemoveAt(Parametrization.Count - 1);
 
             return;
         }
@@ -558,11 +571,19 @@ namespace BezierTool
         private void btn_cPointsAdd_Click(object sender, EventArgs e)
             //start a new line of type <4 cPoints>
         {
-            newLine(BezierType.cPoints);
+            AddType = BezierType.cPoints;
+
+            if (rbtn_MouseAdd.Checked == true)
+            //adding new line with mouse
+            {
+                cPoints = null;
+            }
 
             if (rbtn_KeyboardAdd.Checked == true)
-                //if adding new line by keyboard
+            //adding new line by keyboard
             {
+                newLine(BezierType.cPoints);
+
                 Form_KeyboardAdd form_KeyboardAdd = new Form_KeyboardAdd();
                 form_KeyboardAdd.ShowDialog();
 
@@ -573,98 +594,41 @@ namespace BezierTool
                     return;
                 }
 
-                pPointsAll.Add(null);//adding empty list of pPoints, as <4 cPoints> won't have any, to keep correct counting
-                Parametrization.Add(ParamType.nothing);
-
                 pictureBox1.Invalidate();
             }
 
             if (rbtn_FileAdd.Checked == true)
-            //if adding new line from a .txt file
+            //adding new line from a .txt file
             {
-                string pathFile = "";
-                string text = "";
+                cPoints = getPointsfromFile();
 
-                OpenFileDialog theDialog = new OpenFileDialog();
-                theDialog.Title = "Open Text File";
-                theDialog.Filter = "TXT files|*.txt";
-                theDialog.InitialDirectory = @"C:\";
-                if (theDialog.ShowDialog() == DialogResult.OK)
+                if (cPoints.Count != 4)
                 {
-                    pathFile = theDialog.FileName;
-                }
-
-                if (File.Exists(pathFile))
-                {
-                    using (StreamReader sr = new StreamReader(pathFile))
-                    {
-                        text = sr.ReadToEnd();//all text wil be saved in text enters are also saved
-                    }
-                }
-
-                else
-                {
-                    deleteLine();//te myb vajag labakus exceptions
+                    error.Text = ".txt file was not correct!";
+                    deleteLine();
                     return;
                 }
 
-                cPointsAll.Add(textToPoints(text));
-
-                pPointsAll.Add(null);//adding empty list of pPoints, as <4 cPoints> won't have any, to keep correct counting
-                Parametrization.Add(ParamType.nothing);
-
+                cPointsAll[cPointsAll.Count - 1] = cPoints;
                 pictureBox1.Invalidate();
             }
-
-        }
-
-        private List<Point> textToPoints(string text)
-        {
-            cPoints = new List<Point>();
-            Point point = new Point();
-            string stringX = "";
-            string stringY = "";
-            int index = 0;
-
-            while (text.Length > 0)
-            {
-                index = text.IndexOf(' ');
-                stringX = text.Substring(0, index);
-                point.X = Convert.ToInt32(stringX);
-
-                text = text.Substring(index + 1);
-
-                
-                index = text.IndexOf('\n');
-
-                if (index != -1)
-                {
-                    stringY = text.Substring(0, index);
-                    text = text.Substring(index + 1);
-                }
-
-                else
-                {
-                    stringY = text;
-                    text = "";
-                }
-
-                point.Y = Convert.ToInt32(stringY);
-
-                cPoints.Add(point);
-            }
-
-            return cPoints;
         }
 
         private void btn_pPointsAdd_Click(object sender, EventArgs e)
             //start a new line of type <4 pPoints>
         {
-            newLine(BezierType.pPoints);
+            AddType = BezierType.pPoints;
+
+            if (rbtn_MouseAdd.Checked == true)
+            {
+                pPoints = null;
+            }
 
             if (rbtn_KeyboardAdd.Checked == true)
                 //if adding new line by keyboard
             {
+                newLine(BezierType.cPoints);
+
                 Form_KeyboardAdd form_KeyboardAdd = new Form_KeyboardAdd();
                 form_KeyboardAdd.ShowDialog();
 
@@ -675,64 +639,22 @@ namespace BezierTool
                     return;
                 }
 
-                if (rbtn_Uniform.Checked == true)
-                {
-                    Parametrization.Add(ParamType.uniform);
-                }
-
-                else if (rbtn_Chord.Checked == true)
-                {
-                    Parametrization.Add(ParamType.chord);
-                }
-
-                cPointsAll.Add(null);
-
                 pictureBox1.Invalidate();
             }
 
             if (rbtn_FileAdd.Checked == true)
             //if adding new line from a .txt file
             {
-                string pathFile = "";
-                string text = "";
+                pPoints = getPointsfromFile();
 
-                OpenFileDialog theDialog = new OpenFileDialog();
-                theDialog.Title = "Open Text File";
-                theDialog.Filter = "TXT files|*.txt";
-                theDialog.InitialDirectory = @"C:\";
-                if (theDialog.ShowDialog() == DialogResult.OK)
+                if (pPoints.Count != 4)
                 {
-                    pathFile = theDialog.FileName;
-                }
-
-                if (File.Exists(pathFile))
-                {
-                    using (StreamReader sr = new StreamReader(pathFile))
-                    {
-                        text = sr.ReadToEnd();//all text wil be saved in text enters are also saved
-                    }
-                }
-
-                else
-                {
-                    deleteLine();//te myb vajag labakus exceptions
+                    error.Text = ".txt file was not correct!";
+                    deleteLine();
                     return;
                 }
 
-                pPointsAll.Add(textToPoints(text));
-
-                cPointsAll.Add(null);//adding empty list of pPoints, as <4 cPoints> won't have any, to keep correct counting
-
-                if (rbtn_Uniform.Checked == true)
-                {
-                    Parametrization.Add(ParamType.uniform);
-                }
-
-                else if (rbtn_Chord.Checked == true)
-                {
-                    Parametrization.Add(ParamType.chord);
-                }
-
+                pPointsAll[pPointsAll.Count - 1] = pPoints;
                 pictureBox1.Invalidate();
             }
         }
@@ -740,11 +662,18 @@ namespace BezierTool
         private void btn_LeastSquaresAdd_Click(object sender, EventArgs e)
             //start a new line of type <4 pPoints>
         {
-            newLine(BezierType.leastSquares);
+            AddType = BezierType.leastSquares;
+
+            if (rbtn_MouseAdd.Checked == true)
+            {
+                pPoints = null;
+            }
 
             if (rbtn_KeyboardAdd.Checked == true)
             //if adding new line by keyboard
             {
+                newLine(BezierType.cPoints);
+
                 Form_KeyboardAdd form_KeyboardAdd = new Form_KeyboardAdd();
                 form_KeyboardAdd.ShowDialog();
 
@@ -755,64 +684,22 @@ namespace BezierTool
                     return;
                 }
 
-                if (rbtn_Uniform.Checked == true)
-                {
-                    Parametrization.Add(ParamType.uniform);
-                }
-
-                else if (rbtn_Chord.Checked == true)
-                {
-                    Parametrization.Add(ParamType.chord);
-                }
-
-                cPointsAll.Add(null);
-
                 pictureBox1.Invalidate();
             }
 
             if (rbtn_FileAdd.Checked == true)
             //if adding new line from a .txt file
             {
-                string pathFile = "";
-                string text = "";
+                pPoints = getPointsfromFile();
 
-                OpenFileDialog theDialog = new OpenFileDialog();
-                theDialog.Title = "Open Text File";
-                theDialog.Filter = "TXT files|*.txt";
-                theDialog.InitialDirectory = @"C:\";
-                if (theDialog.ShowDialog() == DialogResult.OK)
+                if (pPoints.Count < 4 || pPoints.Count > maxPointCount)
                 {
-                    pathFile = theDialog.FileName;
-                }
-
-                if (File.Exists(pathFile))
-                {
-                    using (StreamReader sr = new StreamReader(pathFile))
-                    {
-                        text = sr.ReadToEnd();
-                    }
-                }
-
-                else
-                {
-                    deleteLine();//te myb vajag labakus exceptions
+                    error.Text = ".txt file was not correct!";
+                    deleteLine();
                     return;
                 }
 
-                pPointsAll.Add(textToPoints(text));
-
-                cPointsAll.Add(null);
-
-                if (rbtn_Uniform.Checked == true)
-                {
-                    Parametrization.Add(ParamType.uniform);
-                }
-
-                else if (rbtn_Chord.Checked == true)
-                {
-                    Parametrization.Add(ParamType.chord);
-                }
-
+                pPointsAll[pPointsAll.Count - 1] = pPoints;
                 pictureBox1.Invalidate();
             }
         }
@@ -820,11 +707,18 @@ namespace BezierTool
         private void btn_CompositeAdd_Click(object sender, EventArgs e)
             //start a new line of type <Composite>
         {
-            newLine(BezierType.composite);
+            AddType = BezierType.composite;
+
+            if (rbtn_MouseAdd.Checked == true)
+            {
+                pPoints = null;
+            }
 
             if (rbtn_KeyboardAdd.Checked == true)
             //if adding new line by keyboard
             {
+                newLine(BezierType.cPoints);
+
                 Form_KeyboardAdd form_KeyboardAdd = new Form_KeyboardAdd();
                 form_KeyboardAdd.ShowDialog();
 
@@ -834,9 +728,6 @@ namespace BezierTool
                     deleteLine();//delete what newLine() added
                     return;
                 }
-
-                cPointsAll.Add(null);
-                Parametrization.Add(ParamType.nothing);
                 CompositeDone = true;
 
                 pictureBox1.Invalidate();
@@ -845,38 +736,17 @@ namespace BezierTool
             if (rbtn_FileAdd.Checked == true)
             //if adding new line from a .txt file
             {
-                string pathFile = "";
-                string text = "";
+                pPoints = getPointsfromFile();
 
-                OpenFileDialog theDialog = new OpenFileDialog();
-                theDialog.Title = "Open Text File";
-                theDialog.Filter = "TXT files|*.txt";
-                theDialog.InitialDirectory = @"C:\";
-                if (theDialog.ShowDialog() == DialogResult.OK)
+                if (pPoints.Count < 2 || pPoints.Count > maxPointCount)
                 {
-                    pathFile = theDialog.FileName;
-                }
-
-                if (File.Exists(pathFile))
-                {
-                    using (StreamReader sr = new StreamReader(pathFile))
-                    {
-                        text = sr.ReadToEnd();
-                    }
-                }
-
-                else
-                {
-                    deleteLine();//te myb vajag labakus exceptions
+                    error.Text = ".txt file was not correct!";
+                    deleteLine();
                     return;
                 }
 
-                pPointsAll.Add(textToPoints(text));
-
-                cPointsAll.Add(null);
-                Parametrization.Add(ParamType.nothing);
+                pPointsAll[pPointsAll.Count - 1] = pPoints;
                 CompositeDone = true;
-                
                 pictureBox1.Invalidate();
             }
         }
@@ -887,12 +757,10 @@ namespace BezierTool
             if (cPoints == null)
             //if this is the first point of line
             {
+                newLine(AddType);
                 cPoints = new List<Point>();
-                cPointsAll.Add(cPoints);
                 cPoints.Add(MouseLocation);
-
-                pPointsAll.Add(null);//adding empty list of pPoints, as <4 cPoints> won't have any, to keep correct counting
-                Parametrization.Add(ParamType.nothing);
+                cPointsAll[cPointsAll.Count - 1] = cPoints;
             }
 
             else if (cPoints.Count < 4 && cPoints[cPoints.Count - 1] != MouseLocation)
@@ -901,6 +769,48 @@ namespace BezierTool
                 cPoints.Add(MouseLocation);
             }
 
+            return;
+        }
+
+        private void AddpPoint(BezierType type, Point MouseLocation)
+            //add new point on line to the current line
+        {
+            if (pPoints == null)
+            //if this is the first point of line
+            {
+                newLine(AddType);
+                pPoints = new List<Point>();
+                pPoints.Add(MouseLocation);
+                pPointsAll[pPointsAll.Count - 1] = pPoints;
+                
+                return;
+            }
+
+            if (pPoints[pPoints.Count - 1] == MouseLocation)
+            //to avoid accidental double clicks
+            {
+                return;
+            }
+
+            if (type == BezierType.pPoints && pPoints.Count >= 4)
+            //type <4 pPoints can't have more than 4 chosen points on line)
+            {
+                return;
+            }
+
+            if (type == BezierType.composite && CompositeDone == true)
+            // can't add points to a <Composite> line that has been finished
+            {
+                return;
+            }
+
+            else if ((type == BezierType.leastSquares || type == BezierType.composite) && pPoints.Count > maxPointCount)
+            // can't choose more points than the maximum allowed count
+            {
+                return;
+            }
+
+            pPoints.Add(MouseLocation);
             return;
         }
 
@@ -940,70 +850,6 @@ namespace BezierTool
         {
             CompositeDone = true;
             pictureBox1.Invalidate();
-        }
-
-        private void AddpPoint(BezierType type, Point MouseLocation)
-            //add new point on line to the current line
-        {
-            ParamType paramType = ParamType.nothing; // need to asign value for code to work
-
-            if(rbtn_Uniform.Checked == true)
-            {
-                paramType = ParamType.uniform;
-            }
-
-            else if (rbtn_Chord.Checked == true)
-            {
-                paramType = ParamType.chord;
-            }
-
-            if (pPoints == null)
-            //if this is the first point of line
-            {
-                pPoints = new List<Point>();
-                pPointsAll.Add(pPoints);
-                pPoints.Add(MouseLocation);
-                cPointsAll.Add(null);
-
-                if (type == BezierType.pPoints || type == BezierType.leastSquares)
-                {
-                    Parametrization.Add(paramType);
-                }
-
-                else if (type == BezierType.composite)
-                {
-                    Parametrization.Add(ParamType.nothing);
-                }
-
-                return;
-            }
-
-            if (pPoints[pPoints.Count - 1] == MouseLocation)
-            //to avoid accidental double clicks
-            {
-                return;
-            }
-            
-            if (type == BezierType.pPoints && pPoints.Count >= 4)
-            //type <4 pPoints can't have more than 4 chosen points on line)
-            {
-                return;
-            }
-
-            if (type == BezierType.composite && CompositeDone == true)
-            // can't add points to a <Composite> line that has been finished
-            {
-                return;
-            }
-
-            else if ( (type == BezierType.leastSquares || type == BezierType.composite) && pPoints.Count > maxPointCount )
-            // can't choose more points than the maximum allowed count
-            {
-                return;
-            }
-
-            pPoints.Add(MouseLocation);
-            return;
         }
 
         private void addFirstcPoint(int i)
@@ -1147,7 +993,47 @@ namespace BezierTool
             pictureBox1.Invalidate();
             return;
         }
-        
+
+        private List<Point> getPointsfromFile()
+            //choose a .txt file and make a list of points from .it
+        {
+            List<Point> pointList = new List<Point>();
+            Point point = new Point();
+            
+            string path = "";
+            string textLine = "";
+
+            OpenFileDialog theDialog = new OpenFileDialog();
+            theDialog.Title = "Open Text File";
+            theDialog.Filter = "TXT files|*.txt";
+            theDialog.InitialDirectory = @"C:\";
+            if (theDialog.ShowDialog() == DialogResult.OK)
+            {
+                path = theDialog.FileName;
+            }
+
+            if (File.Exists(path))
+            {
+                newLine(AddType);
+                using (StreamReader file = new StreamReader(path))
+                {
+                    while ((textLine = file.ReadLine()) != null)
+                    {
+                        int index = textLine.IndexOf(' ');
+                        string stringX = textLine.Substring(0, index);
+                        string stringY = textLine.Substring(index + 1);
+
+                        point.X = Convert.ToInt32(stringX);
+                        point.Y = Convert.ToInt32(stringY);
+
+                        pointList.Add(point);
+                    }
+                }
+            }
+
+            return pointList;
+        }
+
         private double length(Point a, Point b)
             //get length between two points
         {
@@ -1492,7 +1378,7 @@ namespace BezierTool
         }
 
         private void OutputpPointsFile(int i)
-        //output line points to .txt file
+            //output line points to .txt file
         {
             string pathFolder = "";
 
@@ -1550,6 +1436,19 @@ namespace BezierTool
             OutputPointsType = BezierType.nothing;
 
             pictureBox1.Invalidate();
+        }
+
+        private void Form1_Resize(object sender, EventArgs e)//te jaliek klat kip responsive lietas, jamaina picturbox1 size un parejais janoliek tur, kur jabut.
+        {
+            if (this.Width < 600)
+            {
+                this.Width = 600;
+            }
+
+            if (this.Height < 500)
+            {
+                this.Height = 500;
+            }
         }
     }
 }

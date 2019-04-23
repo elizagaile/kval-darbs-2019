@@ -449,6 +449,7 @@
             this.Controls.Add(this.pictureBox1);
             this.Name = "Form1";
             this.Text = "Bezier Tool";
+            this.Resize += new System.EventHandler(this.Form1_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.group_AddInput.ResumeLayout(false);
             this.group_AddInput.PerformLayout();

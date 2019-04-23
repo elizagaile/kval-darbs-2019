@@ -31,14 +31,14 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btn_DeleteRow = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.btn_AddRow = new System.Windows.Forms.Button();
-            this.btn_SubmitInput = new System.Windows.Forms.Button();
-            this.btn_ResetInput = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.btn_DeleteRow = new System.Windows.Forms.Button();
+            this.btn_SubmitInput = new System.Windows.Forms.Button();
+            this.btn_ResetInput = new System.Windows.Forms.Button();
+            this.btn_AddRow = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -78,6 +78,16 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Set control point coordinates:";
             // 
+            // btn_DeleteRow
+            // 
+            this.btn_DeleteRow.Location = new System.Drawing.Point(303, 67);
+            this.btn_DeleteRow.Name = "btn_DeleteRow";
+            this.btn_DeleteRow.Size = new System.Drawing.Size(125, 36);
+            this.btn_DeleteRow.TabIndex = 11;
+            this.btn_DeleteRow.Text = "Delete Row";
+            this.btn_DeleteRow.UseVisualStyleBackColor = true;
+            this.btn_DeleteRow.Click += new System.EventHandler(this.btn_DeleteRow_Click);
+            // 
             // flowLayoutPanel1
             // 
             this.flowLayoutPanel1.Controls.Add(this.tableLayoutPanel1);
@@ -108,15 +118,21 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(231, 423);
             this.tableLayoutPanel1.TabIndex = 8;
             // 
-            // btn_AddRow
+            // label1
             // 
-            this.btn_AddRow.Location = new System.Drawing.Point(303, 25);
-            this.btn_AddRow.Name = "btn_AddRow";
-            this.btn_AddRow.Size = new System.Drawing.Size(125, 36);
-            this.btn_AddRow.TabIndex = 10;
-            this.btn_AddRow.Text = "Add New Row";
-            this.btn_AddRow.UseVisualStyleBackColor = true;
-            this.btn_AddRow.Click += new System.EventHandler(this.button1_Click);
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(3, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(0, 20);
+            this.label1.TabIndex = 7;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(213, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(0, 20);
+            this.label2.TabIndex = 8;
             // 
             // btn_SubmitInput
             // 
@@ -140,31 +156,15 @@
             this.btn_ResetInput.UseVisualStyleBackColor = false;
             this.btn_ResetInput.Click += new System.EventHandler(this.btn_ResetInput_Click);
             // 
-            // label1
+            // btn_AddRow
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(0, 20);
-            this.label1.TabIndex = 7;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(213, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(0, 20);
-            this.label2.TabIndex = 8;
-            // 
-            // btn_DeleteRow
-            // 
-            this.btn_DeleteRow.Location = new System.Drawing.Point(303, 67);
-            this.btn_DeleteRow.Name = "btn_DeleteRow";
-            this.btn_DeleteRow.Size = new System.Drawing.Size(125, 36);
-            this.btn_DeleteRow.TabIndex = 11;
-            this.btn_DeleteRow.Text = "Delete Row";
-            this.btn_DeleteRow.UseVisualStyleBackColor = true;
-            this.btn_DeleteRow.Click += new System.EventHandler(this.btn_DeleteRow_Click);
+            this.btn_AddRow.Location = new System.Drawing.Point(303, 25);
+            this.btn_AddRow.Name = "btn_AddRow";
+            this.btn_AddRow.Size = new System.Drawing.Size(125, 36);
+            this.btn_AddRow.TabIndex = 10;
+            this.btn_AddRow.Text = "Add New Row";
+            this.btn_AddRow.UseVisualStyleBackColor = true;
+            this.btn_AddRow.Click += new System.EventHandler(this.btn_AddRow_Click);
             // 
             // Form_KeyboardAdd
             // 
