@@ -429,7 +429,7 @@
             this.listBox_ScreenOutput.ItemHeight = 20;
             this.listBox_ScreenOutput.Location = new System.Drawing.Point(3, 501);
             this.listBox_ScreenOutput.Name = "listBox_ScreenOutput";
-            this.listBox_ScreenOutput.Size = new System.Drawing.Size(284, 164);
+            this.listBox_ScreenOutput.Size = new System.Drawing.Size(284, 244);
             this.listBox_ScreenOutput.TabIndex = 30;
             // 
             // panel_bottom
@@ -456,7 +456,7 @@
             this.panel_tools.Controls.Add(this.group_GetCoordinates);
             this.panel_tools.Location = new System.Drawing.Point(1115, 13);
             this.panel_tools.Name = "panel_tools";
-            this.panel_tools.Size = new System.Drawing.Size(330, 669);
+            this.panel_tools.Size = new System.Drawing.Size(330, 752);
             this.panel_tools.TabIndex = 32;
             // 
             // Form1

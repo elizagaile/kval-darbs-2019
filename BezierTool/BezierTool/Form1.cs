@@ -18,8 +18,9 @@ namespace BezierTool
         public Form1()
         {
             InitializeComponent();
-            this.Width = Convert.ToInt32(0.5 * Screen.PrimaryScreen.Bounds.Width);
+            //this.Width = Convert.ToInt32(0.5 * Screen.PrimaryScreen.Bounds.Width);
             this.Height = Convert.ToInt32(0.75 * Screen.PrimaryScreen.Bounds.Height);
+            this.Width = Convert.ToInt32(0.5 * SystemInformation.VirtualScreen.Width);
         }
 
         //each line is representet by two lists: 
@@ -1440,22 +1441,13 @@ namespace BezierTool
             pictureBox1.Invalidate();
         }
 
-        private void Form1_Resize(object sender, EventArgs e)//te jaliek klat kip responsive lietas, jamaina picturbox1 size un parejais janoliek tur, kur jabut.
+        private void Form1_Resize(object sender, EventArgs e)
+            //make form responsive
         {
             int width = this.Width;
             int height = this.Height;
-
-            /*if (width < 600)
-            {
-                this.Width = 600;
-            }
-
-            if (height < 500)
-            {
-                this.Height = 500;
-            }*/
-
-            panel_tools.Left = width - panel_tools.Width - 20;
+            
+            panel_tools.Left = width - panel_tools.Width - 20; // 20px, 50px, 35 px and 55px makes margins
             panel_bottom.Left = width - panel_bottom.Width - 20;
             panel_bottom.Top = height - panel_bottom.Height - 50;
             pictureBox1.Width = width - panel_tools.Width - 35;
