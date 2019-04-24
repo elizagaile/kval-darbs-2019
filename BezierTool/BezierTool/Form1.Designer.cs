@@ -61,6 +61,8 @@
             this.rbtn_ScreenOutput = new System.Windows.Forms.RadioButton();
             this.btn_ResetScreenOutput = new System.Windows.Forms.Button();
             this.listBox_ScreenOutput = new System.Windows.Forms.ListBox();
+            this.panel_bottom = new System.Windows.Forms.Panel();
+            this.panel_tools = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.group_AddInput.SuspendLayout();
             this.group_AddType.SuspendLayout();
@@ -69,6 +71,8 @@
             this.group_Param.SuspendLayout();
             this.group_GetCoordinates.SuspendLayout();
             this.group_Output.SuspendLayout();
+            this.panel_bottom.SuspendLayout();
+            this.panel_tools.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -87,7 +91,7 @@
             // 
             // btn_Background
             // 
-            this.btn_Background.Location = new System.Drawing.Point(1115, 923);
+            this.btn_Background.Location = new System.Drawing.Point(3, 27);
             this.btn_Background.Name = "btn_Background";
             this.btn_Background.Size = new System.Drawing.Size(317, 36);
             this.btn_Background.TabIndex = 1;
@@ -97,7 +101,7 @@
             // 
             // btn_Reset
             // 
-            this.btn_Reset.Location = new System.Drawing.Point(1115, 1011);
+            this.btn_Reset.Location = new System.Drawing.Point(3, 116);
             this.btn_Reset.Name = "btn_Reset";
             this.btn_Reset.Size = new System.Drawing.Size(317, 37);
             this.btn_Reset.TabIndex = 2;
@@ -180,7 +184,7 @@
             // error
             // 
             this.error.AutoSize = true;
-            this.error.Location = new System.Drawing.Point(1111, 900);
+            this.error.Location = new System.Drawing.Point(3, 4);
             this.error.Name = "error";
             this.error.Size = new System.Drawing.Size(18, 20);
             this.error.TabIndex = 12;
@@ -189,7 +193,7 @@
             // cbox_ShowBackground
             // 
             this.cbox_ShowBackground.AutoSize = true;
-            this.cbox_ShowBackground.Location = new System.Drawing.Point(1121, 965);
+            this.cbox_ShowBackground.Location = new System.Drawing.Point(6, 69);
             this.cbox_ShowBackground.Name = "cbox_ShowBackground";
             this.cbox_ShowBackground.Size = new System.Drawing.Size(165, 24);
             this.cbox_ShowBackground.TabIndex = 13;
@@ -244,7 +248,7 @@
             this.group_AddInput.Controls.Add(this.rbtn_MouseAdd);
             this.group_AddInput.Controls.Add(this.rbtn_KeyboardAdd);
             this.group_AddInput.Controls.Add(this.rbtn_FileAdd);
-            this.group_AddInput.Location = new System.Drawing.Point(1292, 13);
+            this.group_AddInput.Location = new System.Drawing.Point(180, 3);
             this.group_AddInput.Name = "group_AddInput";
             this.group_AddInput.Size = new System.Drawing.Size(146, 115);
             this.group_AddInput.TabIndex = 19;
@@ -258,7 +262,7 @@
             this.group_AddType.Controls.Add(this.btn_pPointsAdd);
             this.group_AddType.Controls.Add(this.btn_LeastSquaresAdd);
             this.group_AddType.Controls.Add(this.btn_CompositeAdd);
-            this.group_AddType.Location = new System.Drawing.Point(1115, 13);
+            this.group_AddType.Location = new System.Drawing.Point(3, 3);
             this.group_AddType.Name = "group_AddType";
             this.group_AddType.Size = new System.Drawing.Size(171, 252);
             this.group_AddType.TabIndex = 20;
@@ -279,7 +283,7 @@
             // 
             this.group_ModifyType.Controls.Add(this.btn_cPointsModify);
             this.group_ModifyType.Controls.Add(this.btn_pPointsModify);
-            this.group_ModifyType.Location = new System.Drawing.Point(1115, 271);
+            this.group_ModifyType.Location = new System.Drawing.Point(3, 261);
             this.group_ModifyType.Name = "group_ModifyType";
             this.group_ModifyType.Size = new System.Drawing.Size(171, 114);
             this.group_ModifyType.TabIndex = 21;
@@ -290,7 +294,7 @@
             // 
             this.group_ModifyInput.Controls.Add(this.rbtn_MouseModify);
             this.group_ModifyInput.Controls.Add(this.rbtn_KeyboardModify);
-            this.group_ModifyInput.Location = new System.Drawing.Point(1292, 271);
+            this.group_ModifyInput.Location = new System.Drawing.Point(180, 261);
             this.group_ModifyInput.Name = "group_ModifyInput";
             this.group_ModifyInput.Size = new System.Drawing.Size(146, 114);
             this.group_ModifyInput.TabIndex = 22;
@@ -302,7 +306,7 @@
             this.group_Param.Controls.Add(this.btn_ChangeParam);
             this.group_Param.Controls.Add(this.rbtn_Chord);
             this.group_Param.Controls.Add(this.rbtn_Uniform);
-            this.group_Param.Location = new System.Drawing.Point(1292, 134);
+            this.group_Param.Location = new System.Drawing.Point(180, 124);
             this.group_Param.Name = "group_Param";
             this.group_Param.Size = new System.Drawing.Size(146, 131);
             this.group_Param.TabIndex = 24;
@@ -356,7 +360,7 @@
             // 
             this.group_GetCoordinates.Controls.Add(this.btn_pPointsOutput);
             this.group_GetCoordinates.Controls.Add(this.btn_cPointsOutput);
-            this.group_GetCoordinates.Location = new System.Drawing.Point(1115, 391);
+            this.group_GetCoordinates.Location = new System.Drawing.Point(3, 381);
             this.group_GetCoordinates.Name = "group_GetCoordinates";
             this.group_GetCoordinates.Size = new System.Drawing.Size(171, 114);
             this.group_GetCoordinates.TabIndex = 26;
@@ -377,7 +381,7 @@
             // 
             this.group_Output.Controls.Add(this.rbtn_FileOutput);
             this.group_Output.Controls.Add(this.rbtn_ScreenOutput);
-            this.group_Output.Location = new System.Drawing.Point(1292, 391);
+            this.group_Output.Location = new System.Drawing.Point(180, 381);
             this.group_Output.Name = "group_Output";
             this.group_Output.Size = new System.Drawing.Size(146, 114);
             this.group_Output.TabIndex = 27;
@@ -410,7 +414,7 @@
             // 
             this.btn_ResetScreenOutput.BackColor = System.Drawing.Color.Firebrick;
             this.btn_ResetScreenOutput.ForeColor = System.Drawing.Color.White;
-            this.btn_ResetScreenOutput.Location = new System.Drawing.Point(1401, 511);
+            this.btn_ResetScreenOutput.Location = new System.Drawing.Point(289, 501);
             this.btn_ResetScreenOutput.Name = "btn_ResetScreenOutput";
             this.btn_ResetScreenOutput.Size = new System.Drawing.Size(37, 36);
             this.btn_ResetScreenOutput.TabIndex = 29;
@@ -423,29 +427,45 @@
             // 
             this.listBox_ScreenOutput.FormattingEnabled = true;
             this.listBox_ScreenOutput.ItemHeight = 20;
-            this.listBox_ScreenOutput.Location = new System.Drawing.Point(1115, 511);
+            this.listBox_ScreenOutput.Location = new System.Drawing.Point(3, 501);
             this.listBox_ScreenOutput.Name = "listBox_ScreenOutput";
-            this.listBox_ScreenOutput.Size = new System.Drawing.Size(284, 124);
+            this.listBox_ScreenOutput.Size = new System.Drawing.Size(284, 164);
             this.listBox_ScreenOutput.TabIndex = 30;
+            // 
+            // panel_bottom
+            // 
+            this.panel_bottom.Controls.Add(this.btn_Reset);
+            this.panel_bottom.Controls.Add(this.cbox_ShowBackground);
+            this.panel_bottom.Controls.Add(this.btn_Background);
+            this.panel_bottom.Controls.Add(this.error);
+            this.panel_bottom.Location = new System.Drawing.Point(1115, 892);
+            this.panel_bottom.Name = "panel_bottom";
+            this.panel_bottom.Size = new System.Drawing.Size(330, 156);
+            this.panel_bottom.TabIndex = 31;
+            // 
+            // panel_tools
+            // 
+            this.panel_tools.Controls.Add(this.group_AddType);
+            this.panel_tools.Controls.Add(this.group_AddInput);
+            this.panel_tools.Controls.Add(this.btn_ResetScreenOutput);
+            this.panel_tools.Controls.Add(this.listBox_ScreenOutput);
+            this.panel_tools.Controls.Add(this.group_Param);
+            this.panel_tools.Controls.Add(this.group_ModifyType);
+            this.panel_tools.Controls.Add(this.group_Output);
+            this.panel_tools.Controls.Add(this.group_ModifyInput);
+            this.panel_tools.Controls.Add(this.group_GetCoordinates);
+            this.panel_tools.Location = new System.Drawing.Point(1115, 13);
+            this.panel_tools.Name = "panel_tools";
+            this.panel_tools.Size = new System.Drawing.Size(330, 669);
+            this.panel_tools.TabIndex = 32;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1450, 1060);
-            this.Controls.Add(this.listBox_ScreenOutput);
-            this.Controls.Add(this.btn_ResetScreenOutput);
-            this.Controls.Add(this.group_Output);
-            this.Controls.Add(this.group_GetCoordinates);
-            this.Controls.Add(this.group_Param);
-            this.Controls.Add(this.group_ModifyInput);
-            this.Controls.Add(this.group_ModifyType);
-            this.Controls.Add(this.group_AddType);
-            this.Controls.Add(this.group_AddInput);
-            this.Controls.Add(this.cbox_ShowBackground);
-            this.Controls.Add(this.error);
-            this.Controls.Add(this.btn_Reset);
-            this.Controls.Add(this.btn_Background);
+            this.Controls.Add(this.panel_tools);
+            this.Controls.Add(this.panel_bottom);
             this.Controls.Add(this.pictureBox1);
             this.Name = "Form1";
             this.Text = "Bezier Tool";
@@ -462,8 +482,10 @@
             this.group_GetCoordinates.ResumeLayout(false);
             this.group_Output.ResumeLayout(false);
             this.group_Output.PerformLayout();
+            this.panel_bottom.ResumeLayout(false);
+            this.panel_bottom.PerformLayout();
+            this.panel_tools.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -502,6 +524,8 @@
         private System.Windows.Forms.Button btn_ResetScreenOutput;
         private System.Windows.Forms.ListBox listBox_ScreenOutput;
         private System.Windows.Forms.Button btn_ChangeParam;
+        private System.Windows.Forms.Panel panel_bottom;
+        private System.Windows.Forms.Panel panel_tools;
     }
 }
 

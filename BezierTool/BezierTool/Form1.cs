@@ -18,6 +18,8 @@ namespace BezierTool
         public Form1()
         {
             InitializeComponent();
+            this.Width = Convert.ToInt32(0.5 * Screen.PrimaryScreen.Bounds.Width);
+            this.Height = Convert.ToInt32(0.75 * Screen.PrimaryScreen.Bounds.Height);
         }
 
         //each line is representet by two lists: 
@@ -1440,15 +1442,24 @@ namespace BezierTool
 
         private void Form1_Resize(object sender, EventArgs e)//te jaliek klat kip responsive lietas, jamaina picturbox1 size un parejais janoliek tur, kur jabut.
         {
-            if (this.Width < 600)
+            int width = this.Width;
+            int height = this.Height;
+
+            /*if (width < 600)
             {
                 this.Width = 600;
             }
 
-            if (this.Height < 500)
+            if (height < 500)
             {
                 this.Height = 500;
-            }
+            }*/
+
+            panel_tools.Left = width - panel_tools.Width - 20;
+            panel_bottom.Left = width - panel_bottom.Width - 20;
+            panel_bottom.Top = height - panel_bottom.Height - 50;
+            pictureBox1.Width = width - panel_tools.Width - 35;
+            pictureBox1.Height = height - 55;
         }
     }
 }
