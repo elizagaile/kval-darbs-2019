@@ -9,8 +9,6 @@ namespace BezierTool
     {
 
         private List<TextBox> InputValues = new List<TextBox>();
-        private List<Point> cPoints = null;
-        private List<Point> pPoints = null;
         Form1.BezierType addType = Form1.AddType;
         public static bool lineAdded = false; //to determine if a line was drawn successfully
         int counter = 1; //count of input points

@@ -63,6 +63,7 @@
             this.listBox_ScreenOutput = new System.Windows.Forms.ListBox();
             this.panel_bottom = new System.Windows.Forms.Panel();
             this.panel_tools = new System.Windows.Forms.Panel();
+            this.rbtn_Centripental = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.group_AddInput.SuspendLayout();
             this.group_AddType.SuspendLayout();
@@ -236,6 +237,7 @@
             // rbtn_KeyboardModify
             // 
             this.rbtn_KeyboardModify.AutoSize = true;
+            this.rbtn_KeyboardModify.Enabled = false;
             this.rbtn_KeyboardModify.Location = new System.Drawing.Point(6, 55);
             this.rbtn_KeyboardModify.Name = "rbtn_KeyboardModify";
             this.rbtn_KeyboardModify.Size = new System.Drawing.Size(120, 24);
@@ -294,28 +296,29 @@
             // 
             this.group_ModifyInput.Controls.Add(this.rbtn_MouseModify);
             this.group_ModifyInput.Controls.Add(this.rbtn_KeyboardModify);
-            this.group_ModifyInput.Location = new System.Drawing.Point(180, 261);
+            this.group_ModifyInput.Location = new System.Drawing.Point(180, 288);
             this.group_ModifyInput.Name = "group_ModifyInput";
-            this.group_ModifyInput.Size = new System.Drawing.Size(146, 114);
+            this.group_ModifyInput.Size = new System.Drawing.Size(146, 87);
             this.group_ModifyInput.TabIndex = 22;
             this.group_ModifyInput.TabStop = false;
             this.group_ModifyInput.Text = "Modify points:";
             // 
             // group_Param
             // 
+            this.group_Param.Controls.Add(this.rbtn_Centripental);
             this.group_Param.Controls.Add(this.btn_ChangeParam);
             this.group_Param.Controls.Add(this.rbtn_Chord);
             this.group_Param.Controls.Add(this.rbtn_Uniform);
             this.group_Param.Location = new System.Drawing.Point(180, 124);
             this.group_Param.Name = "group_Param";
-            this.group_Param.Size = new System.Drawing.Size(146, 131);
+            this.group_Param.Size = new System.Drawing.Size(146, 158);
             this.group_Param.TabIndex = 24;
             this.group_Param.TabStop = false;
             this.group_Param.Text = "Paramterization:";
             // 
             // btn_ChangeParam
             // 
-            this.btn_ChangeParam.Location = new System.Drawing.Point(6, 85);
+            this.btn_ChangeParam.Location = new System.Drawing.Point(6, 115);
             this.btn_ChangeParam.Name = "btn_ChangeParam";
             this.btn_ChangeParam.Size = new System.Drawing.Size(134, 37);
             this.btn_ChangeParam.TabIndex = 2;
@@ -332,6 +335,7 @@
             this.rbtn_Chord.TabIndex = 1;
             this.rbtn_Chord.Text = "Chord Length";
             this.rbtn_Chord.UseVisualStyleBackColor = true;
+            this.rbtn_Chord.CheckedChanged += new System.EventHandler(this.rbtn_Chord_CheckedChanged);
             // 
             // rbtn_Uniform
             // 
@@ -429,7 +433,7 @@
             this.listBox_ScreenOutput.ItemHeight = 20;
             this.listBox_ScreenOutput.Location = new System.Drawing.Point(3, 501);
             this.listBox_ScreenOutput.Name = "listBox_ScreenOutput";
-            this.listBox_ScreenOutput.Size = new System.Drawing.Size(284, 244);
+            this.listBox_ScreenOutput.Size = new System.Drawing.Size(284, 144);
             this.listBox_ScreenOutput.TabIndex = 30;
             // 
             // panel_bottom
@@ -456,8 +460,19 @@
             this.panel_tools.Controls.Add(this.group_GetCoordinates);
             this.panel_tools.Location = new System.Drawing.Point(1115, 13);
             this.panel_tools.Name = "panel_tools";
-            this.panel_tools.Size = new System.Drawing.Size(330, 752);
+            this.panel_tools.Size = new System.Drawing.Size(330, 656);
             this.panel_tools.TabIndex = 32;
+            // 
+            // rbtn_Centripental
+            // 
+            this.rbtn_Centripental.AutoSize = true;
+            this.rbtn_Centripental.Location = new System.Drawing.Point(6, 85);
+            this.rbtn_Centripental.Name = "rbtn_Centripental";
+            this.rbtn_Centripental.Size = new System.Drawing.Size(120, 24);
+            this.rbtn_Centripental.TabIndex = 33;
+            this.rbtn_Centripental.TabStop = true;
+            this.rbtn_Centripental.Text = "Centripental";
+            this.rbtn_Centripental.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -526,6 +541,7 @@
         private System.Windows.Forms.Button btn_ChangeParam;
         private System.Windows.Forms.Panel panel_bottom;
         private System.Windows.Forms.Panel panel_tools;
+        private System.Windows.Forms.RadioButton rbtn_Centripental;
     }
 }
 

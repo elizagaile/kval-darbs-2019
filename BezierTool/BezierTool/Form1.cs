@@ -13,14 +13,13 @@ using System.IO;
 
 namespace BezierTool
 {
-    public partial class Form1 : Form
+    public partial class Form1 : Form //contains form, all its atributes and functions
     {
         public Form1()
         {
             InitializeComponent();
-            //this.Width = Convert.ToInt32(0.5 * Screen.PrimaryScreen.Bounds.Width);
+            this.Width = Convert.ToInt32(0.5 * Screen.PrimaryScreen.Bounds.Width);
             this.Height = Convert.ToInt32(0.75 * Screen.PrimaryScreen.Bounds.Height);
-            this.Width = Convert.ToInt32(0.5 * SystemInformation.VirtualScreen.Width);
         }
 
         //each line is representet by two lists: 
@@ -42,7 +41,7 @@ namespace BezierTool
         enum MoveType { leftClick, rightClick, nothing };//ways to move points by mouse
         private List<MoveType> MovedLine = new List<MoveType>();//contains a way a list has been moved
         
-        enum ParamType { uniform, chord, nothing }; // parametrization ways
+        enum ParamType { uniform, chord, centripental, nothing }; // parametrization types
         private List<ParamType> Parametrization = new List<ParamType>();//contains parametrization types for drawn lines
 
         public enum BezierType { cPoints, pPoints, leastSquares, composite, nothing }; //all posible line types, public for Form2
@@ -62,7 +61,7 @@ namespace BezierTool
 
         bool CompositeDone = false;//indicates if the last line of type <Composite> needs to be finished;
         bool ChangeParam = false;//indicates if option to change parametrization is enabled
-        bool ChangingMode = false;
+        bool ChangingMode = false;//indicates if parametrization is being changed
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
             //Mouse has been pressed inside pictureBox1. This can be for adding control points or points on the line,
@@ -252,6 +251,11 @@ namespace BezierTool
                 else if (paramType == ParamType.chord)
                 {
                     rbtn_Chord.Checked = true;
+                }
+
+                else if (paramType == ParamType.centripental)
+                {
+                    rbtn_Centripental.Checked = true;
                 }
 
                 ChangingMode = true;
@@ -552,6 +556,11 @@ namespace BezierTool
                 else if (rbtn_Chord.Checked == true)
                 {
                     Parametrization.Add(ParamType.chord);
+                }
+
+                else if (rbtn_Centripental.Checked == true)
+                {
+                    Parametrization.Add(ParamType.centripental);
                 }
             }
 
@@ -1109,6 +1118,11 @@ namespace BezierTool
                 sPoints = sPointsChord(pList);
             }
 
+            else if (Parametrization[i] == ParamType.centripental)
+            {
+                sPoints = sPointsCentripental(pList);
+            }
+
             var s = M.DenseOfArray(sMatrix(sPoints));
             var s_tr = s.Transpose();
             var s_reiz = s_tr * s;
@@ -1167,11 +1181,39 @@ namespace BezierTool
             List<double> sPoints = new List<double>();
             List<double> dPoints = new List<double>();
 
-            //First we calculate point distance along the polygon:
+            //First we calculate distance along the polygon for each point:
             dPoints.Add(0);
             for (int i = 1; i < pList.Count; i++)
             {
                 double d = dPoints[i - 1] + length(pList[i - 1], pList[i]);
+                dPoints.Add(d);
+            }
+
+            //Then we scale these values to [0, 1] domain:
+            for (int i = 0; i < pList.Count; i++)
+            {
+                double s = dPoints[i] / dPoints[pList.Count - 1];
+                sPoints.Add(s);
+            }
+
+            return (sPoints);
+        }
+
+        private List<double> sPointsCentripental(List<Point> pList)
+            //a way of Bezier curve parametrization, where t values are aligned with square root of the distance along the polygon
+        {
+            //At the first point, we're fixing t = 0. Anywhere in between t value is equal to the square root of the 
+            //distance along the polygon (made from control points), scaled to [0,1] domain.
+            error.Text = "centr";
+
+            List<double> sPoints = new List<double>();
+            List<double> dPoints = new List<double>();
+
+            //First we calculate the square root of distance along the polygon for each point:
+            dPoints.Add(0);
+            for (int i = 1; i < pList.Count; i++)
+            {
+                double d = dPoints[i - 1] + Math.Sqrt(length(pList[i - 1], pList[i]));
                 dPoints.Add(d);
             }
 
@@ -1279,7 +1321,7 @@ namespace BezierTool
         }
 
         private void rbtn_Uniform_CheckedChanged(object sender, EventArgs e)
-            //redraw line when parametrization mode has been changed
+            //redraw line when parametrization type has been changed
         {
             if (ChangingMode == false)
             {
@@ -1287,21 +1329,31 @@ namespace BezierTool
             }
 
             int i = MovingPoint.Item1;
-            ParamType paramType = Parametrization[i];
+            //ParamType paramType = Parametrization[i];
 
             if (rbtn_Uniform.Checked == true)
             {
                 Parametrization[i] = ParamType.uniform;
-                getcPoints(i);
-                pictureBox1.Invalidate();
             }
 
             else if (rbtn_Chord.Checked == true)
             {
                 Parametrization[i] = ParamType.chord;
-                getcPoints(i);
-                pictureBox1.Invalidate();
             }
+
+            else if (rbtn_Centripental.Checked == true)
+            {
+                Parametrization[i] = ParamType.centripental;
+            }
+
+            getcPoints(i);
+            pictureBox1.Invalidate();
+        }
+
+        private void rbtn_Chord_CheckedChanged(object sender, EventArgs e)
+            //redraw line when parametrization type has been changed
+        {
+            rbtn_Uniform_CheckedChanged(sender, e);
         }
 
         private void btn_cPointsOutput_Click(object sender, EventArgs e)
@@ -1453,5 +1505,6 @@ namespace BezierTool
             pictureBox1.Width = width - panel_tools.Width - 35;
             pictureBox1.Height = height - 55;
         }
+        
     }
 }
