@@ -9,12 +9,13 @@ namespace BezierTool
     {
 
         private List<TextBox> InputValues = new List<TextBox>();
-        Form1.BezierType addType = Form1.AddType;
         public static bool lineAdded = false; //to determine if a line was drawn successfully
         int counter = 1; //count of input points
         string type = ""; //point type - "C" for control points, "P" for line points
+        Form1.BezierType lineType;
+        Form1.Form2Type form2Type;
 
-        public Form_KeyboardAdd()
+        public Form_KeyboardAdd( Form1.Form2Type thisForm2Type, Form1.BezierType thisLineType)
             //initialization
         {
             InitializeComponent();
@@ -25,38 +26,86 @@ namespace BezierTool
             tableLayoutPanel1.VerticalScroll.Visible = false;
             tableLayoutPanel1.AutoScroll = true;
 
+            lineType = thisLineType;
+            form2Type = thisForm2Type;
+
             //make labels according to input type:
 
-            this.Text = "New <" + addType + "> line";
-     
-            if (addType == Form1.BezierType.cPoints)
+            if (lineType == Form1.BezierType.cPoints)
             {
-                this.groupBox1.Text = "Set control point coordinates:";
                 type = "C";
             }
 
-            else if (addType == Form1.BezierType.pPoints || addType == Form1.BezierType.leastSquares || addType == Form1.BezierType.composite)
+            else if (lineType == Form1.BezierType.pPoints || lineType == Form1.BezierType.leastSquares || lineType == Form1.BezierType.composite)
             {
-                this.groupBox1.Text = "Set line point coordinates:";
                 type = "P";
             }
+
+            if (form2Type == Form1.Form2Type.add)
+            {
+                initializeAdd();
+            }
+
+            else if (form2Type == Form1.Form2Type.modify)
+            {
+                initializeModify();
+            }
+
+        }
+
+        private void initializeAdd()
+        {
+            this.Text = "New <" + lineType + "> line";
 
             for (int i = 0; i < 4; i++)//for every line, start with 4 points
             {
                 makeRow();
             }
 
-            if (addType == Form1.BezierType.cPoints || addType == Form1.BezierType.pPoints)
+            if (lineType == Form1.BezierType.cPoints || lineType == Form1.BezierType.pPoints)
             {
                 btn_AddRow.Visible = false;
                 btn_DeleteRow.Visible = false;
             }
 
-            if (addType == Form1.BezierType.leastSquares || addType == Form1.BezierType.composite)
+            if (lineType == Form1.BezierType.leastSquares || lineType == Form1.BezierType.composite)
             {
                 btn_AddRow.Visible = true;
                 btn_DeleteRow.Visible = true;
             }
+
+            return;
+        }
+
+        private void initializeModify()
+        {
+            this.Text = "Modify <" + lineType + "> line";
+
+            List<Point> pointList = new List<Point>();
+            int i = Form1.LocalPoint.Item1;
+
+            if (Form1.DragType == Form1.BezierType.cPoints)
+            {
+                pointList = Form1.cPointsAll[i];
+            }
+
+            else if (Form1.DragType == Form1.BezierType.pPoints)
+            {
+                pointList = Form1.pPointsAll[i];
+            }
+
+            for (int j = 0; j < pointList.Count; j++)
+            {
+                makeRow();
+            }
+
+            for (int j = 0; j < pointList.Count; j++)
+            {
+                InputValues[2 * j].Text = "" + pointList[j].X;
+                InputValues[2 * j + 1].Text = "" + pointList[j].Y;
+            }
+
+            return;
         }
 
         private void makeRow()
@@ -114,25 +163,42 @@ namespace BezierTool
             List<Point> pointList = new List<Point>();
             int x, y;
 
-            for (int i = 0; i < InputValues.Count; i += 2)
+            for (int k = 0; k < InputValues.Count; k += 2)
             //put all values from text boxes to control point list
             {
-                x = Convert.ToInt32(InputValues[i].Text);
-                y = Convert.ToInt32(InputValues[i + 1].Text);
+                x = Convert.ToInt32(InputValues[k].Text);
+                y = Convert.ToInt32(InputValues[k + 1].Text);
                 Point tmp = new Point(x, y);
 
                 pointList.Add(tmp);
             }
 
-            if (addType == Form1.BezierType.cPoints)
+            int i = 0;
+            if (form2Type == Form1.Form2Type.add)
             {
-                Form1.cPointsAll[Form1.cPointsAll.Count - 1] = pointList;
+                i = Form1.AllLines.Count - 1;
+            }
+
+            else if (form2Type == Form1.Form2Type.modify)
+            {
+                i = Form1.LocalPoint.Item1;
+            }
+
+            if (lineType == Form1.BezierType.cPoints)
+            {
+                Form1.cPointsAll[i] = pointList;
                 lineAdded = true; //line was added successfully
             }
 
-            else if (addType == Form1.BezierType.pPoints || addType == Form1.BezierType.leastSquares || addType == Form1.BezierType.composite)
+            else if (lineType == Form1.BezierType.pPoints || lineType == Form1.BezierType.leastSquares)
             {
-                Form1.pPointsAll[Form1.pPointsAll.Count - 1] = pointList;
+                Form1.pPointsAll[i] = pointList;
+                lineAdded = true; //line was added successfully
+            }
+
+            else if (lineType == Form1.BezierType.composite)
+            {
+                Form1.pPointsAll[i] = pointList;
                 lineAdded = true; //line was added successfully
             }
             
@@ -142,13 +208,13 @@ namespace BezierTool
         private void btn_DeleteRow_Click(object sender, EventArgs e)
             //delete input row
         {
-            if (addType == Form1.BezierType.leastSquares && tableLayoutPanel1.RowCount <= 9) //4 rows minimum plus 5 rows from design equals 9 rows
+            if (lineType == Form1.BezierType.leastSquares && tableLayoutPanel1.RowCount <= 9) //4 rows minimum plus 5 rows from design equals 9 rows
             {
                 MessageBox.Show("<Least Squares> lines can't have less than 4 points!");
                 return;
             }
 
-            if (addType == Form1.BezierType.composite && tableLayoutPanel1.RowCount <= 7) //2 rows minimum plus 5 rows from design equals 7 rows
+            if (lineType == Form1.BezierType.composite && tableLayoutPanel1.RowCount <= 7) //2 rows minimum plus 5 rows from design equals 7 rows
             {
                 MessageBox.Show("<Composite> lines can't have less than 2 points!");
                 return;

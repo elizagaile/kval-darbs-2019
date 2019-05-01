@@ -50,6 +50,7 @@
             this.group_ModifyType = new System.Windows.Forms.GroupBox();
             this.group_ModifyInput = new System.Windows.Forms.GroupBox();
             this.group_Param = new System.Windows.Forms.GroupBox();
+            this.rbtn_Centripental = new System.Windows.Forms.RadioButton();
             this.btn_ChangeParam = new System.Windows.Forms.Button();
             this.rbtn_Chord = new System.Windows.Forms.RadioButton();
             this.rbtn_Uniform = new System.Windows.Forms.RadioButton();
@@ -63,7 +64,7 @@
             this.listBox_ScreenOutput = new System.Windows.Forms.ListBox();
             this.panel_bottom = new System.Windows.Forms.Panel();
             this.panel_tools = new System.Windows.Forms.Panel();
-            this.rbtn_Centripental = new System.Windows.Forms.RadioButton();
+            this.btn_deleteLine = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.group_AddInput.SuspendLayout();
             this.group_AddType.SuspendLayout();
@@ -208,7 +209,7 @@
             this.btn_cPointsModify.Name = "btn_cPointsModify";
             this.btn_cPointsModify.Size = new System.Drawing.Size(159, 37);
             this.btn_cPointsModify.TabIndex = 14;
-            this.btn_cPointsModify.Text = "Drag cPoints";
+            this.btn_cPointsModify.Text = "Modify cPoints";
             this.btn_cPointsModify.UseVisualStyleBackColor = true;
             this.btn_cPointsModify.Click += new System.EventHandler(this.btn_cPointsModify_Click);
             // 
@@ -218,7 +219,7 @@
             this.btn_pPointsModify.Name = "btn_pPointsModify";
             this.btn_pPointsModify.Size = new System.Drawing.Size(159, 37);
             this.btn_pPointsModify.TabIndex = 15;
-            this.btn_pPointsModify.Text = "Drag pPoints";
+            this.btn_pPointsModify.Text = "Modify pPoints";
             this.btn_pPointsModify.UseVisualStyleBackColor = true;
             this.btn_pPointsModify.Click += new System.EventHandler(this.btn_pPointsModify_Click);
             // 
@@ -237,7 +238,6 @@
             // rbtn_KeyboardModify
             // 
             this.rbtn_KeyboardModify.AutoSize = true;
-            this.rbtn_KeyboardModify.Enabled = false;
             this.rbtn_KeyboardModify.Location = new System.Drawing.Point(6, 55);
             this.rbtn_KeyboardModify.Name = "rbtn_KeyboardModify";
             this.rbtn_KeyboardModify.Size = new System.Drawing.Size(120, 24);
@@ -315,6 +315,17 @@
             this.group_Param.TabIndex = 24;
             this.group_Param.TabStop = false;
             this.group_Param.Text = "Paramterization:";
+            // 
+            // rbtn_Centripental
+            // 
+            this.rbtn_Centripental.AutoSize = true;
+            this.rbtn_Centripental.Location = new System.Drawing.Point(6, 85);
+            this.rbtn_Centripental.Name = "rbtn_Centripental";
+            this.rbtn_Centripental.Size = new System.Drawing.Size(120, 24);
+            this.rbtn_Centripental.TabIndex = 33;
+            this.rbtn_Centripental.TabStop = true;
+            this.rbtn_Centripental.Text = "Centripental";
+            this.rbtn_Centripental.UseVisualStyleBackColor = true;
             // 
             // btn_ChangeParam
             // 
@@ -418,7 +429,7 @@
             // 
             this.btn_ResetScreenOutput.BackColor = System.Drawing.Color.Firebrick;
             this.btn_ResetScreenOutput.ForeColor = System.Drawing.Color.White;
-            this.btn_ResetScreenOutput.Location = new System.Drawing.Point(289, 501);
+            this.btn_ResetScreenOutput.Location = new System.Drawing.Point(289, 617);
             this.btn_ResetScreenOutput.Name = "btn_ResetScreenOutput";
             this.btn_ResetScreenOutput.Size = new System.Drawing.Size(37, 36);
             this.btn_ResetScreenOutput.TabIndex = 29;
@@ -431,7 +442,7 @@
             // 
             this.listBox_ScreenOutput.FormattingEnabled = true;
             this.listBox_ScreenOutput.ItemHeight = 20;
-            this.listBox_ScreenOutput.Location = new System.Drawing.Point(3, 501);
+            this.listBox_ScreenOutput.Location = new System.Drawing.Point(3, 617);
             this.listBox_ScreenOutput.Name = "listBox_ScreenOutput";
             this.listBox_ScreenOutput.Size = new System.Drawing.Size(284, 144);
             this.listBox_ScreenOutput.TabIndex = 30;
@@ -449,6 +460,7 @@
             // 
             // panel_tools
             // 
+            this.panel_tools.Controls.Add(this.btn_deleteLine);
             this.panel_tools.Controls.Add(this.group_AddType);
             this.panel_tools.Controls.Add(this.group_AddInput);
             this.panel_tools.Controls.Add(this.btn_ResetScreenOutput);
@@ -460,19 +472,18 @@
             this.panel_tools.Controls.Add(this.group_GetCoordinates);
             this.panel_tools.Location = new System.Drawing.Point(1115, 13);
             this.panel_tools.Name = "panel_tools";
-            this.panel_tools.Size = new System.Drawing.Size(330, 656);
+            this.panel_tools.Size = new System.Drawing.Size(330, 764);
             this.panel_tools.TabIndex = 32;
             // 
-            // rbtn_Centripental
+            // btn_deleteLine
             // 
-            this.rbtn_Centripental.AutoSize = true;
-            this.rbtn_Centripental.Location = new System.Drawing.Point(6, 85);
-            this.rbtn_Centripental.Name = "rbtn_Centripental";
-            this.rbtn_Centripental.Size = new System.Drawing.Size(120, 24);
-            this.rbtn_Centripental.TabIndex = 33;
-            this.rbtn_Centripental.TabStop = true;
-            this.rbtn_Centripental.Text = "Centripental";
-            this.rbtn_Centripental.UseVisualStyleBackColor = true;
+            this.btn_deleteLine.Location = new System.Drawing.Point(6, 501);
+            this.btn_deleteLine.Name = "btn_deleteLine";
+            this.btn_deleteLine.Size = new System.Drawing.Size(314, 37);
+            this.btn_deleteLine.TabIndex = 31;
+            this.btn_deleteLine.Text = "Choose line to delete";
+            this.btn_deleteLine.UseVisualStyleBackColor = true;
+            this.btn_deleteLine.Click += new System.EventHandler(this.btn_deleteLine_Click);
             // 
             // Form1
             // 
@@ -542,6 +553,7 @@
         private System.Windows.Forms.Panel panel_bottom;
         private System.Windows.Forms.Panel panel_tools;
         private System.Windows.Forms.RadioButton rbtn_Centripental;
+        private System.Windows.Forms.Button btn_deleteLine;
     }
 }
 

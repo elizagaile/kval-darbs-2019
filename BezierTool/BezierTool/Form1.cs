@@ -34,9 +34,9 @@ namespace BezierTool
         private List<Point> pPoints = null;// list of points on line
         public static List<List<Point>> pPointsAll = new List<List<Point>>();// contains all lists of points on line
         
-        Tuple<int, int> MovingPoint = null;// the moving point's location in the lines representitive lists (cPointsAll; pPointsAll)
+        public static Tuple<int, int> LocalPoint = null;//location of a selected point in the representitive lists
 
-        Point NewcPoint; //new point for line <4 cPoints>
+        private Point NewcPoint; //new point for line <4 cPoints>
         
         enum MoveType { leftClick, rightClick, nothing };//ways to move points by mouse
         private List<MoveType> MovedLine = new List<MoveType>();//contains a way a list has been moved
@@ -44,13 +44,15 @@ namespace BezierTool
         enum ParamType { uniform, chord, centripental, nothing }; // parametrization types
         private List<ParamType> Parametrization = new List<ParamType>();//contains parametrization types for drawn lines
 
+        public enum Form2Type { add, modify };
+
         public enum BezierType { cPoints, pPoints, leastSquares, composite, nothing }; //all posible line types, public for Form2
 
-        private List<BezierType> AllLines = new List<BezierType>();// contains type of drawn lines
+        public static List<BezierType> AllLines = new List<BezierType>();// contains type of drawn lines
 
         public static BezierType AddType = BezierType.nothing;// type of line to be or being added, public static for Form2
-        BezierType ModifyType = BezierType.nothing;// type of line to be or being modified
-        BezierType DragType = BezierType.nothing;// type of line to be or being modified
+        public static BezierType ModifyType = BezierType.nothing;// type of line to be or being modified
+        public static BezierType DragType = BezierType.nothing;// type of line to be or being modified
         BezierType OutputPointsType = BezierType.nothing;// type of line to be or being draged by mouse
         
         String imageLocation = ""; //for background image
@@ -62,6 +64,7 @@ namespace BezierTool
         bool CompositeDone = false;//indicates if the last line of type <Composite> needs to be finished;
         bool ChangeParam = false;//indicates if option to change parametrization is enabled
         bool ChangingMode = false;//indicates if parametrization is being changed
+        bool DeleteMode = false;//indicates if option to delete a line is enabled
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
             //Mouse has been pressed inside pictureBox1. This can be for adding control points or points on the line,
@@ -85,31 +88,38 @@ namespace BezierTool
                 pictureBox1.Invalidate();
             }
 
-            if (cPointsAll != null && DragType == BezierType.cPoints && rbtn_MouseModify.Checked == true)
+            if (cPointsAll != null && DragType == BezierType.cPoints)
             //if we want to drag a control point
             {
                 findLocalPoint(cPointsAll, e.Location);
 
-                if (MovingPoint != null)
+                if (LocalPoint != null)
                 {
-                    int i = MovingPoint.Item1;
-                    int j = MovingPoint.Item2;
+                    int i = LocalPoint.Item1;
+                    int j = LocalPoint.Item2;
                     ModifyType = AllLines[i];
 
                     if (ModifyType == BezierType.pPoints || ModifyType == BezierType.leastSquares)
                     {
-                        error.Text = "It's not allowed to move curve's " + ModifyType + " points!";
+                        error.Text = "It's not allowed to move curve's " + ModifyType + " control points!";
                         ModifyType = BezierType.nothing;
-                        MovingPoint = null;
+                        LocalPoint = null;
                     }
 
                     else if (ModifyType == BezierType.composite)
-                    // every third control point on a composite line is one of the line points (pPoint) 
                     {
-                        if (j % 3 == 0)
+                        if (rbtn_KeyboardModify.Checked == true)
                         {
-                            error.Text = "It's not allowed to move curve's " + ModifyType + " points!";
-                            MovingPoint = null;
+                            error.Text = "It's not allowed to move curve's " + ModifyType + " points by keyboard!!";
+                            LocalPoint = null;
+                            ModifyType = BezierType.nothing;
+                        }
+
+                        else if (j % 3 == 0)
+                        // every third control point on a composite line is one of the line points (pPoint) 
+                        {
+                            error.Text = "It's not allowed to move curve's " + ModifyType + " line points!";
+                            LocalPoint = null;
                             ModifyType = BezierType.nothing;
                         }
 
@@ -123,26 +133,49 @@ namespace BezierTool
                             MovedLine[i] = MoveType.rightClick;
                         }
                     }
+
+                    else if (rbtn_KeyboardModify.Checked == true)
+                    {
+                        Form_KeyboardAdd form_KeyboardAdd = new Form_KeyboardAdd(Form2Type.modify, ModifyType);
+                        form_KeyboardAdd.ShowDialog();
+                        ModifyType = BezierType.nothing;
+                        LocalPoint = null;
+                    }
                 }
 
                 pictureBox1.Invalidate();
             }
 
-            if (pPointsAll != null && DragType == BezierType.pPoints && rbtn_MouseModify.Checked == true)
+            if (pPointsAll != null && DragType == BezierType.pPoints)
             //if we want to drag a line point
             {
                 findLocalPoint(pPointsAll, e.Location);
 
-                if (MovingPoint != null)
+                if (LocalPoint != null)
                 {
-                    int i = MovingPoint.Item1;
+                    int i = LocalPoint.Item1;
                     ModifyType = AllLines[i];
 
-                    if (ModifyType == BezierType.composite)
+                    if (ModifyType == BezierType.composite && rbtn_MouseModify.Checked == true)//nakotne var uztaisit, ka var.
                     {
-                        error.Text = "It's not allowed to move curve's <Composite> line points!";
+                        error.Text = "It's not allowed to move curve's <Composite> line points by mouse!";
                         ModifyType = BezierType.nothing;
-                        MovingPoint = null;
+                        LocalPoint = null;
+                    }
+
+                    if (rbtn_KeyboardModify.Checked == true)
+                    {
+                        Form_KeyboardAdd form_KeyboardAdd = new Form_KeyboardAdd(Form2Type.modify, ModifyType);
+                        form_KeyboardAdd.ShowDialog();
+
+                        if (ModifyType == BezierType.pPoints || ModifyType == BezierType.leastSquares)
+                        {
+                            getcPoints(i);
+                        }
+
+                        ModifyType = BezierType.nothing;
+                        LocalPoint = null;
+                        pictureBox1.Invalidate();
                     }
                 }
 
@@ -154,14 +187,14 @@ namespace BezierTool
             {
                 findLocalPoint(cPointsAll, e.Location);
 
-                if (MovingPoint != null)
+                if (LocalPoint != null)
                 {
-                    int i = MovingPoint.Item1;
+                    int i = LocalPoint.Item1;
 
                     OutputcPointsScreen(i);
                     OutputPointsType = BezierType.nothing;
                     ModifyType = BezierType.nothing;
-                    MovingPoint = null;
+                    LocalPoint = null;
                 }
 
                 pictureBox1.Invalidate();
@@ -172,14 +205,14 @@ namespace BezierTool
             {
                 findLocalPoint(pPointsAll, e.Location);
 
-                if (MovingPoint != null)
+                if (LocalPoint != null)
                 {
-                    int i = MovingPoint.Item1;
+                    int i = LocalPoint.Item1;
 
                     OutputpPointsScreen(i);
                     OutputPointsType = BezierType.nothing;
                     ModifyType = BezierType.nothing;
-                    MovingPoint = null;
+                    LocalPoint = null;
                 }
 
                 pictureBox1.Invalidate();
@@ -190,14 +223,14 @@ namespace BezierTool
             {
                 findLocalPoint(cPointsAll, e.Location);
 
-                if (MovingPoint != null)
+                if (LocalPoint != null)
                 {
-                    int i = MovingPoint.Item1;
+                    int i = LocalPoint.Item1;
 
                     OutputcPointsFile(i);
                     OutputPointsType = BezierType.nothing;
                     ModifyType = BezierType.nothing;
-                    MovingPoint = null;
+                    LocalPoint = null;
                 }
 
                 pictureBox1.Invalidate();
@@ -208,32 +241,31 @@ namespace BezierTool
             {
                 findLocalPoint(pPointsAll, e.Location);
 
-                if (MovingPoint != null)
+                if (LocalPoint != null)
                 {
-                    int i = MovingPoint.Item1;
+                    int i = LocalPoint.Item1;
 
                     OutputpPointsFile(i);
                     OutputPointsType = BezierType.nothing;
                     ModifyType = BezierType.nothing;
-                    MovingPoint = null;
+                    LocalPoint = null;
                 }
 
                 pictureBox1.Invalidate();
             }
-
 
             if (cPointsAll != null && ChangeParam == true && ChangingMode == false)
             //if we want to change parametrization type
             {
                 findLocalPoint(cPointsAll, e.Location);
 
-                if (MovingPoint == null)
+                if (LocalPoint == null)
                 //mouse wasn't clicked near a control point
                 {
                     return;
                 }
 
-                int i = MovingPoint.Item1;
+                int i = LocalPoint.Item1;
                 ParamType paramType = Parametrization[i];
 
                 if (AllLines[i] == BezierType.cPoints || AllLines[i] == BezierType.composite)
@@ -260,6 +292,31 @@ namespace BezierTool
 
                 ChangingMode = true;
             }
+
+            if (cPointsAll != null && DeleteMode == true)
+            {
+                findLocalPoint(cPointsAll, e.Location);
+
+                if (LocalPoint == null)
+                //mouse wasn't clicked near a control point
+                {
+                    return;
+                }
+
+                int i = LocalPoint.Item1;
+
+                string message = "Do you want to delete this line?";
+                string title = "Delete line";
+                MessageBoxButtons buttons = MessageBoxButtons.OKCancel;
+                DialogResult result = MessageBox.Show(message, title, buttons);
+                
+                if (result == DialogResult.OK)
+                {
+                    deleteLine(i);
+                }
+
+                pictureBox1.Invalidate();
+            }
         }
 
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
@@ -276,10 +333,10 @@ namespace BezierTool
             int i = 0;//need to set a value for code to work, chose 0 arbitrary
             int j = 0;
 
-            if (MovingPoint != null)
+            if (LocalPoint != null)
             {
-                i = MovingPoint.Item1;
-                j = MovingPoint.Item2;
+                i = LocalPoint.Item1;
+                j = LocalPoint.Item2;
             }
 
             if (ModifyType == BezierType.cPoints)
@@ -336,6 +393,11 @@ namespace BezierTool
                     }
                 }
                 pictureBox1.Invalidate();
+            }
+
+            else if (ModifyType == BezierType.composite && DragType == BezierType.pPoints)
+            {
+                //var nakotne pievienot
             }
         }
 
@@ -534,7 +596,7 @@ namespace BezierTool
             pPoints = null;
             DragType = BezierType.nothing;
             ModifyType = BezierType.nothing;
-            MovingPoint = null;
+            LocalPoint = null;
             ChangingMode = false;
             CompositeDone = false;
             MovedLine.Add(MoveType.nothing);
@@ -567,15 +629,17 @@ namespace BezierTool
             return;
         }
 
-        private void deleteLine()
+        private void deleteLine(int i)
             //remove everything function newLine() added; used when adding new line by keybord is canceled
         {
             AddType = BezierType.nothing;
-            AllLines.RemoveAt(AllLines.Count - 1);
-            MovedLine.RemoveAt(MovedLine.Count - 1);
-            cPointsAll.RemoveAt(cPointsAll.Count - 1);
-            pPointsAll.RemoveAt(pPointsAll.Count - 1);
-            Parametrization.RemoveAt(Parametrization.Count - 1);
+            AllLines.RemoveAt(i);
+            MovedLine.RemoveAt(i);
+            cPointsAll.RemoveAt(i);
+            pPointsAll.RemoveAt(i);
+            Parametrization.RemoveAt(i);
+
+            DeleteMode = false;
 
             return;
         }
@@ -596,13 +660,13 @@ namespace BezierTool
             {
                 newLine(BezierType.cPoints);
 
-                Form_KeyboardAdd form_KeyboardAdd = new Form_KeyboardAdd();
+                Form_KeyboardAdd form_KeyboardAdd = new Form_KeyboardAdd(Form2Type.add, AddType);
                 form_KeyboardAdd.ShowDialog();
 
                 if (Form_KeyboardAdd.lineAdded == false) 
                     //an error or cancelation occured and no line was added
                 {
-                    deleteLine();//delete what newLine() added
+                    deleteLine(AllLines.Count - 1);//delete what newLine() added
                     return;
                 }
 
@@ -617,7 +681,7 @@ namespace BezierTool
                 if (cPoints.Count != 4)
                 {
                     error.Text = ".txt file was not correct!";
-                    deleteLine();
+                    deleteLine(AllLines.Count - 1);
                     return;
                 }
 
@@ -641,13 +705,13 @@ namespace BezierTool
             {
                 newLine(BezierType.cPoints);
 
-                Form_KeyboardAdd form_KeyboardAdd = new Form_KeyboardAdd();
+                Form_KeyboardAdd form_KeyboardAdd = new Form_KeyboardAdd(Form2Type.add, AddType);
                 form_KeyboardAdd.ShowDialog();
 
                 if (Form_KeyboardAdd.lineAdded == false)
                     //an error or cancelation occured and no line was added
                 {
-                    deleteLine();//delete what newLine() added
+                    deleteLine(AllLines.Count - 1);//delete what newLine() added
                     return;
                 }
 
@@ -662,7 +726,7 @@ namespace BezierTool
                 if (pPoints.Count != 4)
                 {
                     error.Text = ".txt file was not correct!";
-                    deleteLine();
+                    deleteLine(AllLines.Count - 1);
                     return;
                 }
 
@@ -686,13 +750,13 @@ namespace BezierTool
             {
                 newLine(BezierType.cPoints);
 
-                Form_KeyboardAdd form_KeyboardAdd = new Form_KeyboardAdd();
+                Form_KeyboardAdd form_KeyboardAdd = new Form_KeyboardAdd(Form2Type.add, AddType);
                 form_KeyboardAdd.ShowDialog();
 
                 if (Form_KeyboardAdd.lineAdded == false)
                 //an error or cancelation occured and no line was added
                 {
-                    deleteLine();//delete what newLine() added
+                    deleteLine(AllLines.Count - 1);//delete what newLine() added
                     return;
                 }
 
@@ -707,7 +771,7 @@ namespace BezierTool
                 if (pPoints.Count < 4 || pPoints.Count > maxPointCount)
                 {
                     error.Text = ".txt file was not correct!";
-                    deleteLine();
+                    deleteLine(AllLines.Count - 1);
                     return;
                 }
 
@@ -731,13 +795,13 @@ namespace BezierTool
             {
                 newLine(BezierType.cPoints);
 
-                Form_KeyboardAdd form_KeyboardAdd = new Form_KeyboardAdd();
+                Form_KeyboardAdd form_KeyboardAdd = new Form_KeyboardAdd(Form2Type.add, AddType);
                 form_KeyboardAdd.ShowDialog();
 
                 if (Form_KeyboardAdd.lineAdded == false)
                 //an error or cancelation occured and no line was added
                 {
-                    deleteLine();//delete what newLine() added
+                    deleteLine(AllLines.Count - 1);//delete what newLine() added
                     return;
                 }
                 CompositeDone = true;
@@ -753,7 +817,7 @@ namespace BezierTool
                 if (pPoints.Count < 2 || pPoints.Count > maxPointCount)
                 {
                     error.Text = ".txt file was not correct!";
-                    deleteLine();
+                    deleteLine(AllLines.Count - 1);
                     return;
                 }
 
@@ -1067,7 +1131,7 @@ namespace BezierTool
                         //mouse if in a neighborhood of some point, so we asume it this point was clicked
                         {
                             //ModifyType = AllLines[i];
-                            MovingPoint = new Tuple<int, int>(i, j);
+                            LocalPoint = new Tuple<int, int>(i, j);
                         }
                     }
                 }
@@ -1246,15 +1310,17 @@ namespace BezierTool
         private void btn_cPointsModify_Click(object sender, EventArgs e)
             //allow to drag existing control points by mouse
         {
-            DragType = BezierType.cPoints;
+            DeleteMode = false;
             AddType = BezierType.nothing; // to stop new point adding
+            DragType = BezierType.cPoints;
         }
 
         private void btn_pPointsModify_Click(object sender, EventArgs e)
             //allow to drag existing line points by mouse
         {
-            DragType = BezierType.pPoints;
+            DeleteMode = false;
             AddType = BezierType.nothing; // to stop new point adding
+            DragType = BezierType.pPoints;
         }
 
         private void changecPoint(int a, int b, int c)
@@ -1265,9 +1331,9 @@ namespace BezierTool
             Point middle = new Point();// the middle line point
             Point change = new Point();// the opposite handle that needs to be moved
 
-            moving = cPointsAll[MovingPoint.Item1][a];
-            middle = cPointsAll[MovingPoint.Item1][b];
-            change = cPointsAll[MovingPoint.Item1][c];
+            moving = cPointsAll[LocalPoint.Item1][a];
+            middle = cPointsAll[LocalPoint.Item1][b];
+            change = cPointsAll[LocalPoint.Item1][c];
 
             if (middle == moving)
             //in segment no two control points should have the same location, it doesn't make mathematical sense and makes an error
@@ -1286,7 +1352,7 @@ namespace BezierTool
             change.X = Convert.ToInt32(middle.X + prop * (middle.X - moving.X));
             change.Y = Convert.ToInt32(middle.Y + prop * (middle.Y - moving.Y));
 
-            cPointsAll[MovingPoint.Item1][c] = change;
+            cPointsAll[LocalPoint.Item1][c] = change;
 
             return;
         }
@@ -1306,7 +1372,7 @@ namespace BezierTool
             res.X = Convert.ToInt32(middle.X + prop * (middle.X - prev.X));
             res.Y = Convert.ToInt32(middle.Y + prop * (middle.Y - prev.Y));
 
-            cPointsAll[MovingPoint.Item1][MovingPoint.Item2] = res;
+            cPointsAll[LocalPoint.Item1][LocalPoint.Item2] = res;
 
             return;
         }
@@ -1328,7 +1394,7 @@ namespace BezierTool
                 return;
             }
 
-            int i = MovingPoint.Item1;
+            int i = LocalPoint.Item1;
             //ParamType paramType = Parametrization[i];
 
             if (rbtn_Uniform.Checked == true)
@@ -1479,7 +1545,7 @@ namespace BezierTool
             AllLines = new List<BezierType>();
             MovedLine = new List<MoveType>();
             Parametrization = new List<ParamType>();
-            MovingPoint = null;
+            LocalPoint = null;
             rbtn_MouseAdd.Checked = true;
             rbtn_MouseModify.Checked = true;
             imageLocation = "";
@@ -1488,6 +1554,8 @@ namespace BezierTool
             cbox_ShowBackground.Checked = false;
             CompositeDone = false;
             ChangeParam = false;
+            ChangingMode = false;
+            DeleteMode = false;
             OutputPointsType = BezierType.nothing;
 
             pictureBox1.Invalidate();
@@ -1505,6 +1573,11 @@ namespace BezierTool
             pictureBox1.Width = width - panel_tools.Width - 35;
             pictureBox1.Height = height - 55;
         }
-        
+
+        private void btn_deleteLine_Click(object sender, EventArgs e)
+            //enable option to delete lines
+        {
+            DeleteMode = true;
+        }
     }
 }
