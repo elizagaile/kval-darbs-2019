@@ -39,6 +39,7 @@
             this.btn_SubmitInput = new System.Windows.Forms.Button();
             this.btn_ResetInput = new System.Windows.Forms.Button();
             this.btn_AddRow = new System.Windows.Forms.Button();
+            this.error = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -66,6 +67,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.error);
             this.groupBox1.Controls.Add(this.btn_DeleteRow);
             this.groupBox1.Controls.Add(this.flowLayoutPanel1);
             this.groupBox1.Controls.Add(this.btn_SubmitInput);
@@ -166,6 +168,15 @@
             this.btn_AddRow.UseVisualStyleBackColor = true;
             this.btn_AddRow.Click += new System.EventHandler(this.btn_AddRow_Click);
             // 
+            // error
+            // 
+            this.error.AutoSize = true;
+            this.error.Location = new System.Drawing.Point(348, 273);
+            this.error.Name = "error";
+            this.error.Size = new System.Drawing.Size(18, 20);
+            this.error.TabIndex = 12;
+            this.error.Text = "+";
+            // 
             // Form_KeyboardAdd
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -175,6 +186,7 @@
             this.Name = "Form_KeyboardAdd";
             this.Text = "New <4 cPoints> line";
             this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.flowLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
@@ -194,5 +206,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btn_DeleteRow;
+        private System.Windows.Forms.Label error;
     }
 }

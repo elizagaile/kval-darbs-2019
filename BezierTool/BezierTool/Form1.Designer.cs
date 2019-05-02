@@ -60,8 +60,6 @@
             this.group_Output = new System.Windows.Forms.GroupBox();
             this.rbtn_FileOutput = new System.Windows.Forms.RadioButton();
             this.rbtn_ScreenOutput = new System.Windows.Forms.RadioButton();
-            this.btn_ResetScreenOutput = new System.Windows.Forms.Button();
-            this.listBox_ScreenOutput = new System.Windows.Forms.ListBox();
             this.panel_bottom = new System.Windows.Forms.Panel();
             this.panel_tools = new System.Windows.Forms.Panel();
             this.btn_deleteLine = new System.Windows.Forms.Button();
@@ -425,28 +423,6 @@
             this.rbtn_ScreenOutput.Text = "Screen";
             this.rbtn_ScreenOutput.UseVisualStyleBackColor = true;
             // 
-            // btn_ResetScreenOutput
-            // 
-            this.btn_ResetScreenOutput.BackColor = System.Drawing.Color.Firebrick;
-            this.btn_ResetScreenOutput.ForeColor = System.Drawing.Color.White;
-            this.btn_ResetScreenOutput.Location = new System.Drawing.Point(289, 617);
-            this.btn_ResetScreenOutput.Name = "btn_ResetScreenOutput";
-            this.btn_ResetScreenOutput.Size = new System.Drawing.Size(37, 36);
-            this.btn_ResetScreenOutput.TabIndex = 29;
-            this.btn_ResetScreenOutput.Text = "⨉";
-            this.btn_ResetScreenOutput.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btn_ResetScreenOutput.UseVisualStyleBackColor = false;
-            this.btn_ResetScreenOutput.Click += new System.EventHandler(this.btn_ResetScreenOutput_Click);
-            // 
-            // listBox_ScreenOutput
-            // 
-            this.listBox_ScreenOutput.FormattingEnabled = true;
-            this.listBox_ScreenOutput.ItemHeight = 20;
-            this.listBox_ScreenOutput.Location = new System.Drawing.Point(3, 617);
-            this.listBox_ScreenOutput.Name = "listBox_ScreenOutput";
-            this.listBox_ScreenOutput.Size = new System.Drawing.Size(284, 144);
-            this.listBox_ScreenOutput.TabIndex = 30;
-            // 
             // panel_bottom
             // 
             this.panel_bottom.Controls.Add(this.btn_Reset);
@@ -463,8 +439,6 @@
             this.panel_tools.Controls.Add(this.btn_deleteLine);
             this.panel_tools.Controls.Add(this.group_AddType);
             this.panel_tools.Controls.Add(this.group_AddInput);
-            this.panel_tools.Controls.Add(this.btn_ResetScreenOutput);
-            this.panel_tools.Controls.Add(this.listBox_ScreenOutput);
             this.panel_tools.Controls.Add(this.group_Param);
             this.panel_tools.Controls.Add(this.group_ModifyType);
             this.panel_tools.Controls.Add(this.group_Output);
@@ -472,7 +446,7 @@
             this.panel_tools.Controls.Add(this.group_GetCoordinates);
             this.panel_tools.Location = new System.Drawing.Point(1115, 13);
             this.panel_tools.Name = "panel_tools";
-            this.panel_tools.Size = new System.Drawing.Size(330, 764);
+            this.panel_tools.Size = new System.Drawing.Size(330, 541);
             this.panel_tools.TabIndex = 32;
             // 
             // btn_deleteLine
@@ -481,7 +455,7 @@
             this.btn_deleteLine.Name = "btn_deleteLine";
             this.btn_deleteLine.Size = new System.Drawing.Size(314, 37);
             this.btn_deleteLine.TabIndex = 31;
-            this.btn_deleteLine.Text = "Choose line to delete";
+            this.btn_deleteLine.Text = "Choose a line to delete";
             this.btn_deleteLine.UseVisualStyleBackColor = true;
             this.btn_deleteLine.Click += new System.EventHandler(this.btn_deleteLine_Click);
             // 
@@ -547,8 +521,6 @@
         private System.Windows.Forms.GroupBox group_Output;
         private System.Windows.Forms.RadioButton rbtn_FileOutput;
         private System.Windows.Forms.RadioButton rbtn_ScreenOutput;
-        private System.Windows.Forms.Button btn_ResetScreenOutput;
-        private System.Windows.Forms.ListBox listBox_ScreenOutput;
         private System.Windows.Forms.Button btn_ChangeParam;
         private System.Windows.Forms.Panel panel_bottom;
         private System.Windows.Forms.Panel panel_tools;
