@@ -19,9 +19,9 @@ C:\Users\Eliza Gaile\source\repos\kval-darbs-2019\BezierTool\BezierTool\bin\Debu
 C:\Users\Eliza Gaile\source\repos\kval-darbs-2019\BezierTool\BezierTool\bin\Debug\MathNet.Numerics.dll
 C:\Users\Eliza Gaile\source\repos\kval-darbs-2019\BezierTool\BezierTool\bin\Debug\MathNet.Numerics.xml
 C:\Users\Eliza Gaile\source\repos\kval-darbs-2019\BezierTool\BezierTool\obj\Debug\BezierTool.csprojAssemblyReference.cache
-C:\Users\Eliza Gaile\source\repos\kval-darbs-2019\BezierTool\BezierTool\obj\Debug\BezierTool.Form1.resources
 C:\Users\Eliza Gaile\source\repos\kval-darbs-2019\BezierTool\BezierTool\obj\Debug\BezierTool.Properties.Resources.resources
 C:\Users\Eliza Gaile\source\repos\kval-darbs-2019\BezierTool\BezierTool\obj\Debug\BezierTool.csproj.GenerateResource.cache
 C:\Users\Eliza Gaile\source\repos\kval-darbs-2019\BezierTool\BezierTool\obj\Debug\BezierTool.csproj.CoreCompileInputs.cache
 C:\Users\Eliza Gaile\source\repos\kval-darbs-2019\BezierTool\BezierTool\obj\Debug\BezierTool.csproj.CopyComplete
-C:\Users\Eliza Gaile\source\repos\kval-darbs-2019\BezierTool\BezierTool\obj\Debug\BezierTool.Form_KeyboardAdd.resources
+C:\Users\Eliza Gaile\source\repos\kval-darbs-2019\BezierTool\BezierTool\obj\Debug\BezierTool.FormMain.resources
+C:\Users\Eliza Gaile\source\repos\kval-darbs-2019\BezierTool\BezierTool\obj\Debug\BezierTool.FormCoordinates.resources

@@ -1,6 +1,6 @@
 ﻿namespace BezierTool
 {
-    partial class Form_KeyboardAdd
+    partial class FormCoordinates
     {
         /// <summary>
         /// Required designer variable.
@@ -30,19 +30,19 @@
         {
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.btn_DeleteRow = new System.Windows.Forms.Button();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.gbCoordinates = new System.Windows.Forms.GroupBox();
+            this.error = new System.Windows.Forms.Label();
+            this.btnDeleteRow = new System.Windows.Forms.Button();
+            this.flpCoordinates = new System.Windows.Forms.FlowLayoutPanel();
+            this.tlpCoordinates = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.btn_SubmitInput = new System.Windows.Forms.Button();
-            this.btn_ResetInput = new System.Windows.Forms.Button();
-            this.btn_AddRow = new System.Windows.Forms.Button();
-            this.error = new System.Windows.Forms.Label();
-            this.groupBox1.SuspendLayout();
-            this.flowLayoutPanel1.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
+            this.btnSubmitInput = new System.Windows.Forms.Button();
+            this.btnResetInput = new System.Windows.Forms.Button();
+            this.btnAddRow = new System.Windows.Forms.Button();
+            this.gbCoordinates.SuspendLayout();
+            this.flpCoordinates.SuspendLayout();
+            this.tlpCoordinates.SuspendLayout();
             this.SuspendLayout();
             // 
             // label6
@@ -65,60 +65,69 @@
             this.label7.TabIndex = 6;
             this.label7.Text = "Y";
             // 
-            // groupBox1
+            // gbCoordinates
             // 
-            this.groupBox1.Controls.Add(this.error);
-            this.groupBox1.Controls.Add(this.btn_DeleteRow);
-            this.groupBox1.Controls.Add(this.flowLayoutPanel1);
-            this.groupBox1.Controls.Add(this.btn_SubmitInput);
-            this.groupBox1.Controls.Add(this.btn_ResetInput);
-            this.groupBox1.Controls.Add(this.btn_AddRow);
-            this.groupBox1.Location = new System.Drawing.Point(13, 13);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(462, 457);
-            this.groupBox1.TabIndex = 7;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Set control point coordinates:";
+            this.gbCoordinates.Controls.Add(this.error);
+            this.gbCoordinates.Controls.Add(this.btnDeleteRow);
+            this.gbCoordinates.Controls.Add(this.flpCoordinates);
+            this.gbCoordinates.Controls.Add(this.btnSubmitInput);
+            this.gbCoordinates.Controls.Add(this.btnResetInput);
+            this.gbCoordinates.Controls.Add(this.btnAddRow);
+            this.gbCoordinates.Location = new System.Drawing.Point(13, 13);
+            this.gbCoordinates.Name = "gbCoordinates";
+            this.gbCoordinates.Size = new System.Drawing.Size(462, 457);
+            this.gbCoordinates.TabIndex = 7;
+            this.gbCoordinates.TabStop = false;
+            this.gbCoordinates.Text = "Set control point coordinates:";
             // 
-            // btn_DeleteRow
+            // error
             // 
-            this.btn_DeleteRow.Location = new System.Drawing.Point(303, 67);
-            this.btn_DeleteRow.Name = "btn_DeleteRow";
-            this.btn_DeleteRow.Size = new System.Drawing.Size(125, 36);
-            this.btn_DeleteRow.TabIndex = 11;
-            this.btn_DeleteRow.Text = "Delete Row";
-            this.btn_DeleteRow.UseVisualStyleBackColor = true;
-            this.btn_DeleteRow.Click += new System.EventHandler(this.btn_DeleteRow_Click);
+            this.error.AutoSize = true;
+            this.error.Location = new System.Drawing.Point(348, 273);
+            this.error.Name = "error";
+            this.error.Size = new System.Drawing.Size(18, 20);
+            this.error.TabIndex = 12;
+            this.error.Text = "+";
             // 
-            // flowLayoutPanel1
+            // btnDeleteRow
             // 
-            this.flowLayoutPanel1.Controls.Add(this.tableLayoutPanel1);
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(40, 25);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(257, 426);
-            this.flowLayoutPanel1.TabIndex = 9;
+            this.btnDeleteRow.Location = new System.Drawing.Point(303, 67);
+            this.btnDeleteRow.Name = "btnDeleteRow";
+            this.btnDeleteRow.Size = new System.Drawing.Size(125, 36);
+            this.btnDeleteRow.TabIndex = 11;
+            this.btnDeleteRow.Text = "Delete Row";
+            this.btnDeleteRow.UseVisualStyleBackColor = true;
+            this.btnDeleteRow.Click += new System.EventHandler(this.btnDeleteRow_Click);
             // 
-            // tableLayoutPanel1
+            // flpCoordinates
             // 
-            this.tableLayoutPanel1.ColumnCount = 4;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.tableLayoutPanel1.Controls.Add(this.label7, 2, 0);
-            this.tableLayoutPanel1.Controls.Add(this.label6, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.label2, 3, 0);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 5;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(231, 423);
-            this.tableLayoutPanel1.TabIndex = 8;
+            this.flpCoordinates.Controls.Add(this.tlpCoordinates);
+            this.flpCoordinates.Location = new System.Drawing.Point(40, 25);
+            this.flpCoordinates.Name = "flpCoordinates";
+            this.flpCoordinates.Size = new System.Drawing.Size(257, 432);
+            this.flpCoordinates.TabIndex = 9;
+            // 
+            // tlpCoordinates
+            // 
+            this.tlpCoordinates.ColumnCount = 4;
+            this.tlpCoordinates.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tlpCoordinates.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
+            this.tlpCoordinates.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
+            this.tlpCoordinates.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tlpCoordinates.Controls.Add(this.label7, 2, 0);
+            this.tlpCoordinates.Controls.Add(this.label6, 1, 0);
+            this.tlpCoordinates.Controls.Add(this.label1, 0, 0);
+            this.tlpCoordinates.Controls.Add(this.label2, 3, 0);
+            this.tlpCoordinates.Location = new System.Drawing.Point(3, 3);
+            this.tlpCoordinates.Name = "tlpCoordinates";
+            this.tlpCoordinates.RowCount = 5;
+            this.tlpCoordinates.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpCoordinates.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpCoordinates.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpCoordinates.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpCoordinates.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpCoordinates.Size = new System.Drawing.Size(231, 423);
+            this.tlpCoordinates.TabIndex = 8;
             // 
             // label1
             // 
@@ -136,60 +145,50 @@
             this.label2.Size = new System.Drawing.Size(0, 20);
             this.label2.TabIndex = 8;
             // 
-            // btn_SubmitInput
+            // btnSubmitInput
             // 
-            this.btn_SubmitInput.Location = new System.Drawing.Point(303, 401);
-            this.btn_SubmitInput.Name = "btn_SubmitInput";
-            this.btn_SubmitInput.Size = new System.Drawing.Size(125, 32);
-            this.btn_SubmitInput.TabIndex = 8;
-            this.btn_SubmitInput.Text = "OK";
-            this.btn_SubmitInput.UseVisualStyleBackColor = true;
-            this.btn_SubmitInput.Click += new System.EventHandler(this.btn_SubmitInput_Click);
+            this.btnSubmitInput.Location = new System.Drawing.Point(303, 401);
+            this.btnSubmitInput.Name = "btnSubmitInput";
+            this.btnSubmitInput.Size = new System.Drawing.Size(125, 32);
+            this.btnSubmitInput.TabIndex = 8;
+            this.btnSubmitInput.Text = "OK";
+            this.btnSubmitInput.UseVisualStyleBackColor = true;
+            this.btnSubmitInput.Click += new System.EventHandler(this.btnSubmitInput_Click);
             // 
-            // btn_ResetInput
+            // btnResetInput
             // 
-            this.btn_ResetInput.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
-            this.btn_ResetInput.ForeColor = System.Drawing.Color.White;
-            this.btn_ResetInput.Location = new System.Drawing.Point(303, 357);
-            this.btn_ResetInput.Name = "btn_ResetInput";
-            this.btn_ResetInput.Size = new System.Drawing.Size(125, 38);
-            this.btn_ResetInput.TabIndex = 9;
-            this.btn_ResetInput.Text = "Reset";
-            this.btn_ResetInput.UseVisualStyleBackColor = false;
-            this.btn_ResetInput.Click += new System.EventHandler(this.btn_ResetInput_Click);
+            this.btnResetInput.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.btnResetInput.ForeColor = System.Drawing.Color.White;
+            this.btnResetInput.Location = new System.Drawing.Point(303, 357);
+            this.btnResetInput.Name = "btnResetInput";
+            this.btnResetInput.Size = new System.Drawing.Size(125, 38);
+            this.btnResetInput.TabIndex = 9;
+            this.btnResetInput.Text = "Reset";
+            this.btnResetInput.UseVisualStyleBackColor = false;
+            this.btnResetInput.Click += new System.EventHandler(this.btnResetInput_Click);
             // 
-            // btn_AddRow
+            // btnAddRow
             // 
-            this.btn_AddRow.Location = new System.Drawing.Point(303, 25);
-            this.btn_AddRow.Name = "btn_AddRow";
-            this.btn_AddRow.Size = new System.Drawing.Size(125, 36);
-            this.btn_AddRow.TabIndex = 10;
-            this.btn_AddRow.Text = "Add New Row";
-            this.btn_AddRow.UseVisualStyleBackColor = true;
-            this.btn_AddRow.Click += new System.EventHandler(this.btn_AddRow_Click);
+            this.btnAddRow.Location = new System.Drawing.Point(303, 25);
+            this.btnAddRow.Name = "btnAddRow";
+            this.btnAddRow.Size = new System.Drawing.Size(125, 36);
+            this.btnAddRow.TabIndex = 10;
+            this.btnAddRow.Text = "Add New Row";
+            this.btnAddRow.UseVisualStyleBackColor = true;
+            this.btnAddRow.Click += new System.EventHandler(this.btnAddRow_Click);
             // 
-            // error
-            // 
-            this.error.AutoSize = true;
-            this.error.Location = new System.Drawing.Point(348, 273);
-            this.error.Name = "error";
-            this.error.Size = new System.Drawing.Size(18, 20);
-            this.error.TabIndex = 12;
-            this.error.Text = "+";
-            // 
-            // Form_KeyboardAdd
+            // FormCoordinates
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(487, 482);
-            this.Controls.Add(this.groupBox1);
-            this.Name = "Form_KeyboardAdd";
-            this.Text = "New <4 cPoints> line";
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            this.flowLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
+            this.Controls.Add(this.gbCoordinates);
+            this.Name = "FormCoordinates";
+            this.gbCoordinates.ResumeLayout(false);
+            this.gbCoordinates.PerformLayout();
+            this.flpCoordinates.ResumeLayout(false);
+            this.tlpCoordinates.ResumeLayout(false);
+            this.tlpCoordinates.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -197,15 +196,15 @@
         #endregion
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.Button btn_SubmitInput;
-        private System.Windows.Forms.Button btn_ResetInput;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
-        private System.Windows.Forms.Button btn_AddRow;
+        private System.Windows.Forms.GroupBox gbCoordinates;
+        private System.Windows.Forms.TableLayoutPanel tlpCoordinates;
+        private System.Windows.Forms.Button btnSubmitInput;
+        private System.Windows.Forms.Button btnResetInput;
+        private System.Windows.Forms.FlowLayoutPanel flpCoordinates;
+        private System.Windows.Forms.Button btnAddRow;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button btn_DeleteRow;
+        private System.Windows.Forms.Button btnDeleteRow;
         private System.Windows.Forms.Label error;
     }
 }

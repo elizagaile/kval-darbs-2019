@@ -1,6 +1,6 @@
 ﻿namespace BezierTool
 {
-    partial class Form1
+    partial class FormMain
     {
         /// <summary>
         /// Required designer variable.
@@ -28,158 +28,158 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.btn_Background = new System.Windows.Forms.Button();
-            this.btn_Reset = new System.Windows.Forms.Button();
-            this.btn_cPointsAdd = new System.Windows.Forms.Button();
-            this.btn_pPointsAdd = new System.Windows.Forms.Button();
-            this.btn_LeastSquaresAdd = new System.Windows.Forms.Button();
-            this.btn_CompositeAdd = new System.Windows.Forms.Button();
-            this.rbtn_MouseAdd = new System.Windows.Forms.RadioButton();
-            this.rbtn_KeyboardAdd = new System.Windows.Forms.RadioButton();
-            this.rbtn_FileAdd = new System.Windows.Forms.RadioButton();
+            this.pbCanva = new System.Windows.Forms.PictureBox();
+            this.btnUploadBackground = new System.Windows.Forms.Button();
+            this.btnResetAll = new System.Windows.Forms.Button();
+            this.btnAdd4cPoints = new System.Windows.Forms.Button();
+            this.btnAdd4pPoints = new System.Windows.Forms.Button();
+            this.btnAddLeastSquares = new System.Windows.Forms.Button();
+            this.btnAddComposite = new System.Windows.Forms.Button();
+            this.rbMouseInput = new System.Windows.Forms.RadioButton();
+            this.rbKeyboardInput = new System.Windows.Forms.RadioButton();
+            this.rbFileInput = new System.Windows.Forms.RadioButton();
             this.error = new System.Windows.Forms.Label();
-            this.cbox_ShowBackground = new System.Windows.Forms.CheckBox();
-            this.btn_cPointsModify = new System.Windows.Forms.Button();
-            this.btn_pPointsModify = new System.Windows.Forms.Button();
-            this.rbtn_MouseModify = new System.Windows.Forms.RadioButton();
-            this.rbtn_KeyboardModify = new System.Windows.Forms.RadioButton();
-            this.group_AddInput = new System.Windows.Forms.GroupBox();
-            this.group_AddType = new System.Windows.Forms.GroupBox();
-            this.btn_DoneComposite = new System.Windows.Forms.Button();
-            this.group_ModifyType = new System.Windows.Forms.GroupBox();
-            this.group_ModifyInput = new System.Windows.Forms.GroupBox();
-            this.group_Param = new System.Windows.Forms.GroupBox();
-            this.rbtn_Centripental = new System.Windows.Forms.RadioButton();
-            this.btn_ChangeParam = new System.Windows.Forms.Button();
-            this.rbtn_Chord = new System.Windows.Forms.RadioButton();
-            this.rbtn_Uniform = new System.Windows.Forms.RadioButton();
-            this.btn_cPointsOutput = new System.Windows.Forms.Button();
-            this.group_GetCoordinates = new System.Windows.Forms.GroupBox();
-            this.btn_pPointsOutput = new System.Windows.Forms.Button();
-            this.group_Output = new System.Windows.Forms.GroupBox();
-            this.rbtn_FileOutput = new System.Windows.Forms.RadioButton();
-            this.rbtn_ScreenOutput = new System.Windows.Forms.RadioButton();
+            this.cbShowBackground = new System.Windows.Forms.CheckBox();
+            this.btnModifycPoints = new System.Windows.Forms.Button();
+            this.btnModifypPoints = new System.Windows.Forms.Button();
+            this.rbMouseModify = new System.Windows.Forms.RadioButton();
+            this.rbKeyboardModify = new System.Windows.Forms.RadioButton();
+            this.groupAddInputType = new System.Windows.Forms.GroupBox();
+            this.groupAddType = new System.Windows.Forms.GroupBox();
+            this.btnDoneComposite = new System.Windows.Forms.Button();
+            this.groupModifyType = new System.Windows.Forms.GroupBox();
+            this.groupModifyInput = new System.Windows.Forms.GroupBox();
+            this.groupParamType = new System.Windows.Forms.GroupBox();
+            this.rbCentripetal = new System.Windows.Forms.RadioButton();
+            this.btnChangeParam = new System.Windows.Forms.Button();
+            this.rbChord = new System.Windows.Forms.RadioButton();
+            this.rbUniform = new System.Windows.Forms.RadioButton();
+            this.btnOutputcPoints = new System.Windows.Forms.Button();
+            this.groupGetCoordinates = new System.Windows.Forms.GroupBox();
+            this.btnOutputpPoints = new System.Windows.Forms.Button();
+            this.groupOutput = new System.Windows.Forms.GroupBox();
+            this.rbFileOutput = new System.Windows.Forms.RadioButton();
+            this.rbScreenOutput = new System.Windows.Forms.RadioButton();
             this.panel_bottom = new System.Windows.Forms.Panel();
             this.panel_tools = new System.Windows.Forms.Panel();
-            this.btn_deleteLine = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            this.group_AddInput.SuspendLayout();
-            this.group_AddType.SuspendLayout();
-            this.group_ModifyType.SuspendLayout();
-            this.group_ModifyInput.SuspendLayout();
-            this.group_Param.SuspendLayout();
-            this.group_GetCoordinates.SuspendLayout();
-            this.group_Output.SuspendLayout();
+            this.btnDeleteLine = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.pbCanva)).BeginInit();
+            this.groupAddInputType.SuspendLayout();
+            this.groupAddType.SuspendLayout();
+            this.groupModifyType.SuspendLayout();
+            this.groupModifyInput.SuspendLayout();
+            this.groupParamType.SuspendLayout();
+            this.groupGetCoordinates.SuspendLayout();
+            this.groupOutput.SuspendLayout();
             this.panel_bottom.SuspendLayout();
             this.panel_tools.SuspendLayout();
             this.SuspendLayout();
             // 
-            // pictureBox1
+            // pbCanva
             // 
-            this.pictureBox1.BackColor = System.Drawing.SystemColors.Window;
-            this.pictureBox1.Location = new System.Drawing.Point(13, 13);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(1096, 1035);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
-            this.pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
-            this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDown);
-            this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
-            this.pictureBox1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseUp);
+            this.pbCanva.BackColor = System.Drawing.SystemColors.Window;
+            this.pbCanva.Location = new System.Drawing.Point(13, 13);
+            this.pbCanva.Name = "pbCanva";
+            this.pbCanva.Size = new System.Drawing.Size(1096, 1035);
+            this.pbCanva.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pbCanva.TabIndex = 0;
+            this.pbCanva.TabStop = false;
+            this.pbCanva.Paint += new System.Windows.Forms.PaintEventHandler(this.pbCanva_Paint);
+            this.pbCanva.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pbCanva_MouseDown);
+            this.pbCanva.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbCanva_MouseMove);
+            this.pbCanva.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pbCanva_MouseUp);
             // 
-            // btn_Background
+            // btnUploadBackground
             // 
-            this.btn_Background.Location = new System.Drawing.Point(3, 27);
-            this.btn_Background.Name = "btn_Background";
-            this.btn_Background.Size = new System.Drawing.Size(317, 36);
-            this.btn_Background.TabIndex = 1;
-            this.btn_Background.Text = "Upload Background Image";
-            this.btn_Background.UseVisualStyleBackColor = true;
-            this.btn_Background.Click += new System.EventHandler(this.btnBackground_Click);
+            this.btnUploadBackground.Location = new System.Drawing.Point(3, 27);
+            this.btnUploadBackground.Name = "btnUploadBackground";
+            this.btnUploadBackground.Size = new System.Drawing.Size(317, 36);
+            this.btnUploadBackground.TabIndex = 1;
+            this.btnUploadBackground.Text = "Upload Background Image";
+            this.btnUploadBackground.UseVisualStyleBackColor = true;
+            this.btnUploadBackground.Click += new System.EventHandler(this.btnUploadBackground_Click);
             // 
-            // btn_Reset
+            // btnResetAll
             // 
-            this.btn_Reset.Location = new System.Drawing.Point(3, 116);
-            this.btn_Reset.Name = "btn_Reset";
-            this.btn_Reset.Size = new System.Drawing.Size(317, 37);
-            this.btn_Reset.TabIndex = 2;
-            this.btn_Reset.Text = "Reset All";
-            this.btn_Reset.UseVisualStyleBackColor = true;
-            this.btn_Reset.Click += new System.EventHandler(this.btn_Reset_Click);
+            this.btnResetAll.Location = new System.Drawing.Point(3, 116);
+            this.btnResetAll.Name = "btnResetAll";
+            this.btnResetAll.Size = new System.Drawing.Size(317, 37);
+            this.btnResetAll.TabIndex = 2;
+            this.btnResetAll.Text = "Reset All";
+            this.btnResetAll.UseVisualStyleBackColor = true;
+            this.btnResetAll.Click += new System.EventHandler(this.btnResetAll_Click);
             // 
-            // btn_cPointsAdd
+            // btnAdd4cPoints
             // 
-            this.btn_cPointsAdd.Location = new System.Drawing.Point(6, 25);
-            this.btn_cPointsAdd.Name = "btn_cPointsAdd";
-            this.btn_cPointsAdd.Size = new System.Drawing.Size(159, 37);
-            this.btn_cPointsAdd.TabIndex = 4;
-            this.btn_cPointsAdd.Text = "4 cPoints";
-            this.btn_cPointsAdd.UseVisualStyleBackColor = true;
-            this.btn_cPointsAdd.Click += new System.EventHandler(this.btn_cPointsAdd_Click);
+            this.btnAdd4cPoints.Location = new System.Drawing.Point(6, 25);
+            this.btnAdd4cPoints.Name = "btnAdd4cPoints";
+            this.btnAdd4cPoints.Size = new System.Drawing.Size(159, 37);
+            this.btnAdd4cPoints.TabIndex = 4;
+            this.btnAdd4cPoints.Text = "4 cPoints";
+            this.btnAdd4cPoints.UseVisualStyleBackColor = true;
+            this.btnAdd4cPoints.Click += new System.EventHandler(this.btnAdd4cPoints_Click);
             // 
-            // btn_pPointsAdd
+            // btnAdd4pPoints
             // 
-            this.btn_pPointsAdd.Location = new System.Drawing.Point(6, 68);
-            this.btn_pPointsAdd.Name = "btn_pPointsAdd";
-            this.btn_pPointsAdd.Size = new System.Drawing.Size(159, 37);
-            this.btn_pPointsAdd.TabIndex = 5;
-            this.btn_pPointsAdd.Text = "4 pPoints";
-            this.btn_pPointsAdd.UseVisualStyleBackColor = true;
-            this.btn_pPointsAdd.Click += new System.EventHandler(this.btn_pPointsAdd_Click);
+            this.btnAdd4pPoints.Location = new System.Drawing.Point(6, 68);
+            this.btnAdd4pPoints.Name = "btnAdd4pPoints";
+            this.btnAdd4pPoints.Size = new System.Drawing.Size(159, 37);
+            this.btnAdd4pPoints.TabIndex = 5;
+            this.btnAdd4pPoints.Text = "4 pPoints";
+            this.btnAdd4pPoints.UseVisualStyleBackColor = true;
+            this.btnAdd4pPoints.Click += new System.EventHandler(this.btnAdd4pPoints_Click);
             // 
-            // btn_LeastSquaresAdd
+            // btnAddLeastSquares
             // 
-            this.btn_LeastSquaresAdd.Location = new System.Drawing.Point(6, 111);
-            this.btn_LeastSquaresAdd.Name = "btn_LeastSquaresAdd";
-            this.btn_LeastSquaresAdd.Size = new System.Drawing.Size(159, 37);
-            this.btn_LeastSquaresAdd.TabIndex = 6;
-            this.btn_LeastSquaresAdd.Text = "Least Squares";
-            this.btn_LeastSquaresAdd.UseVisualStyleBackColor = true;
-            this.btn_LeastSquaresAdd.Click += new System.EventHandler(this.btn_LeastSquaresAdd_Click);
+            this.btnAddLeastSquares.Location = new System.Drawing.Point(6, 111);
+            this.btnAddLeastSquares.Name = "btnAddLeastSquares";
+            this.btnAddLeastSquares.Size = new System.Drawing.Size(159, 37);
+            this.btnAddLeastSquares.TabIndex = 6;
+            this.btnAddLeastSquares.Text = "Least Squares";
+            this.btnAddLeastSquares.UseVisualStyleBackColor = true;
+            this.btnAddLeastSquares.Click += new System.EventHandler(this.btnAddLeastSquares_Click);
             // 
-            // btn_CompositeAdd
+            // btnAddComposite
             // 
-            this.btn_CompositeAdd.Location = new System.Drawing.Point(6, 154);
-            this.btn_CompositeAdd.Name = "btn_CompositeAdd";
-            this.btn_CompositeAdd.Size = new System.Drawing.Size(159, 37);
-            this.btn_CompositeAdd.TabIndex = 7;
-            this.btn_CompositeAdd.Text = "Composite";
-            this.btn_CompositeAdd.UseVisualStyleBackColor = true;
-            this.btn_CompositeAdd.Click += new System.EventHandler(this.btn_CompositeAdd_Click);
+            this.btnAddComposite.Location = new System.Drawing.Point(6, 154);
+            this.btnAddComposite.Name = "btnAddComposite";
+            this.btnAddComposite.Size = new System.Drawing.Size(159, 37);
+            this.btnAddComposite.TabIndex = 7;
+            this.btnAddComposite.Text = "Composite";
+            this.btnAddComposite.UseVisualStyleBackColor = true;
+            this.btnAddComposite.Click += new System.EventHandler(this.btnAddComposite_Click);
             // 
-            // rbtn_MouseAdd
+            // rbMouseInput
             // 
-            this.rbtn_MouseAdd.AutoSize = true;
-            this.rbtn_MouseAdd.Checked = true;
-            this.rbtn_MouseAdd.Location = new System.Drawing.Point(6, 25);
-            this.rbtn_MouseAdd.Name = "rbtn_MouseAdd";
-            this.rbtn_MouseAdd.Size = new System.Drawing.Size(101, 24);
-            this.rbtn_MouseAdd.TabIndex = 8;
-            this.rbtn_MouseAdd.TabStop = true;
-            this.rbtn_MouseAdd.Text = "w/ Mouse";
-            this.rbtn_MouseAdd.UseVisualStyleBackColor = true;
+            this.rbMouseInput.AutoSize = true;
+            this.rbMouseInput.Checked = true;
+            this.rbMouseInput.Location = new System.Drawing.Point(6, 25);
+            this.rbMouseInput.Name = "rbMouseInput";
+            this.rbMouseInput.Size = new System.Drawing.Size(101, 24);
+            this.rbMouseInput.TabIndex = 8;
+            this.rbMouseInput.TabStop = true;
+            this.rbMouseInput.Text = "w/ Mouse";
+            this.rbMouseInput.UseVisualStyleBackColor = true;
             // 
-            // rbtn_KeyboardAdd
+            // rbKeyboardInput
             // 
-            this.rbtn_KeyboardAdd.AutoSize = true;
-            this.rbtn_KeyboardAdd.Location = new System.Drawing.Point(6, 55);
-            this.rbtn_KeyboardAdd.Name = "rbtn_KeyboardAdd";
-            this.rbtn_KeyboardAdd.Size = new System.Drawing.Size(120, 24);
-            this.rbtn_KeyboardAdd.TabIndex = 9;
-            this.rbtn_KeyboardAdd.Text = "w/ Keyboard";
-            this.rbtn_KeyboardAdd.UseVisualStyleBackColor = true;
+            this.rbKeyboardInput.AutoSize = true;
+            this.rbKeyboardInput.Location = new System.Drawing.Point(6, 55);
+            this.rbKeyboardInput.Name = "rbKeyboardInput";
+            this.rbKeyboardInput.Size = new System.Drawing.Size(120, 24);
+            this.rbKeyboardInput.TabIndex = 9;
+            this.rbKeyboardInput.Text = "w/ Keyboard";
+            this.rbKeyboardInput.UseVisualStyleBackColor = true;
             // 
-            // rbtn_FileAdd
+            // rbFileInput
             // 
-            this.rbtn_FileAdd.AutoSize = true;
-            this.rbtn_FileAdd.Location = new System.Drawing.Point(6, 85);
-            this.rbtn_FileAdd.Name = "rbtn_FileAdd";
-            this.rbtn_FileAdd.Size = new System.Drawing.Size(120, 24);
-            this.rbtn_FileAdd.TabIndex = 10;
-            this.rbtn_FileAdd.Text = "From .txt file";
-            this.rbtn_FileAdd.UseVisualStyleBackColor = true;
+            this.rbFileInput.AutoSize = true;
+            this.rbFileInput.Location = new System.Drawing.Point(6, 85);
+            this.rbFileInput.Name = "rbFileInput";
+            this.rbFileInput.Size = new System.Drawing.Size(120, 24);
+            this.rbFileInput.TabIndex = 10;
+            this.rbFileInput.Text = "From .txt file";
+            this.rbFileInput.UseVisualStyleBackColor = true;
             // 
             // error
             // 
@@ -190,244 +190,244 @@
             this.error.TabIndex = 12;
             this.error.Text = "+";
             // 
-            // cbox_ShowBackground
+            // cbShowBackground
             // 
-            this.cbox_ShowBackground.AutoSize = true;
-            this.cbox_ShowBackground.Location = new System.Drawing.Point(6, 69);
-            this.cbox_ShowBackground.Name = "cbox_ShowBackground";
-            this.cbox_ShowBackground.Size = new System.Drawing.Size(165, 24);
-            this.cbox_ShowBackground.TabIndex = 13;
-            this.cbox_ShowBackground.Text = "Show Background";
-            this.cbox_ShowBackground.UseVisualStyleBackColor = true;
-            this.cbox_ShowBackground.CheckStateChanged += new System.EventHandler(this.cbox_ShowBackground_CheckStateChanged);
+            this.cbShowBackground.AutoSize = true;
+            this.cbShowBackground.Location = new System.Drawing.Point(6, 69);
+            this.cbShowBackground.Name = "cbShowBackground";
+            this.cbShowBackground.Size = new System.Drawing.Size(165, 24);
+            this.cbShowBackground.TabIndex = 13;
+            this.cbShowBackground.Text = "Show Background";
+            this.cbShowBackground.UseVisualStyleBackColor = true;
+            this.cbShowBackground.CheckStateChanged += new System.EventHandler(this.cbShowBackground_CheckStateChanged);
             // 
-            // btn_cPointsModify
+            // btnModifycPoints
             // 
-            this.btn_cPointsModify.Location = new System.Drawing.Point(6, 25);
-            this.btn_cPointsModify.Name = "btn_cPointsModify";
-            this.btn_cPointsModify.Size = new System.Drawing.Size(159, 37);
-            this.btn_cPointsModify.TabIndex = 14;
-            this.btn_cPointsModify.Text = "Modify cPoints";
-            this.btn_cPointsModify.UseVisualStyleBackColor = true;
-            this.btn_cPointsModify.Click += new System.EventHandler(this.btn_cPointsModify_Click);
+            this.btnModifycPoints.Location = new System.Drawing.Point(6, 25);
+            this.btnModifycPoints.Name = "btnModifycPoints";
+            this.btnModifycPoints.Size = new System.Drawing.Size(159, 37);
+            this.btnModifycPoints.TabIndex = 14;
+            this.btnModifycPoints.Text = "Modify cPoints";
+            this.btnModifycPoints.UseVisualStyleBackColor = true;
+            this.btnModifycPoints.Click += new System.EventHandler(this.btnModifycPoints_Click);
             // 
-            // btn_pPointsModify
+            // btnModifypPoints
             // 
-            this.btn_pPointsModify.Location = new System.Drawing.Point(6, 68);
-            this.btn_pPointsModify.Name = "btn_pPointsModify";
-            this.btn_pPointsModify.Size = new System.Drawing.Size(159, 37);
-            this.btn_pPointsModify.TabIndex = 15;
-            this.btn_pPointsModify.Text = "Modify pPoints";
-            this.btn_pPointsModify.UseVisualStyleBackColor = true;
-            this.btn_pPointsModify.Click += new System.EventHandler(this.btn_pPointsModify_Click);
+            this.btnModifypPoints.Location = new System.Drawing.Point(6, 68);
+            this.btnModifypPoints.Name = "btnModifypPoints";
+            this.btnModifypPoints.Size = new System.Drawing.Size(159, 37);
+            this.btnModifypPoints.TabIndex = 15;
+            this.btnModifypPoints.Text = "Modify pPoints";
+            this.btnModifypPoints.UseVisualStyleBackColor = true;
+            this.btnModifypPoints.Click += new System.EventHandler(this.btnModifypPoints_Click);
             // 
-            // rbtn_MouseModify
+            // rbMouseModify
             // 
-            this.rbtn_MouseModify.AutoSize = true;
-            this.rbtn_MouseModify.Checked = true;
-            this.rbtn_MouseModify.Location = new System.Drawing.Point(6, 25);
-            this.rbtn_MouseModify.Name = "rbtn_MouseModify";
-            this.rbtn_MouseModify.Size = new System.Drawing.Size(101, 24);
-            this.rbtn_MouseModify.TabIndex = 17;
-            this.rbtn_MouseModify.TabStop = true;
-            this.rbtn_MouseModify.Text = "w/ Mouse";
-            this.rbtn_MouseModify.UseVisualStyleBackColor = true;
+            this.rbMouseModify.AutoSize = true;
+            this.rbMouseModify.Checked = true;
+            this.rbMouseModify.Location = new System.Drawing.Point(6, 25);
+            this.rbMouseModify.Name = "rbMouseModify";
+            this.rbMouseModify.Size = new System.Drawing.Size(101, 24);
+            this.rbMouseModify.TabIndex = 17;
+            this.rbMouseModify.TabStop = true;
+            this.rbMouseModify.Text = "w/ Mouse";
+            this.rbMouseModify.UseVisualStyleBackColor = true;
             // 
-            // rbtn_KeyboardModify
+            // rbKeyboardModify
             // 
-            this.rbtn_KeyboardModify.AutoSize = true;
-            this.rbtn_KeyboardModify.Location = new System.Drawing.Point(6, 55);
-            this.rbtn_KeyboardModify.Name = "rbtn_KeyboardModify";
-            this.rbtn_KeyboardModify.Size = new System.Drawing.Size(120, 24);
-            this.rbtn_KeyboardModify.TabIndex = 18;
-            this.rbtn_KeyboardModify.Text = "w/ Keyboard";
-            this.rbtn_KeyboardModify.UseVisualStyleBackColor = true;
+            this.rbKeyboardModify.AutoSize = true;
+            this.rbKeyboardModify.Location = new System.Drawing.Point(6, 55);
+            this.rbKeyboardModify.Name = "rbKeyboardModify";
+            this.rbKeyboardModify.Size = new System.Drawing.Size(120, 24);
+            this.rbKeyboardModify.TabIndex = 18;
+            this.rbKeyboardModify.Text = "w/ Keyboard";
+            this.rbKeyboardModify.UseVisualStyleBackColor = true;
             // 
-            // group_AddInput
+            // groupAddInputType
             // 
-            this.group_AddInput.Controls.Add(this.rbtn_MouseAdd);
-            this.group_AddInput.Controls.Add(this.rbtn_KeyboardAdd);
-            this.group_AddInput.Controls.Add(this.rbtn_FileAdd);
-            this.group_AddInput.Location = new System.Drawing.Point(180, 3);
-            this.group_AddInput.Name = "group_AddInput";
-            this.group_AddInput.Size = new System.Drawing.Size(146, 115);
-            this.group_AddInput.TabIndex = 19;
-            this.group_AddInput.TabStop = false;
-            this.group_AddInput.Text = "Choose points:";
+            this.groupAddInputType.Controls.Add(this.rbMouseInput);
+            this.groupAddInputType.Controls.Add(this.rbKeyboardInput);
+            this.groupAddInputType.Controls.Add(this.rbFileInput);
+            this.groupAddInputType.Location = new System.Drawing.Point(180, 3);
+            this.groupAddInputType.Name = "groupAddInputType";
+            this.groupAddInputType.Size = new System.Drawing.Size(146, 115);
+            this.groupAddInputType.TabIndex = 19;
+            this.groupAddInputType.TabStop = false;
+            this.groupAddInputType.Text = "Choose points:";
             // 
-            // group_AddType
+            // groupAddType
             // 
-            this.group_AddType.Controls.Add(this.btn_DoneComposite);
-            this.group_AddType.Controls.Add(this.btn_cPointsAdd);
-            this.group_AddType.Controls.Add(this.btn_pPointsAdd);
-            this.group_AddType.Controls.Add(this.btn_LeastSquaresAdd);
-            this.group_AddType.Controls.Add(this.btn_CompositeAdd);
-            this.group_AddType.Location = new System.Drawing.Point(3, 3);
-            this.group_AddType.Name = "group_AddType";
-            this.group_AddType.Size = new System.Drawing.Size(171, 252);
-            this.group_AddType.TabIndex = 20;
-            this.group_AddType.TabStop = false;
-            this.group_AddType.Text = "New Bezier of type:";
+            this.groupAddType.Controls.Add(this.btnDoneComposite);
+            this.groupAddType.Controls.Add(this.btnAdd4cPoints);
+            this.groupAddType.Controls.Add(this.btnAdd4pPoints);
+            this.groupAddType.Controls.Add(this.btnAddLeastSquares);
+            this.groupAddType.Controls.Add(this.btnAddComposite);
+            this.groupAddType.Location = new System.Drawing.Point(3, 3);
+            this.groupAddType.Name = "groupAddType";
+            this.groupAddType.Size = new System.Drawing.Size(171, 252);
+            this.groupAddType.TabIndex = 20;
+            this.groupAddType.TabStop = false;
+            this.groupAddType.Text = "New Bezier of type:";
             // 
-            // btn_DoneComposite
+            // btnDoneComposite
             // 
-            this.btn_DoneComposite.Location = new System.Drawing.Point(6, 197);
-            this.btn_DoneComposite.Name = "btn_DoneComposite";
-            this.btn_DoneComposite.Size = new System.Drawing.Size(67, 37);
-            this.btn_DoneComposite.TabIndex = 8;
-            this.btn_DoneComposite.Text = "Done";
-            this.btn_DoneComposite.UseVisualStyleBackColor = true;
-            this.btn_DoneComposite.Click += new System.EventHandler(this.btn_DoneComposite_Click);
+            this.btnDoneComposite.Location = new System.Drawing.Point(6, 197);
+            this.btnDoneComposite.Name = "btnDoneComposite";
+            this.btnDoneComposite.Size = new System.Drawing.Size(67, 37);
+            this.btnDoneComposite.TabIndex = 8;
+            this.btnDoneComposite.Text = "Done";
+            this.btnDoneComposite.UseVisualStyleBackColor = true;
+            this.btnDoneComposite.Click += new System.EventHandler(this.btnDoneComposite_Click);
             // 
-            // group_ModifyType
+            // groupModifyType
             // 
-            this.group_ModifyType.Controls.Add(this.btn_cPointsModify);
-            this.group_ModifyType.Controls.Add(this.btn_pPointsModify);
-            this.group_ModifyType.Location = new System.Drawing.Point(3, 261);
-            this.group_ModifyType.Name = "group_ModifyType";
-            this.group_ModifyType.Size = new System.Drawing.Size(171, 114);
-            this.group_ModifyType.TabIndex = 21;
-            this.group_ModifyType.TabStop = false;
-            this.group_ModifyType.Text = "Modify existing line:";
+            this.groupModifyType.Controls.Add(this.btnModifycPoints);
+            this.groupModifyType.Controls.Add(this.btnModifypPoints);
+            this.groupModifyType.Location = new System.Drawing.Point(3, 261);
+            this.groupModifyType.Name = "groupModifyType";
+            this.groupModifyType.Size = new System.Drawing.Size(171, 114);
+            this.groupModifyType.TabIndex = 21;
+            this.groupModifyType.TabStop = false;
+            this.groupModifyType.Text = "Modify existing line:";
             // 
-            // group_ModifyInput
+            // groupModifyInput
             // 
-            this.group_ModifyInput.Controls.Add(this.rbtn_MouseModify);
-            this.group_ModifyInput.Controls.Add(this.rbtn_KeyboardModify);
-            this.group_ModifyInput.Location = new System.Drawing.Point(180, 288);
-            this.group_ModifyInput.Name = "group_ModifyInput";
-            this.group_ModifyInput.Size = new System.Drawing.Size(146, 87);
-            this.group_ModifyInput.TabIndex = 22;
-            this.group_ModifyInput.TabStop = false;
-            this.group_ModifyInput.Text = "Modify points:";
+            this.groupModifyInput.Controls.Add(this.rbMouseModify);
+            this.groupModifyInput.Controls.Add(this.rbKeyboardModify);
+            this.groupModifyInput.Location = new System.Drawing.Point(180, 288);
+            this.groupModifyInput.Name = "groupModifyInput";
+            this.groupModifyInput.Size = new System.Drawing.Size(146, 87);
+            this.groupModifyInput.TabIndex = 22;
+            this.groupModifyInput.TabStop = false;
+            this.groupModifyInput.Text = "Modify points:";
             // 
-            // group_Param
+            // groupParamType
             // 
-            this.group_Param.Controls.Add(this.rbtn_Centripental);
-            this.group_Param.Controls.Add(this.btn_ChangeParam);
-            this.group_Param.Controls.Add(this.rbtn_Chord);
-            this.group_Param.Controls.Add(this.rbtn_Uniform);
-            this.group_Param.Location = new System.Drawing.Point(180, 124);
-            this.group_Param.Name = "group_Param";
-            this.group_Param.Size = new System.Drawing.Size(146, 158);
-            this.group_Param.TabIndex = 24;
-            this.group_Param.TabStop = false;
-            this.group_Param.Text = "Paramterization:";
+            this.groupParamType.Controls.Add(this.rbCentripetal);
+            this.groupParamType.Controls.Add(this.btnChangeParam);
+            this.groupParamType.Controls.Add(this.rbChord);
+            this.groupParamType.Controls.Add(this.rbUniform);
+            this.groupParamType.Location = new System.Drawing.Point(180, 124);
+            this.groupParamType.Name = "groupParamType";
+            this.groupParamType.Size = new System.Drawing.Size(146, 158);
+            this.groupParamType.TabIndex = 24;
+            this.groupParamType.TabStop = false;
+            this.groupParamType.Text = "Paramterization:";
             // 
-            // rbtn_Centripental
+            // rbCentripetal
             // 
-            this.rbtn_Centripental.AutoSize = true;
-            this.rbtn_Centripental.Location = new System.Drawing.Point(6, 85);
-            this.rbtn_Centripental.Name = "rbtn_Centripental";
-            this.rbtn_Centripental.Size = new System.Drawing.Size(120, 24);
-            this.rbtn_Centripental.TabIndex = 33;
-            this.rbtn_Centripental.TabStop = true;
-            this.rbtn_Centripental.Text = "Centripental";
-            this.rbtn_Centripental.UseVisualStyleBackColor = true;
+            this.rbCentripetal.AutoSize = true;
+            this.rbCentripetal.Location = new System.Drawing.Point(6, 85);
+            this.rbCentripetal.Name = "rbCentripetal";
+            this.rbCentripetal.Size = new System.Drawing.Size(111, 24);
+            this.rbCentripetal.TabIndex = 33;
+            this.rbCentripetal.TabStop = true;
+            this.rbCentripetal.Text = "Centripetal";
+            this.rbCentripetal.UseVisualStyleBackColor = true;
             // 
-            // btn_ChangeParam
+            // btnChangeParam
             // 
-            this.btn_ChangeParam.Location = new System.Drawing.Point(6, 115);
-            this.btn_ChangeParam.Name = "btn_ChangeParam";
-            this.btn_ChangeParam.Size = new System.Drawing.Size(134, 37);
-            this.btn_ChangeParam.TabIndex = 2;
-            this.btn_ChangeParam.Text = "Choose line";
-            this.btn_ChangeParam.UseVisualStyleBackColor = true;
-            this.btn_ChangeParam.Click += new System.EventHandler(this.btn_ChangeParam_Click);
+            this.btnChangeParam.Location = new System.Drawing.Point(6, 115);
+            this.btnChangeParam.Name = "btnChangeParam";
+            this.btnChangeParam.Size = new System.Drawing.Size(134, 37);
+            this.btnChangeParam.TabIndex = 2;
+            this.btnChangeParam.Text = "Choose line";
+            this.btnChangeParam.UseVisualStyleBackColor = true;
+            this.btnChangeParam.Click += new System.EventHandler(this.btnChangeParam_Click);
             // 
-            // rbtn_Chord
+            // rbChord
             // 
-            this.rbtn_Chord.AutoSize = true;
-            this.rbtn_Chord.Location = new System.Drawing.Point(6, 55);
-            this.rbtn_Chord.Name = "rbtn_Chord";
-            this.rbtn_Chord.Size = new System.Drawing.Size(131, 24);
-            this.rbtn_Chord.TabIndex = 1;
-            this.rbtn_Chord.Text = "Chord Length";
-            this.rbtn_Chord.UseVisualStyleBackColor = true;
-            this.rbtn_Chord.CheckedChanged += new System.EventHandler(this.rbtn_Chord_CheckedChanged);
+            this.rbChord.AutoSize = true;
+            this.rbChord.Location = new System.Drawing.Point(6, 55);
+            this.rbChord.Name = "rbChord";
+            this.rbChord.Size = new System.Drawing.Size(131, 24);
+            this.rbChord.TabIndex = 1;
+            this.rbChord.Text = "Chord Length";
+            this.rbChord.UseVisualStyleBackColor = true;
+            this.rbChord.CheckedChanged += new System.EventHandler(this.rbtn_Chord_CheckedChanged);
             // 
-            // rbtn_Uniform
+            // rbUniform
             // 
-            this.rbtn_Uniform.AutoSize = true;
-            this.rbtn_Uniform.Checked = true;
-            this.rbtn_Uniform.Location = new System.Drawing.Point(6, 25);
-            this.rbtn_Uniform.Name = "rbtn_Uniform";
-            this.rbtn_Uniform.Size = new System.Drawing.Size(90, 24);
-            this.rbtn_Uniform.TabIndex = 0;
-            this.rbtn_Uniform.TabStop = true;
-            this.rbtn_Uniform.Text = "Uniform";
-            this.rbtn_Uniform.UseVisualStyleBackColor = true;
-            this.rbtn_Uniform.CheckedChanged += new System.EventHandler(this.rbtn_Uniform_CheckedChanged);
+            this.rbUniform.AutoSize = true;
+            this.rbUniform.Checked = true;
+            this.rbUniform.Location = new System.Drawing.Point(6, 25);
+            this.rbUniform.Name = "rbUniform";
+            this.rbUniform.Size = new System.Drawing.Size(90, 24);
+            this.rbUniform.TabIndex = 0;
+            this.rbUniform.TabStop = true;
+            this.rbUniform.Text = "Uniform";
+            this.rbUniform.UseVisualStyleBackColor = true;
+            this.rbUniform.CheckedChanged += new System.EventHandler(this.rbtn_Uniform_CheckedChanged);
             // 
-            // btn_cPointsOutput
+            // btnOutputcPoints
             // 
-            this.btn_cPointsOutput.Location = new System.Drawing.Point(6, 25);
-            this.btn_cPointsOutput.Name = "btn_cPointsOutput";
-            this.btn_cPointsOutput.Size = new System.Drawing.Size(159, 37);
-            this.btn_cPointsOutput.TabIndex = 25;
-            this.btn_cPointsOutput.Text = "cPoints";
-            this.btn_cPointsOutput.UseVisualStyleBackColor = true;
-            this.btn_cPointsOutput.Click += new System.EventHandler(this.btn_cPointsOutput_Click);
+            this.btnOutputcPoints.Location = new System.Drawing.Point(6, 25);
+            this.btnOutputcPoints.Name = "btnOutputcPoints";
+            this.btnOutputcPoints.Size = new System.Drawing.Size(159, 37);
+            this.btnOutputcPoints.TabIndex = 25;
+            this.btnOutputcPoints.Text = "cPoints";
+            this.btnOutputcPoints.UseVisualStyleBackColor = true;
+            this.btnOutputcPoints.Click += new System.EventHandler(this.btnOutputcPoints_Click);
             // 
-            // group_GetCoordinates
+            // groupGetCoordinates
             // 
-            this.group_GetCoordinates.Controls.Add(this.btn_pPointsOutput);
-            this.group_GetCoordinates.Controls.Add(this.btn_cPointsOutput);
-            this.group_GetCoordinates.Location = new System.Drawing.Point(3, 381);
-            this.group_GetCoordinates.Name = "group_GetCoordinates";
-            this.group_GetCoordinates.Size = new System.Drawing.Size(171, 114);
-            this.group_GetCoordinates.TabIndex = 26;
-            this.group_GetCoordinates.TabStop = false;
-            this.group_GetCoordinates.Text = "Get coordinates";
+            this.groupGetCoordinates.Controls.Add(this.btnOutputpPoints);
+            this.groupGetCoordinates.Controls.Add(this.btnOutputcPoints);
+            this.groupGetCoordinates.Location = new System.Drawing.Point(3, 381);
+            this.groupGetCoordinates.Name = "groupGetCoordinates";
+            this.groupGetCoordinates.Size = new System.Drawing.Size(171, 114);
+            this.groupGetCoordinates.TabIndex = 26;
+            this.groupGetCoordinates.TabStop = false;
+            this.groupGetCoordinates.Text = "Get coordinates";
             // 
-            // btn_pPointsOutput
+            // btnOutputpPoints
             // 
-            this.btn_pPointsOutput.Location = new System.Drawing.Point(6, 68);
-            this.btn_pPointsOutput.Name = "btn_pPointsOutput";
-            this.btn_pPointsOutput.Size = new System.Drawing.Size(159, 37);
-            this.btn_pPointsOutput.TabIndex = 26;
-            this.btn_pPointsOutput.Text = "pPoints";
-            this.btn_pPointsOutput.UseVisualStyleBackColor = true;
-            this.btn_pPointsOutput.Click += new System.EventHandler(this.btn_pPointsOutput_Click);
+            this.btnOutputpPoints.Location = new System.Drawing.Point(6, 68);
+            this.btnOutputpPoints.Name = "btnOutputpPoints";
+            this.btnOutputpPoints.Size = new System.Drawing.Size(159, 37);
+            this.btnOutputpPoints.TabIndex = 26;
+            this.btnOutputpPoints.Text = "pPoints";
+            this.btnOutputpPoints.UseVisualStyleBackColor = true;
+            this.btnOutputpPoints.Click += new System.EventHandler(this.btnOutputpPoints_Click);
             // 
-            // group_Output
+            // groupOutput
             // 
-            this.group_Output.Controls.Add(this.rbtn_FileOutput);
-            this.group_Output.Controls.Add(this.rbtn_ScreenOutput);
-            this.group_Output.Location = new System.Drawing.Point(180, 381);
-            this.group_Output.Name = "group_Output";
-            this.group_Output.Size = new System.Drawing.Size(146, 114);
-            this.group_Output.TabIndex = 27;
-            this.group_Output.TabStop = false;
-            this.group_Output.Text = "Output to";
+            this.groupOutput.Controls.Add(this.rbFileOutput);
+            this.groupOutput.Controls.Add(this.rbScreenOutput);
+            this.groupOutput.Location = new System.Drawing.Point(180, 381);
+            this.groupOutput.Name = "groupOutput";
+            this.groupOutput.Size = new System.Drawing.Size(146, 114);
+            this.groupOutput.TabIndex = 27;
+            this.groupOutput.TabStop = false;
+            this.groupOutput.Text = "Output to";
             // 
-            // rbtn_FileOutput
+            // rbFileOutput
             // 
-            this.rbtn_FileOutput.AutoSize = true;
-            this.rbtn_FileOutput.Location = new System.Drawing.Point(6, 55);
-            this.rbtn_FileOutput.Name = "rbtn_FileOutput";
-            this.rbtn_FileOutput.Size = new System.Drawing.Size(79, 24);
-            this.rbtn_FileOutput.TabIndex = 1;
-            this.rbtn_FileOutput.Text = ".txt file";
-            this.rbtn_FileOutput.UseVisualStyleBackColor = true;
+            this.rbFileOutput.AutoSize = true;
+            this.rbFileOutput.Location = new System.Drawing.Point(6, 55);
+            this.rbFileOutput.Name = "rbFileOutput";
+            this.rbFileOutput.Size = new System.Drawing.Size(79, 24);
+            this.rbFileOutput.TabIndex = 1;
+            this.rbFileOutput.Text = ".txt file";
+            this.rbFileOutput.UseVisualStyleBackColor = true;
             // 
-            // rbtn_ScreenOutput
+            // rbScreenOutput
             // 
-            this.rbtn_ScreenOutput.AutoSize = true;
-            this.rbtn_ScreenOutput.Checked = true;
-            this.rbtn_ScreenOutput.Location = new System.Drawing.Point(6, 25);
-            this.rbtn_ScreenOutput.Name = "rbtn_ScreenOutput";
-            this.rbtn_ScreenOutput.Size = new System.Drawing.Size(85, 24);
-            this.rbtn_ScreenOutput.TabIndex = 0;
-            this.rbtn_ScreenOutput.TabStop = true;
-            this.rbtn_ScreenOutput.Text = "Screen";
-            this.rbtn_ScreenOutput.UseVisualStyleBackColor = true;
+            this.rbScreenOutput.AutoSize = true;
+            this.rbScreenOutput.Checked = true;
+            this.rbScreenOutput.Location = new System.Drawing.Point(6, 25);
+            this.rbScreenOutput.Name = "rbScreenOutput";
+            this.rbScreenOutput.Size = new System.Drawing.Size(85, 24);
+            this.rbScreenOutput.TabIndex = 0;
+            this.rbScreenOutput.TabStop = true;
+            this.rbScreenOutput.Text = "Screen";
+            this.rbScreenOutput.UseVisualStyleBackColor = true;
             // 
             // panel_bottom
             // 
-            this.panel_bottom.Controls.Add(this.btn_Reset);
-            this.panel_bottom.Controls.Add(this.cbox_ShowBackground);
-            this.panel_bottom.Controls.Add(this.btn_Background);
+            this.panel_bottom.Controls.Add(this.btnResetAll);
+            this.panel_bottom.Controls.Add(this.cbShowBackground);
+            this.panel_bottom.Controls.Add(this.btnUploadBackground);
             this.panel_bottom.Controls.Add(this.error);
             this.panel_bottom.Location = new System.Drawing.Point(1115, 892);
             this.panel_bottom.Name = "panel_bottom";
@@ -436,52 +436,52 @@
             // 
             // panel_tools
             // 
-            this.panel_tools.Controls.Add(this.btn_deleteLine);
-            this.panel_tools.Controls.Add(this.group_AddType);
-            this.panel_tools.Controls.Add(this.group_AddInput);
-            this.panel_tools.Controls.Add(this.group_Param);
-            this.panel_tools.Controls.Add(this.group_ModifyType);
-            this.panel_tools.Controls.Add(this.group_Output);
-            this.panel_tools.Controls.Add(this.group_ModifyInput);
-            this.panel_tools.Controls.Add(this.group_GetCoordinates);
+            this.panel_tools.Controls.Add(this.btnDeleteLine);
+            this.panel_tools.Controls.Add(this.groupAddType);
+            this.panel_tools.Controls.Add(this.groupAddInputType);
+            this.panel_tools.Controls.Add(this.groupParamType);
+            this.panel_tools.Controls.Add(this.groupModifyType);
+            this.panel_tools.Controls.Add(this.groupOutput);
+            this.panel_tools.Controls.Add(this.groupModifyInput);
+            this.panel_tools.Controls.Add(this.groupGetCoordinates);
             this.panel_tools.Location = new System.Drawing.Point(1115, 13);
             this.panel_tools.Name = "panel_tools";
             this.panel_tools.Size = new System.Drawing.Size(330, 541);
             this.panel_tools.TabIndex = 32;
             // 
-            // btn_deleteLine
+            // btnDeleteLine
             // 
-            this.btn_deleteLine.Location = new System.Drawing.Point(6, 501);
-            this.btn_deleteLine.Name = "btn_deleteLine";
-            this.btn_deleteLine.Size = new System.Drawing.Size(314, 37);
-            this.btn_deleteLine.TabIndex = 31;
-            this.btn_deleteLine.Text = "Choose a line to delete";
-            this.btn_deleteLine.UseVisualStyleBackColor = true;
-            this.btn_deleteLine.Click += new System.EventHandler(this.btn_deleteLine_Click);
+            this.btnDeleteLine.Location = new System.Drawing.Point(6, 501);
+            this.btnDeleteLine.Name = "btnDeleteLine";
+            this.btnDeleteLine.Size = new System.Drawing.Size(314, 37);
+            this.btnDeleteLine.TabIndex = 31;
+            this.btnDeleteLine.Text = "Choose a line to delete";
+            this.btnDeleteLine.UseVisualStyleBackColor = true;
+            this.btnDeleteLine.Click += new System.EventHandler(this.btnDeleteLine_Click);
             // 
-            // Form1
+            // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1450, 1060);
             this.Controls.Add(this.panel_tools);
             this.Controls.Add(this.panel_bottom);
-            this.Controls.Add(this.pictureBox1);
-            this.Name = "Form1";
+            this.Controls.Add(this.pbCanva);
+            this.Name = "FormMain";
             this.Text = "Bezier Tool";
-            this.Resize += new System.EventHandler(this.Form1_Resize);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            this.group_AddInput.ResumeLayout(false);
-            this.group_AddInput.PerformLayout();
-            this.group_AddType.ResumeLayout(false);
-            this.group_ModifyType.ResumeLayout(false);
-            this.group_ModifyInput.ResumeLayout(false);
-            this.group_ModifyInput.PerformLayout();
-            this.group_Param.ResumeLayout(false);
-            this.group_Param.PerformLayout();
-            this.group_GetCoordinates.ResumeLayout(false);
-            this.group_Output.ResumeLayout(false);
-            this.group_Output.PerformLayout();
+            this.Resize += new System.EventHandler(this.FormMain_Resize);
+            ((System.ComponentModel.ISupportInitialize)(this.pbCanva)).EndInit();
+            this.groupAddInputType.ResumeLayout(false);
+            this.groupAddInputType.PerformLayout();
+            this.groupAddType.ResumeLayout(false);
+            this.groupModifyType.ResumeLayout(false);
+            this.groupModifyInput.ResumeLayout(false);
+            this.groupModifyInput.PerformLayout();
+            this.groupParamType.ResumeLayout(false);
+            this.groupParamType.PerformLayout();
+            this.groupGetCoordinates.ResumeLayout(false);
+            this.groupOutput.ResumeLayout(false);
+            this.groupOutput.PerformLayout();
             this.panel_bottom.ResumeLayout(false);
             this.panel_bottom.PerformLayout();
             this.panel_tools.ResumeLayout(false);
@@ -491,41 +491,41 @@
 
         #endregion
 
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Button btn_Background;
-        private System.Windows.Forms.Button btn_Reset;
-        private System.Windows.Forms.Button btn_cPointsAdd;
-        private System.Windows.Forms.Button btn_pPointsAdd;
-        private System.Windows.Forms.Button btn_LeastSquaresAdd;
-        private System.Windows.Forms.Button btn_CompositeAdd;
-        private System.Windows.Forms.RadioButton rbtn_MouseAdd;
-        private System.Windows.Forms.RadioButton rbtn_KeyboardAdd;
-        private System.Windows.Forms.RadioButton rbtn_FileAdd;
+        private System.Windows.Forms.PictureBox pbCanva;
+        private System.Windows.Forms.Button btnUploadBackground;
+        private System.Windows.Forms.Button btnResetAll;
+        private System.Windows.Forms.Button btnAdd4cPoints;
+        private System.Windows.Forms.Button btnAdd4pPoints;
+        private System.Windows.Forms.Button btnAddLeastSquares;
+        private System.Windows.Forms.Button btnAddComposite;
+        private System.Windows.Forms.RadioButton rbMouseInput;
+        private System.Windows.Forms.RadioButton rbKeyboardInput;
+        private System.Windows.Forms.RadioButton rbFileInput;
         private System.Windows.Forms.Label error;
-        private System.Windows.Forms.CheckBox cbox_ShowBackground;
-        private System.Windows.Forms.Button btn_cPointsModify;
-        private System.Windows.Forms.Button btn_pPointsModify;
-        private System.Windows.Forms.RadioButton rbtn_MouseModify;
-        private System.Windows.Forms.RadioButton rbtn_KeyboardModify;
-        private System.Windows.Forms.GroupBox group_AddInput;
-        private System.Windows.Forms.GroupBox group_AddType;
-        private System.Windows.Forms.GroupBox group_ModifyType;
-        private System.Windows.Forms.GroupBox group_ModifyInput;
-        private System.Windows.Forms.GroupBox group_Param;
-        private System.Windows.Forms.RadioButton rbtn_Chord;
-        private System.Windows.Forms.RadioButton rbtn_Uniform;
-        private System.Windows.Forms.Button btn_DoneComposite;
-        private System.Windows.Forms.Button btn_cPointsOutput;
-        private System.Windows.Forms.GroupBox group_GetCoordinates;
-        private System.Windows.Forms.Button btn_pPointsOutput;
-        private System.Windows.Forms.GroupBox group_Output;
-        private System.Windows.Forms.RadioButton rbtn_FileOutput;
-        private System.Windows.Forms.RadioButton rbtn_ScreenOutput;
-        private System.Windows.Forms.Button btn_ChangeParam;
+        private System.Windows.Forms.CheckBox cbShowBackground;
+        private System.Windows.Forms.Button btnModifycPoints;
+        private System.Windows.Forms.Button btnModifypPoints;
+        private System.Windows.Forms.RadioButton rbMouseModify;
+        private System.Windows.Forms.RadioButton rbKeyboardModify;
+        private System.Windows.Forms.GroupBox groupAddInputType;
+        private System.Windows.Forms.GroupBox groupAddType;
+        private System.Windows.Forms.GroupBox groupModifyType;
+        private System.Windows.Forms.GroupBox groupModifyInput;
+        private System.Windows.Forms.GroupBox groupParamType;
+        private System.Windows.Forms.RadioButton rbChord;
+        private System.Windows.Forms.RadioButton rbUniform;
+        private System.Windows.Forms.Button btnDoneComposite;
+        private System.Windows.Forms.Button btnOutputcPoints;
+        private System.Windows.Forms.GroupBox groupGetCoordinates;
+        private System.Windows.Forms.Button btnOutputpPoints;
+        private System.Windows.Forms.GroupBox groupOutput;
+        private System.Windows.Forms.RadioButton rbFileOutput;
+        private System.Windows.Forms.RadioButton rbScreenOutput;
+        private System.Windows.Forms.Button btnChangeParam;
         private System.Windows.Forms.Panel panel_bottom;
         private System.Windows.Forms.Panel panel_tools;
-        private System.Windows.Forms.RadioButton rbtn_Centripental;
-        private System.Windows.Forms.Button btn_deleteLine;
+        private System.Windows.Forms.RadioButton rbCentripetal;
+        private System.Windows.Forms.Button btnDeleteLine;
     }
 }
 
