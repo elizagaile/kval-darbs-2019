@@ -919,7 +919,7 @@ namespace BezierTool
             //calculate control points for a <Composite> line with three or more line points
         {
             cPointsAll[i].Add(pPointsAll[i][0]);//first control point is first line point
-            AddFirstcPointComposite(i);//add first control point that isn't a line point
+            cPointsAll[i].Add(GetVeryFirstHandleComposite(pPointsAll[i][0], GetFirstHandleComposite(pPointsAll[i][0], pPointsAll[i][1], pPointsAll[i][2]), pPointsAll[i][1]));//add first control point that isn't a line point
 
             for (int j = 2; j < pPointsAll[i].Count; j++)
             //we can add three new controlpoints for every line point starting with the third line point. 
@@ -934,34 +934,29 @@ namespace BezierTool
             //if a <Composite> line isn't the last drawn line, it must be finished. 
             //That means, it should have three times (every point is a control point and has two "handles") minus two (each end point dont have one handle) more control points than line points
             {
-                AddLastcPointsComposite(i);
+                cPointsAll[i].Add(GetLastHandleComposite(pPointsAll[i][pPointsAll[i].Count - 2], cPointsAll[i][cPointsAll[i].Count - 1], pPointsAll[i][pPointsAll[i].Count - 1]));
+                cPointsAll[i].Add(pPointsAll[i][pPointsAll[i].Count - 1]);
             }
 
             else if (i == allLines.Count - 1 && isCompositeDone == true)
             //if the last drawn <Composite> line is marked as done, calculate and add last control points
             {
-                AddLastcPointsComposite(i);
+                cPointsAll[i].Add(GetLastHandleComposite(pPointsAll[i][pPointsAll[i].Count - 2], cPointsAll[i][cPointsAll[i].Count - 1], pPointsAll[i][pPointsAll[i].Count - 1]));
+                cPointsAll[i].Add(pPointsAll[i][pPointsAll[i].Count - 1]);
             }
 
             return;
         }
         
-        private void AddFirstcPointComposite(int i)
+        private Point GetVeryFirstHandleComposite(Point firstpPoint, Point oppositeHandle, Point secondpPoint)
             //add first control point thats not a line point for <Composite> line with at least three line points
         {
-            Point c1 = new Point();
-            Point c2 = new Point();
-            Point c3 = new Point();
-            Point c4 = new Point();
+            Point res = new Point();
 
             //control point location is calculated from first, third and fourth control points of the  <Composite> line
 
-            c1 = pPointsAll[i][0];
-            c3 = GetFirstHandleComposite(pPointsAll[i][0], pPointsAll[i][1], pPointsAll[i][2]);
-            c4 = pPointsAll[i][1];
-
             //We can look at these calculations as vector operations. First we calculate dot product of vectors C4C3 and C1C4:
-            double dot = (c3.X - c4.X) * (c1.X - c4.X) + (c3.Y - c4.Y) * (c1.Y - c4.Y);
+            double dot = (oppositeHandle.X - secondpPoint.X) * (firstpPoint.X - secondpPoint.X) + (oppositeHandle.Y - secondpPoint.Y) * (firstpPoint.Y - secondpPoint.Y);
 
             //We need to find how long the vector from C2 to C3 needs to be, so that the middle control points are symmetrical.
             //The symmetry can be achieved, if the C3C2 vector is parallel to C4C1 and has the length of 
@@ -971,17 +966,16 @@ namespace BezierTool
             //we get: proportion = 1 - 2 * dot / |C4C1|^2
 
             //That means, the length of the vector we will add equals 
-            double prop = 1 - 2 * dot / (Math.Pow(GetLength(c1, c4), 2));
+            double prop = 1 - 2 * dot / (Math.Pow(GetLength(firstpPoint, secondpPoint), 2));
 
             //Lastly, to point C3 we add vector parallel to C1C4 scaled by the needed length - variable "prop":
-            c2.X = Convert.ToInt32(c3.X + prop * (c1.X - c4.X));
-            c2.Y = Convert.ToInt32(c3.Y + prop * (c1.Y - c4.Y));
+            res.X = Convert.ToInt32(oppositeHandle.X + prop * (firstpPoint.X - secondpPoint.X));
+            res.Y = Convert.ToInt32(oppositeHandle.Y + prop * (firstpPoint.Y - secondpPoint.Y));
 
             //We have achieved a "symmetrical" point to third control point, both of these points are on the same side of the bezier line.
+            
 
-            cPointsAll[i].Add(c2);
-
-            return;
+            return res;
         }
 
         private Point GetFirstHandleComposite(Point prevpPoint, Point thispPoint, Point nextpPoint)
@@ -992,7 +986,7 @@ namespace BezierTool
             double lengthThisNext = GetLength(thispPoint, nextpPoint);
 
             //Distance from first to second handle is half the distance from first given line point (a) to the last(c).
-            //The proportions of each handle is the same as proportion ab/bc, where b is the middle line point.
+            //The proportions of each handle are the same as proportion ab/bc, where b is the middle line point.
             //Methods of calculation for distances can be different and there isn't one best method. 
             //I have discovered that this method works nice most of the time and isn't expesive.
 
@@ -1021,39 +1015,28 @@ namespace BezierTool
             return res;
         }
         
-        private void AddLastcPointsComposite(int i)
-            //add two last control points to a <Composite> line that''
+        private Point GetLastHandleComposite(Point prevpPoint, Point prevHandle, Point lastpPoint)
+            //add two last control points to a <Composite> line that has at least three line points and is marked as 'done'
         {
-            Point c1 = new Point();
-            Point c2 = new Point();
-            Point c3 = new Point();
-            Point c4 = new Point();
+            Point res = new Point();
 
             //control point location is calculated from first, second and fourth control point of the last segment in the <Comoposite> line
-
-            c1 = pPointsAll[i][pPointsAll[i].Count - 2];
-            c2 = cPointsAll[i][cPointsAll[i].Count - 1];
-            c4 = pPointsAll[i][pPointsAll[i].Count - 1];
-
+   
+      
             //We can look at these calculations as vector operations. First we calculate dot product of vectors C4C2 and C1C4:
-            double dot = (c2.X - c4.X) * (c1.X - c4.X) + (c2.Y - c4.Y) * (c1.Y - c4.Y);
+            double dotProduct = (prevHandle.X - lastpPoint.X) * (prevpPoint.X - lastpPoint.X) + (prevHandle.Y - lastpPoint.Y) * (prevpPoint.Y - lastpPoint.Y);
 
             //To find how long the vector from C2 to C3 needs to be, we find the the proportion:
             //(for more information on the calculation, see function AddFirstcPointComposite();)
-            double prop = 1 - 2 * dot / (Math.Pow(GetLength(c1, c4), 2));
+            double proportion = 1 - 2 * dotProduct / (Math.Pow(GetLength(prevpPoint, lastpPoint), 2));
 
             //Lastly, to point C2 we add vector parallel to C1C4 scaled by the needed length - variable "prop":
-            c3.X = Convert.ToInt32(prop * (c1.X - c4.X) + c2.X);
-            c3.Y = Convert.ToInt32(prop * (c1.Y - c4.Y) + c2.Y);
+            res.X = Convert.ToInt32(proportion * (prevpPoint.X - lastpPoint.X) + prevHandle.X);
+            res.Y = Convert.ToInt32(proportion * (prevpPoint.Y - lastpPoint.Y) + prevHandle.Y);
 
             //We have achieved a "symmetrical" point to second control point, both of these points are on the same side of the bezier line.
-
-            //We add the calculated point as wall as the last control point - the last line point:
-            cPointsAll[i].Add(c3);
-            cPointsAll[i].Add(c4);
-
-            pbCanva.Invalidate();
-            return;
+            
+            return res;
         }
 
         private void AddOnlycPointsComposite(int i)

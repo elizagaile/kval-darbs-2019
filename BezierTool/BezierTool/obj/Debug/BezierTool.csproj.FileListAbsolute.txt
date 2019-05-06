@@ -2,7 +2,6 @@ C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\BezierTool\BezierTool\bin\Debu
 C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\BezierTool\BezierTool\bin\Debug\BezierTool.exe
 C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\BezierTool\BezierTool\bin\Debug\BezierTool.pdb
 C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\BezierTool\BezierTool\obj\Debug\BezierTool.csprojAssemblyReference.cache
-C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\BezierTool\BezierTool\obj\Debug\BezierTool.Form1.resources
 C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\BezierTool\BezierTool\obj\Debug\BezierTool.Properties.Resources.resources
 C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\BezierTool\BezierTool\obj\Debug\BezierTool.csproj.GenerateResource.cache
 C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\BezierTool\BezierTool\obj\Debug\BezierTool.csproj.CoreCompileInputs.cache
@@ -25,3 +24,5 @@ C:\Users\Eliza Gaile\source\repos\kval-darbs-2019\BezierTool\BezierTool\obj\Debu
 C:\Users\Eliza Gaile\source\repos\kval-darbs-2019\BezierTool\BezierTool\obj\Debug\BezierTool.csproj.CopyComplete
 C:\Users\Eliza Gaile\source\repos\kval-darbs-2019\BezierTool\BezierTool\obj\Debug\BezierTool.FormMain.resources
 C:\Users\Eliza Gaile\source\repos\kval-darbs-2019\BezierTool\BezierTool\obj\Debug\BezierTool.FormCoordinates.resources
+C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\BezierTool\BezierTool\obj\Debug\BezierTool.FormMain.resources
+C:\Users\eliza\Desktop\darbs\kval\kval-darbs-2019\BezierTool\BezierTool\obj\Debug\BezierTool.FormCoordinates.resources
