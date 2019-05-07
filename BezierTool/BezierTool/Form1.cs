@@ -13,7 +13,7 @@ namespace BezierTool
         public FormMain()
         {
             InitializeComponent();
-            this.Width = Convert.ToInt32(0.5 * Screen.PrimaryScreen.Bounds.Width);
+            this.Width = Convert.ToInt32(0.75 * Screen.PrimaryScreen.Bounds.Width);
             this.Height = Convert.ToInt32(0.75 * Screen.PrimaryScreen.Bounds.Height);
         }
 
@@ -65,21 +65,17 @@ namespace BezierTool
             //Mouse has been pressed inside pictureBox1. This can be for adding control points or points on the line,
             //for moving points with mouse or for selecting a line to output point coordinates
         {
-            if (addType != BezierType.Nothing && rbMouseInput.Checked == true)
-            //if we want to add a new point by mouse            
+            if (addType == BezierType.cPoints && rbMouseInput.Checked == true)
+            //if we want to add a new control point for a <4 cPoints> type line with mouse
             {
-                if (addType == BezierType.cPoints)
-                //if we want to add a new point for a <4 cPoints> type line
-                {
-                    AddcPoint(e.Location);
-                }
+                AddcPoint(e.Location);
+                pbCanva.Invalidate();
+            }
 
-                else if (addType == BezierType.pPoints || addType == BezierType.LeastSquares || addType == BezierType.Composite)
-                //for <4 pPoints>, <Least Squares> or <Composite> type lines we can add only line points
-                {
-                    AddpPoint(e.Location);
-                }
-
+            else if ((addType == BezierType.pPoints || addType == BezierType.LeastSquares || addType == BezierType.Composite) && rbMouseInput.Checked == true)
+            //for <4 pPoints>, <Least Squares> or <Composite> type lines we can add only line points
+            {
+                AddpPoint(e.Location);
                 pbCanva.Invalidate();
             }
 
@@ -90,56 +86,8 @@ namespace BezierTool
 
                 if (localPoint != null)
                 {
-                    int i = localPoint.Item1;
-                    int j = localPoint.Item2;
-                    modifyLineType = allLines[i];
-
-                    if (modifyLineType == BezierType.pPoints || modifyLineType == BezierType.LeastSquares)
-                    {
-                        error.Text = "It's not allowed to move curve's " + modifyLineType + " control points!";
-                        modifyLineType = BezierType.Nothing;
-                        localPoint = null;
-                    }
-
-                    else if (modifyLineType == BezierType.Composite)
-                    {
-                        if (rbKeyboardModify.Checked == true)
-                        {
-                            error.Text = "It's not allowed to move curve's " + modifyLineType + " points by keyboard!!";
-                            localPoint = null;
-                            modifyLineType = BezierType.Nothing;
-                        }
-
-                        else if (j % 3 == 0)
-                        // every third control point on a composite line is one of the line points (pPoint) 
-                        {
-                            localPoint = null;
-                            modifyLineType = BezierType.Nothing;
-                        }
-
-                        else if (e.Button == MouseButtons.Left)
-                        {
-                            MovedLine[i] = MoveType.LeftClick;
-                        }
-
-                        else if (e.Button == MouseButtons.Right)
-                        {
-                            MovedLine[i] = MoveType.RightClick;
-                        }
-                    }
-
-                    else if (rbKeyboardModify.Checked == true)
-                    {
-                        FormCoordinates form_KeyboardAdd = new FormCoordinates(FormType.Modify, modifyLineType);
-                        form_KeyboardAdd.ShowDialog();
-                        
-                        MovedLine[i] = MoveType.pPoints;
-                        modifyLineType = BezierType.Nothing;
-                        localPoint = null;
-                    }
+                    ModifycPoint(e);
                 }
-
-                pbCanva.Invalidate();
             }
 
             if (pPointsAll != null && modifyPointType == BezierType.pPoints)
@@ -149,26 +97,8 @@ namespace BezierTool
 
                 if (localPoint != null)
                 {
-                    int i = localPoint.Item1;
-                    modifyLineType = allLines[i];
-
-                    if (rbKeyboardModify.Checked == true)
-                    {
-                        FormCoordinates form_KeyboardAdd = new FormCoordinates(FormType.Modify, modifyLineType);
-                        form_KeyboardAdd.ShowDialog();
-
-                        if (modifyLineType == BezierType.pPoints || modifyLineType == BezierType.LeastSquares)
-                        {
-                            AddcPointsInterpolation(i);
-                        }
-
-                        modifyLineType = BezierType.Nothing;
-                        localPoint = null;
-                        pbCanva.Invalidate();
-                    }
+                    ModifypPoint();
                 }
-
-                pbCanva.Invalidate();
             }
 
             if (cPointsAll != null && outputPointType == BezierType.cPoints && rbScreenOutput.Checked == true)
@@ -296,9 +226,7 @@ namespace BezierTool
                     return;
                 }
 
-                int i = localPoint.Item1;
-
-                DeleteLine(i);
+                DeleteLine(localPoint.Item1);
 
                 pbCanva.Invalidate();
             }
@@ -1038,7 +966,10 @@ namespace BezierTool
             //calculate and add control points for a <Composite> line with three or more line points
         {
             cPointsAll[i].Add(pPointsAll[i][0]);//first control point is first line point
-            cPointsAll[i].Add(GetVeryFirstHandle(pPointsAll[i][0], GetFirstHandle(pPointsAll[i][0], pPointsAll[i][1], pPointsAll[i][2]), pPointsAll[i][1]));//add first control point that isn't a line point
+
+            Point tmp = new Point();
+            tmp = GetVeryFirstHandle(pPointsAll[i][0], GetFirstHandle(pPointsAll[i][0], pPointsAll[i][1], pPointsAll[i][2]), pPointsAll[i][1]);
+            cPointsAll[i].Add(tmp);//add first control point that isn't a line point
 
             for (int j = 2; j < pPointsAll[i].Count; j++)
             //we can add three new controlpoints for every line point starting with the third line point. 
@@ -1053,14 +984,16 @@ namespace BezierTool
             //if a <Composite> line isn't the last drawn line, it must be finished. 
             //That means, it should have three times (every point is a control point and has two "handles") minus two (each end point dont have one handle) more control points than line points
             {
-                cPointsAll[i].Add(GetVeryLastHandle(pPointsAll[i][pPointsAll[i].Count - 2], cPointsAll[i][cPointsAll[i].Count - 1], pPointsAll[i][pPointsAll[i].Count - 1]));
+                tmp = GetVeryLastHandle(pPointsAll[i][pPointsAll[i].Count - 2], cPointsAll[i][cPointsAll[i].Count - 1], pPointsAll[i][pPointsAll[i].Count - 1]);
+                cPointsAll[i].Add(tmp);
                 cPointsAll[i].Add(pPointsAll[i][pPointsAll[i].Count - 1]);
             }
 
             else if (i == allLines.Count - 1 && isCompositeDone == true)
             //if the last drawn <Composite> line is marked as done, calculate and add last control points
             {
-                cPointsAll[i].Add(GetVeryLastHandle(pPointsAll[i][pPointsAll[i].Count - 2], cPointsAll[i][cPointsAll[i].Count - 1], pPointsAll[i][pPointsAll[i].Count - 1]));
+                tmp = GetVeryLastHandle(pPointsAll[i][pPointsAll[i].Count - 2], cPointsAll[i][cPointsAll[i].Count - 1], pPointsAll[i][pPointsAll[i].Count - 1]);
+                cPointsAll[i].Add(tmp);
                 cPointsAll[i].Add(pPointsAll[i][pPointsAll[i].Count - 1]);
             }
 
@@ -1192,6 +1125,83 @@ namespace BezierTool
             //We have achieved a "symmetrical" point to second control point, both of these points are on the same side of the bezier line.
             
             return res;
+        }
+
+        private void ModifycPoint(MouseEventArgs e)
+        {
+            int i = localPoint.Item1;
+            int j = localPoint.Item2;
+            modifyLineType = allLines[i];
+
+            if (modifyLineType == BezierType.pPoints || modifyLineType == BezierType.LeastSquares)
+            {
+                error.Text = "It's not allowed to move curve's " + modifyLineType + " control points!";
+                modifyLineType = BezierType.Nothing;
+                localPoint = null;
+            }
+
+            else if (modifyLineType == BezierType.Composite)
+            {
+                if (rbKeyboardModify.Checked == true)
+                {
+                    error.Text = "It's not allowed to move curve's " + modifyLineType + " points by keyboard!!";
+                    localPoint = null;
+                    modifyLineType = BezierType.Nothing;
+                }
+
+                else if (j % 3 == 0)
+                // every third control point on a composite line is one of the line points (pPoint) 
+                {
+                    localPoint = null;
+                    modifyLineType = BezierType.Nothing;
+                }
+
+                else if (e.Button == MouseButtons.Left)
+                {
+                    MovedLine[i] = MoveType.LeftClick;
+                }
+
+                else if (e.Button == MouseButtons.Right)
+                {
+                    MovedLine[i] = MoveType.RightClick;
+                }
+            }
+
+            else if (rbKeyboardModify.Checked == true)
+            {
+                FormCoordinates form_KeyboardAdd = new FormCoordinates(FormType.Modify, modifyLineType);
+                form_KeyboardAdd.ShowDialog();
+
+                MovedLine[i] = MoveType.pPoints;
+                modifyLineType = BezierType.Nothing;
+                localPoint = null;
+            }
+
+            pbCanva.Invalidate();
+            return;
+        }
+
+        private void ModifypPoint()
+        {
+            int i = localPoint.Item1;
+            modifyLineType = allLines[i];
+
+            if (rbKeyboardModify.Checked == true)
+            {
+                FormCoordinates form_KeyboardAdd = new FormCoordinates(FormType.Modify, modifyLineType);
+                form_KeyboardAdd.ShowDialog();
+
+                if (modifyLineType == BezierType.pPoints || modifyLineType == BezierType.LeastSquares)
+                {
+                    AddcPointsInterpolation(i);
+                }
+
+                modifyLineType = BezierType.Nothing;
+                localPoint = null;
+            }
+
+            pbCanva.Invalidate();
+            return;
         }
 
         private void ModifyHandleComposite(Point modifyHandle, Point middlepPoint, Point oppositeHandle, int opposite)

@@ -327,6 +327,5 @@ namespace BezierTool
         {
             AddRow();
         }
-
     }
 }
