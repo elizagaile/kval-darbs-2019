@@ -31,10 +31,10 @@
             this.pbCanva = new System.Windows.Forms.PictureBox();
             this.btnUploadBackground = new System.Windows.Forms.Button();
             this.btnResetAll = new System.Windows.Forms.Button();
-            this.btnAdd4cPoints = new System.Windows.Forms.Button();
-            this.btnAdd4pPoints = new System.Windows.Forms.Button();
-            this.btnAddLeastSquares = new System.Windows.Forms.Button();
-            this.btnAddComposite = new System.Windows.Forms.Button();
+            this.btnNew4cPoints = new System.Windows.Forms.Button();
+            this.btnNew4pPoints = new System.Windows.Forms.Button();
+            this.btnNewLeastSquares = new System.Windows.Forms.Button();
+            this.btnNewComposite = new System.Windows.Forms.Button();
             this.rbMouseInput = new System.Windows.Forms.RadioButton();
             this.rbKeyboardInput = new System.Windows.Forms.RadioButton();
             this.rbFileInput = new System.Windows.Forms.RadioButton();
@@ -109,45 +109,45 @@
             this.btnResetAll.UseVisualStyleBackColor = true;
             this.btnResetAll.Click += new System.EventHandler(this.btnResetAll_Click);
             // 
-            // btnAdd4cPoints
+            // btnNew4cPoints
             // 
-            this.btnAdd4cPoints.Location = new System.Drawing.Point(6, 25);
-            this.btnAdd4cPoints.Name = "btnAdd4cPoints";
-            this.btnAdd4cPoints.Size = new System.Drawing.Size(159, 37);
-            this.btnAdd4cPoints.TabIndex = 4;
-            this.btnAdd4cPoints.Text = "4 cPoints";
-            this.btnAdd4cPoints.UseVisualStyleBackColor = true;
-            this.btnAdd4cPoints.Click += new System.EventHandler(this.btnAdd4cPoints_Click);
+            this.btnNew4cPoints.Location = new System.Drawing.Point(6, 25);
+            this.btnNew4cPoints.Name = "btnNew4cPoints";
+            this.btnNew4cPoints.Size = new System.Drawing.Size(159, 37);
+            this.btnNew4cPoints.TabIndex = 4;
+            this.btnNew4cPoints.Text = "4 cPoints";
+            this.btnNew4cPoints.UseVisualStyleBackColor = true;
+            this.btnNew4cPoints.Click += new System.EventHandler(this.btnNew4cPoints_Click);
             // 
-            // btnAdd4pPoints
+            // btnNew4pPoints
             // 
-            this.btnAdd4pPoints.Location = new System.Drawing.Point(6, 68);
-            this.btnAdd4pPoints.Name = "btnAdd4pPoints";
-            this.btnAdd4pPoints.Size = new System.Drawing.Size(159, 37);
-            this.btnAdd4pPoints.TabIndex = 5;
-            this.btnAdd4pPoints.Text = "4 pPoints";
-            this.btnAdd4pPoints.UseVisualStyleBackColor = true;
-            this.btnAdd4pPoints.Click += new System.EventHandler(this.btnAdd4pPoints_Click);
+            this.btnNew4pPoints.Location = new System.Drawing.Point(6, 68);
+            this.btnNew4pPoints.Name = "btnNew4pPoints";
+            this.btnNew4pPoints.Size = new System.Drawing.Size(159, 37);
+            this.btnNew4pPoints.TabIndex = 5;
+            this.btnNew4pPoints.Text = "4 pPoints";
+            this.btnNew4pPoints.UseVisualStyleBackColor = true;
+            this.btnNew4pPoints.Click += new System.EventHandler(this.btnNew4pPoints_Click);
             // 
-            // btnAddLeastSquares
+            // btnNewLeastSquares
             // 
-            this.btnAddLeastSquares.Location = new System.Drawing.Point(6, 111);
-            this.btnAddLeastSquares.Name = "btnAddLeastSquares";
-            this.btnAddLeastSquares.Size = new System.Drawing.Size(159, 37);
-            this.btnAddLeastSquares.TabIndex = 6;
-            this.btnAddLeastSquares.Text = "Least Squares";
-            this.btnAddLeastSquares.UseVisualStyleBackColor = true;
-            this.btnAddLeastSquares.Click += new System.EventHandler(this.btnAddLeastSquares_Click);
+            this.btnNewLeastSquares.Location = new System.Drawing.Point(6, 111);
+            this.btnNewLeastSquares.Name = "btnNewLeastSquares";
+            this.btnNewLeastSquares.Size = new System.Drawing.Size(159, 37);
+            this.btnNewLeastSquares.TabIndex = 6;
+            this.btnNewLeastSquares.Text = "Least Squares";
+            this.btnNewLeastSquares.UseVisualStyleBackColor = true;
+            this.btnNewLeastSquares.Click += new System.EventHandler(this.btnNewLeastSquares_Click);
             // 
-            // btnAddComposite
+            // btnNewComposite
             // 
-            this.btnAddComposite.Location = new System.Drawing.Point(6, 154);
-            this.btnAddComposite.Name = "btnAddComposite";
-            this.btnAddComposite.Size = new System.Drawing.Size(159, 37);
-            this.btnAddComposite.TabIndex = 7;
-            this.btnAddComposite.Text = "Composite";
-            this.btnAddComposite.UseVisualStyleBackColor = true;
-            this.btnAddComposite.Click += new System.EventHandler(this.btnAddComposite_Click);
+            this.btnNewComposite.Location = new System.Drawing.Point(6, 154);
+            this.btnNewComposite.Name = "btnNewComposite";
+            this.btnNewComposite.Size = new System.Drawing.Size(159, 37);
+            this.btnNewComposite.TabIndex = 7;
+            this.btnNewComposite.Text = "Composite";
+            this.btnNewComposite.UseVisualStyleBackColor = true;
+            this.btnNewComposite.Click += new System.EventHandler(this.btnNewComposite_Click);
             // 
             // rbMouseInput
             // 
@@ -258,10 +258,10 @@
             // groupAddType
             // 
             this.groupAddType.Controls.Add(this.btnDoneComposite);
-            this.groupAddType.Controls.Add(this.btnAdd4cPoints);
-            this.groupAddType.Controls.Add(this.btnAdd4pPoints);
-            this.groupAddType.Controls.Add(this.btnAddLeastSquares);
-            this.groupAddType.Controls.Add(this.btnAddComposite);
+            this.groupAddType.Controls.Add(this.btnNew4cPoints);
+            this.groupAddType.Controls.Add(this.btnNew4pPoints);
+            this.groupAddType.Controls.Add(this.btnNewLeastSquares);
+            this.groupAddType.Controls.Add(this.btnNewComposite);
             this.groupAddType.Location = new System.Drawing.Point(3, 3);
             this.groupAddType.Name = "groupAddType";
             this.groupAddType.Size = new System.Drawing.Size(171, 252);
@@ -344,7 +344,7 @@
             this.rbChord.TabIndex = 1;
             this.rbChord.Text = "Chord Length";
             this.rbChord.UseVisualStyleBackColor = true;
-            this.rbChord.CheckedChanged += new System.EventHandler(this.rbtn_Chord_CheckedChanged);
+            this.rbChord.CheckedChanged += new System.EventHandler(this.rbChord_CheckedChanged);
             // 
             // rbUniform
             // 
@@ -357,7 +357,7 @@
             this.rbUniform.TabStop = true;
             this.rbUniform.Text = "Uniform";
             this.rbUniform.UseVisualStyleBackColor = true;
-            this.rbUniform.CheckedChanged += new System.EventHandler(this.rbtn_Uniform_CheckedChanged);
+            this.rbUniform.CheckedChanged += new System.EventHandler(this.rbUniform_CheckedChanged);
             // 
             // btnOutputcPoints
             // 
@@ -494,10 +494,10 @@
         private System.Windows.Forms.PictureBox pbCanva;
         private System.Windows.Forms.Button btnUploadBackground;
         private System.Windows.Forms.Button btnResetAll;
-        private System.Windows.Forms.Button btnAdd4cPoints;
-        private System.Windows.Forms.Button btnAdd4pPoints;
-        private System.Windows.Forms.Button btnAddLeastSquares;
-        private System.Windows.Forms.Button btnAddComposite;
+        private System.Windows.Forms.Button btnNew4cPoints;
+        private System.Windows.Forms.Button btnNew4pPoints;
+        private System.Windows.Forms.Button btnNewLeastSquares;
+        private System.Windows.Forms.Button btnNewComposite;
         private System.Windows.Forms.RadioButton rbMouseInput;
         private System.Windows.Forms.RadioButton rbKeyboardInput;
         private System.Windows.Forms.RadioButton rbFileInput;
