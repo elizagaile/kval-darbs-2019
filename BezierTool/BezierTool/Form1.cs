@@ -10,13 +10,6 @@ namespace BezierTool
 {
     public partial class FormMain : Form //contains form, all its atributes and functions
     {
-        public FormMain()
-        {
-            InitializeComponent();
-            this.Width = Convert.ToInt32(0.75 * Screen.PrimaryScreen.Bounds.Width);
-            this.Height = Convert.ToInt32(0.75 * Screen.PrimaryScreen.Bounds.Height);
-        }
-
         //each line is representet by two lists: 
         //list of control points, list of known points on the line 
         //all lines have control points, but come lines (<4cPoints>) dont have known points on the line
@@ -49,8 +42,6 @@ namespace BezierTool
         public static BezierType modifyLineType = BezierType.Nothing;// type of line to be or being modified
         public static BezierType modifyPointType = BezierType.Nothing;// type of line to be or being draged by mouse
         public static BezierType outputPointType = BezierType.Nothing;
-        
-        String imageLocation = ""; //for background image
 
         const int pointRadius = 2; //radius for control points and specific points on lines, chosen arbitrary
         const int localRadius = 7; //radius of neiborghood, used when selecting a point with mouse, chosen arbitrary
@@ -60,6 +51,15 @@ namespace BezierTool
         bool canChangeParam = false;//indicates if option to change parametrization is enabled
         bool isChangingParam = false;//indicates if parametrization is being changed
         bool canDeleteLine = false;//indicates if option to delete a line is enabled
+
+        String imageLocation = ""; //for background image
+
+        public FormMain()
+        {
+            InitializeComponent();
+            this.Width = Convert.ToInt32(0.75 * Screen.PrimaryScreen.Bounds.Width);
+            this.Height = Convert.ToInt32(0.75 * Screen.PrimaryScreen.Bounds.Height);
+        }
 
         private void pbCanva_MouseDown(object sender, MouseEventArgs e)
             //Mouse has been pressed inside pictureBox1. This can be for adding control points or points on the line,
@@ -73,7 +73,7 @@ namespace BezierTool
             }
 
             else if ((addType == BezierType.pPoints || addType == BezierType.LeastSquares || addType == BezierType.Composite) && rbMouseInput.Checked == true)
-            //for <4 pPoints>, <Least Squares> or <Composite> type lines we can add only line points
+            //ading a new line for  <4 pPoints>, <Least Squares> or <Composite> line with mouse
             {
                 AddpPoint(e.Location);
                 pbCanva.Invalidate();
@@ -87,6 +87,7 @@ namespace BezierTool
                 if (localPoint != null)
                 {
                     ModifycPoint(e);
+                    pbCanva.Invalidate();
                 }
             }
 
@@ -98,83 +99,8 @@ namespace BezierTool
                 if (localPoint != null)
                 {
                     ModifypPoint();
+                    pbCanva.Invalidate();
                 }
-            }
-
-            if (cPointsAll != null && outputPointType == BezierType.cPoints && rbScreenOutput.Checked == true)
-            // if we want to output line's control point coordinates on screen
-            {
-                FindLocalPoint(cPointsAll, e.Location);
-
-                if (localPoint != null)
-                {
-                    int i = localPoint.Item1;
-
-                    FormCoordinates form_KeyboardAdd = new FormCoordinates(FormType.Output, allLines[i]);
-                    form_KeyboardAdd.ShowDialog();
-                    
-                    outputPointType = BezierType.Nothing;
-                    modifyLineType = BezierType.Nothing;
-                    localPoint = null;
-                }
-
-                pbCanva.Invalidate();
-            }
-
-            if (pPointsAll != null && outputPointType == BezierType.pPoints && rbScreenOutput.Checked == true)
-            //if we want to output coordinates of known line points on screen
-            {
-                FindLocalPoint(pPointsAll, e.Location);
-
-                if (localPoint != null)
-                {
-                    int i = localPoint.Item1;
-
-                    FormCoordinates form_KeyboardAdd = new FormCoordinates(FormType.Output, allLines[i]);
-                    form_KeyboardAdd.ShowDialog();
-
-                    outputPointType = BezierType.Nothing;
-                    modifyLineType = BezierType.Nothing;
-                    localPoint = null;
-                }
-
-                pbCanva.Invalidate();
-            }
-
-            if (cPointsAll != null && outputPointType == BezierType.cPoints && rbFileOutput.Checked == true)
-            // if we want to output line's control point coordinates to .txt file
-            {
-                FindLocalPoint(cPointsAll, e.Location);
-
-                if (localPoint != null)
-                {
-                    int i = localPoint.Item1;
-
-                    OutputcPointsToFile(i);
-                    outputPointType = BezierType.Nothing;
-                    modifyLineType = BezierType.Nothing;
-                    localPoint = null;
-                }
-
-                pbCanva.Invalidate();
-            }
-
-            if (pPointsAll != null && outputPointType == BezierType.pPoints && rbFileOutput.Checked == true)
-            // if we want to output lines's line point coordinates to .txt file
-            {
-                FindLocalPoint(pPointsAll, e.Location);
-
-                if (localPoint != null)
-                {
-                    int i = localPoint.Item1;
-
-                    OutputpPointsToFile(i);
-                    outputPointType = BezierType.Nothing;
-                    modifyLineType = BezierType.Nothing;
-                    localPoint = null;
-                }
-
-                pbCanva.Invalidate();
             }
 
             if (cPointsAll != null && canChangeParam == true && isChangingParam == false)
@@ -182,53 +108,84 @@ namespace BezierTool
             {
                 FindLocalPoint(cPointsAll, e.Location);
 
+                if (localPoint != null)
+                {
+                    ChangeParametrization();
+                    pbCanva.Invalidate();
+                }
+            }
+
+            if (cPointsAll != null && outputPointType == BezierType.cPoints)
+            {
+                FindLocalPoint(cPointsAll, e.Location);
+
                 if (localPoint == null)
-                //mouse wasn't clicked near a control point
                 {
                     return;
                 }
 
                 int i = localPoint.Item1;
-                ParamType paramType = parametrization[i];
 
-                if (allLines[i] == BezierType.cPoints || allLines[i] == BezierType.Composite)
+                if (rbScreenOutput.Checked == true)
+                // if we want to output line's control point coordinates on screen
                 {
-                    error.Text = "<" + allLines[i] + "> lines doesn't use parametrization!";
+                    FormCoordinates form_KeyboardAdd = new FormCoordinates(FormType.Output, allLines[i]);
+                    form_KeyboardAdd.ShowDialog();
+                }
+
+                if (rbFileOutput.Checked == true)
+                // if we want to output line's control point coordinates to .txt file
+                {
+                    OutputcPointsToFile();
+                }
+
+                outputPointType = BezierType.Nothing;
+                modifyLineType = BezierType.Nothing;
+                localPoint = null;
+
+                pbCanva.Invalidate();
+            }
+
+            if (pPointsAll != null && outputPointType == BezierType.pPoints)
+            {
+                FindLocalPoint(pPointsAll, e.Location);
+
+                if (localPoint == null)
+                {
                     return;
                 }
 
-                //show the real parametrization type of the selected line
-                if (paramType == ParamType.Uniform)
+                int i = localPoint.Item1;
+
+                if (rbScreenOutput.Checked == true)
+                // if we want to output line's control point coordinates on screen
                 {
-                    rbUniform.Checked = true;
+                    FormCoordinates form_KeyboardAdd = new FormCoordinates(FormType.Output, allLines[i]);
+                    form_KeyboardAdd.ShowDialog();
                 }
 
-                else if (paramType == ParamType.Chord)
+                else if (rbFileOutput.Checked == true)
+                // if we want to output line's control point coordinates to .txt file
                 {
-                    rbChord.Checked = true;
+                    OutputpPointsToFile();
                 }
 
-                else if (paramType == ParamType.Centripetal)
-                {
-                    rbCentripetal.Checked = true;
-                }
+                outputPointType = BezierType.Nothing;
+                modifyLineType = BezierType.Nothing;
+                localPoint = null;
 
-                isChangingParam = true;
+                pbCanva.Invalidate();
             }
 
             if (cPointsAll != null && canDeleteLine == true)
             {
                 FindLocalPoint(cPointsAll, e.Location);
 
-                if (localPoint == null)
-                //mouse wasn't clicked near a control point
+                if (localPoint != null)
                 {
-                    return;
+                    DeleteLine(localPoint.Item1);
+                    pbCanva.Invalidate();
                 }
-
-                DeleteLine(localPoint.Item1);
-
-                pbCanva.Invalidate();
             }
         }
 
@@ -344,11 +301,11 @@ namespace BezierTool
                 if (cPoints.Count < 4 && addType == BezierType.cPoints)
                 //<4 cPoints> line cant have more than 4 control points
                 {
-                    using (Pen dashedPen = new Pen(Color.LightGray))
+                    Pen dashedPen = new Pen(Color.LightGray)
                     {
-                        dashedPen.DashPattern = new float[] { 5, 5 }; // 5 and 5 chosen arbitrary, describes length of dashed design
-                        e.Graphics.DrawLine(dashedPen, cPoints[cPoints.Count - 1], cPointNew);
-                    }
+                        DashPattern = new float[] { 5, 5 }// 5 and 5 chosen arbitrary, describes length of dashed design
+                    };
+                    e.Graphics.DrawLine(dashedPen, cPoints[cPoints.Count - 1], cPointNew);
                 }
             }
 
@@ -362,7 +319,7 @@ namespace BezierTool
                     {
                         e.Graphics.FillEllipse(Brushes.Black, pPoint.X - pointRadius, pPoint.Y - pointRadius, 2 * pointRadius, 2 * pointRadius);
                     }
-
+                    
                     if (allLines[i] == BezierType.pPoints && pPointsAll[i].Count == 4 && cPointsAll[i] == null)
                     //if there are four line points for <4 pPoints> line, but we haven't yet calculated control points, calculate them
                     {
@@ -579,7 +536,7 @@ namespace BezierTool
             if (rbKeyboardInput.Checked == true)
             //if adding new line by keyboard
             {
-                NewLine(BezierType.cPoints);
+                NewLine(BezierType.pPoints);
 
                 FormCoordinates form_KeyboardAdd = new FormCoordinates(FormType.Add, addType);
                 form_KeyboardAdd.ShowDialog();
@@ -624,7 +581,7 @@ namespace BezierTool
             if (rbKeyboardInput.Checked == true)
             //if adding new line by keyboard
             {
-                NewLine(BezierType.cPoints);
+                NewLine(BezierType.LeastSquares);
 
                 FormCoordinates form_KeyboardAdd = new FormCoordinates(FormType.Add, addType);
                 form_KeyboardAdd.ShowDialog();
@@ -669,7 +626,7 @@ namespace BezierTool
             if (rbKeyboardInput.Checked == true)
             //if adding new line by keyboard
             {
-                NewLine(BezierType.cPoints);
+                NewLine(BezierType.Composite);
 
                 FormCoordinates form_KeyboardAdd = new FormCoordinates(FormType.Add, addType);
                 form_KeyboardAdd.ShowDialog();
@@ -1288,6 +1245,36 @@ namespace BezierTool
             return;
         }
 
+        private void ChangeParametrization()
+        {
+            int i = localPoint.Item1;
+            ParamType paramType = parametrization[i];
+
+            if (allLines[i] == BezierType.cPoints || allLines[i] == BezierType.Composite)
+            {
+                error.Text = "<" + allLines[i] + "> lines doesn't use parametrization!";
+                return;
+            }
+
+            //show the real parametrization type of the selected line
+            if (paramType == ParamType.Uniform)
+            {
+                rbUniform.Checked = true;
+            }
+
+            else if (paramType == ParamType.Chord)
+            {
+                rbChord.Checked = true;
+            }
+
+            else if (paramType == ParamType.Centripetal)
+            {
+                rbCentripetal.Checked = true;
+            }
+
+            isChangingParam = true;
+        }
+
         private void FindLocalPoint(List<List<Point>> PointsAll, Point MouseLocation)
             //find if there is a control or line point near mouse location
         {
@@ -1525,9 +1512,11 @@ namespace BezierTool
             return pointList;
         }
 
-        private void OutputcPointsToFile(int i)
-            //output control points to .txt file
+        private void OutputcPointsToFile()
+        //output control points to .txt file
         {
+            int i = localPoint.Item1;
+
             string folderPath = "";
 
             FolderBrowserDialog dialog = new FolderBrowserDialog();
@@ -1552,9 +1541,11 @@ namespace BezierTool
             }
         }
 
-        private void OutputpPointsToFile(int i)
-            //output line points to .txt file
+        private void OutputpPointsToFile()
+        //output line points to .txt file
         {
+            int i = localPoint.Item1;
+
             string folderPath = "";
 
             FolderBrowserDialog dialog = new FolderBrowserDialog();
