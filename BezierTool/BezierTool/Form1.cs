@@ -960,48 +960,48 @@ namespace BezierTool
         private void AddOnlycPointsComposite(int i)
             //add all control points to a <Composite> line thats marked as "done", but has only two line points
         {
-            Point c1 = new Point();
-            Point c2 = new Point();
-            Point c3 = new Point();
-            Point c4 = new Point();
+            Point firstcPoint = new Point();
+            Point firstHandle = new Point();
+            Point secondHandle = new Point();
+            Point lastcPoint = new Point();
 
             //the first and last control points are the line points:
-            c1 = pPointsAll[i][0];
-            c4 = pPointsAll[i][1];
+            firstcPoint = pPointsAll[i][0];
+            lastcPoint = pPointsAll[i][1];
 
             double sin60 = Math.Sin(Math.PI / 3);
             double cos60 = Math.Cos(Math.PI / 3);
 
             //Each control point will be line's C1C4 midpoint, rotated by 60 degrees. First we find the midpoint:
-            double x03 = 0.5 * (c4.X - c1.X);
-            double y03 = 0.5 * (c4.Y - c1.Y);
+            double xMidpoint = 0.5 * (lastcPoint.X - firstcPoint.X);
+            double yMidpoint = 0.5 * (lastcPoint.Y - firstcPoint.Y);
 
             //Then we rotate the midpoint by 60 degrees.
-            c2.X = Convert.ToInt32(cos60 * x03 - sin60 * y03 + c1.X);
-            c2.Y = Convert.ToInt32(sin60 * x03 + cos60 * y03 + c1.Y);
+            firstHandle.X = Convert.ToInt32(cos60 * xMidpoint - sin60 * yMidpoint + firstcPoint.X);
+            firstHandle.Y = Convert.ToInt32(sin60 * xMidpoint + cos60 * yMidpoint + firstcPoint.Y);
 
             //Change the signs for third control point, so the control points are on different sides of the bezier line:
-            c3.X = Convert.ToInt32(cos60 * -x03 - sin60 * -y03 + c4.X);
-            c3.Y = Convert.ToInt32(sin60 * -x03 + cos60 * -y03 + c4.Y);
+            secondHandle.X = Convert.ToInt32(cos60 * -xMidpoint - sin60 * -yMidpoint + lastcPoint.X);
+            secondHandle.Y = Convert.ToInt32(sin60 * -xMidpoint + cos60 * -yMidpoint + lastcPoint.Y);
 
-            cPointsAll[i].Add(c1);
-            cPointsAll[i].Add(c2);
-            cPointsAll[i].Add(c3);
-            cPointsAll[i].Add(c4);
+            cPointsAll[i].Add(firstcPoint);
+            cPointsAll[i].Add(firstHandle);
+            cPointsAll[i].Add(secondHandle);
+            cPointsAll[i].Add(lastcPoint);
 
             pbCanva.Invalidate();
             return;
         }
 
-        private Point GetVeryFirstHandle(Point firstpPoint, Point oppositeHandle, Point secondpPoint)
+        private Point GetVeryFirstHandle(Point firstpPoint, Point nextHandle, Point secondpPoint)
             //add first control point thats not a line point for <Composite> line with at least three line points
         {
             Point res = new Point();
 
             //control point location is calculated from first, third and fourth control points of the  <Composite> line
 
-            //We can look at these calculations as vector operations. First we calculate dot product of vectors C4C3 and C1C4:
-            double dot = (oppositeHandle.X - secondpPoint.X) * (firstpPoint.X - secondpPoint.X) + (oppositeHandle.Y - secondpPoint.Y) * (firstpPoint.Y - secondpPoint.Y);
+            //We can look at these calculations as vector operations. First, we calculate dot product of vectors C4C3 and C1C4:
+            double dotProduct = (nextHandle.X - secondpPoint.X) * (firstpPoint.X - secondpPoint.X) + (nextHandle.Y - secondpPoint.Y) * (firstpPoint.Y - secondpPoint.Y);
 
             //We need to find how long the vector from C2 to C3 needs to be, so that the middle control points are symmetrical.
             //The symmetry can be achieved, if the C3C2 vector is parallel to C4C1 and has the length of 
@@ -1011,11 +1011,11 @@ namespace BezierTool
             //we get: proportion = 1 - 2 * dot / |C4C1|^2
 
             //That means, the length of the vector we will add equals 
-            double prop = 1 - 2 * dot / (Math.Pow(GetLength(firstpPoint, secondpPoint), 2));
+            double prop = 1 - 2 * dotProduct / (Math.Pow(GetLength(firstpPoint, secondpPoint), 2));
 
             //Lastly, to point C3 we add vector parallel to C1C4 scaled by the needed length - variable "prop":
-            res.X = Convert.ToInt32(oppositeHandle.X + prop * (firstpPoint.X - secondpPoint.X));
-            res.Y = Convert.ToInt32(oppositeHandle.Y + prop * (firstpPoint.Y - secondpPoint.Y));
+            res.X = Convert.ToInt32(nextHandle.X + prop * (firstpPoint.X - secondpPoint.X));
+            res.Y = Convert.ToInt32(nextHandle.Y + prop * (firstpPoint.Y - secondpPoint.Y));
 
             //We have achieved a "symmetrical" point to third control point, both of these points are on the same side of the bezier line.
             
