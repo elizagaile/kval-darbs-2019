@@ -45,6 +45,7 @@ namespace BezierTool
 
         const int pointRadius = 2; //radius for control points and specific points on lines, chosen arbitrary
         const int localRadius = 7; //radius of neiborghood, used when selecting a point with mouse, chosen arbitrary
+        const int maxDistanceToMouse = 100;
         const int maxPointCount = 25; //maximum count of points to choose for lines <Least Squares> and <Composite>, chosen arbitrary
 
         bool isCompositeDone = false;//indicates if the last line of type <Composite> needs to be finished;
@@ -924,9 +925,11 @@ namespace BezierTool
         {
             cPointsAll[i].Add(pPointsAll[i][0]);//first control point is first line point
 
-            Point tmp = new Point();
-            tmp = GetVeryFirstHandle(pPointsAll[i][0], GetFirstHandle(pPointsAll[i][0], pPointsAll[i][1], pPointsAll[i][2]), pPointsAll[i][1]);
-            cPointsAll[i].Add(tmp);//add first control point that isn't a line point
+            int pCount = pPointsAll[i].Count;
+
+            Point firstHandle = new Point();
+            firstHandle = GetFirstHandle(pPointsAll[i][0], pPointsAll[i][1], pPointsAll[i][2]);
+            cPointsAll[i].Add(GetVeryFirstHandle(pPointsAll[i][0], firstHandle, pPointsAll[i][1]));//add first control point that isn't a line point
 
             for (int j = 2; j < pPointsAll[i].Count; j++)
             //we can add three new controlpoints for every line point starting with the third line point. 
@@ -937,20 +940,13 @@ namespace BezierTool
                 cPointsAll[i].Add(GetSecondHandle(pPointsAll[i][j - 2], pPointsAll[i][j - 1], pPointsAll[i][j]));
             }
 
-            if (i != allLines.Count - 1 && cPointsAll[i].Count < pPointsAll[i].Count * 3 - 2)
+            if ((i != allLines.Count - 1 && cPointsAll[i].Count < pCount * 3 - 2) || (i == allLines.Count - 1 && isCompositeDone == true))
             //if a <Composite> line isn't the last drawn line, it must be finished. 
             //That means, it should have three times (every point is a control point and has two "handles") minus two (each end point dont have one handle) more control points than line points
             {
-                tmp = GetVeryLastHandle(pPointsAll[i][pPointsAll[i].Count - 2], cPointsAll[i][cPointsAll[i].Count - 1], pPointsAll[i][pPointsAll[i].Count - 1]);
-                cPointsAll[i].Add(tmp);
-                cPointsAll[i].Add(pPointsAll[i][pPointsAll[i].Count - 1]);
-            }
-
-            else if (i == allLines.Count - 1 && isCompositeDone == true)
-            //if the last drawn <Composite> line is marked as done, calculate and add last control points
-            {
-                tmp = GetVeryLastHandle(pPointsAll[i][pPointsAll[i].Count - 2], cPointsAll[i][cPointsAll[i].Count - 1], pPointsAll[i][pPointsAll[i].Count - 1]);
-                cPointsAll[i].Add(tmp);
+                Point veryLastHandle;
+                veryLastHandle = GetVeryLastHandle(pPointsAll[i][pCount - 2], cPointsAll[i][cPointsAll[i].Count - 1], pPointsAll[i][pCount - 1]);
+                cPointsAll[i].Add(veryLastHandle);
                 cPointsAll[i].Add(pPointsAll[i][pPointsAll[i].Count - 1]);
             }
 
@@ -1078,12 +1074,12 @@ namespace BezierTool
             //Lastly, to point C2 we add vector parallel to C1C4 scaled by the needed length - variable "prop":
             res.X = Convert.ToInt32(proportion * (prevpPoint.X - lastpPoint.X) + prevHandle.X);
             res.Y = Convert.ToInt32(proportion * (prevpPoint.Y - lastpPoint.Y) + prevHandle.Y);
-
+           
             //We have achieved a "symmetrical" point to second control point, both of these points are on the same side of the bezier line.
-            
+
             return res;
         }
-
+        
         private void ModifycPoint(MouseEventArgs e)
         {
             int i = localPoint.Item1;
@@ -1191,6 +1187,14 @@ namespace BezierTool
             //When moving a control point of a <Composite> line with right mouse button, it can be moved only in straight line away from the
             //middle point. This ensures C2 continuity and that no other control point moves.
         {
+            int i = localPoint.Item1;
+            int j = localPoint.Item2;
+
+            if (GetLength(modifyHandle, cPointsAll[i][j]) > maxDistanceToMouse)
+            {
+                return;
+            }
+
             Point result = new Point();
 
             //To move the control point in straight line, we take unit vector from the middle line point ("middle") to 
@@ -1202,7 +1206,7 @@ namespace BezierTool
             result.X = Convert.ToInt32(middlepPoint.X + prop * (middlepPoint.X - oppositeHandle.X));
             result.Y = Convert.ToInt32(middlepPoint.Y + prop * (middlepPoint.Y - oppositeHandle.Y));
 
-            cPointsAll[localPoint.Item1][localPoint.Item2] = result;
+            cPointsAll[i][j] = result;
 
             return;
         }
