@@ -359,7 +359,7 @@ namespace BezierTool
                 if (cPointsAll[i] != null)
                 {
                     //Drawing control points:
-
+                    /*
                     if (allLines[i] == BezierType.cPoints || allLines[i] == BezierType.LeastSquares)
                     // for <4 cPoints> and <Least Squares> draw all control points
                     {
@@ -407,20 +407,36 @@ namespace BezierTool
                             }
                         }
                     }
+                    */
+                    Pen bezierPen = new Pen(Brushes.Black);
+                    if (parametrization[i] == ParamType.Centripetal)
+                    {
+                        bezierPen.Color = Color.Blue;
+                    }
+
+                    else if (parametrization[i] == ParamType.Chord)
+                    {
+                        bezierPen.Color = Color.Red;
+                    }
+
+                    else if (parametrization[i] == ParamType.Uniform)
+                    {
+                        bezierPen.Color = Color.Green;
+                    }
 
 
                     //Drawing all bezier lines:
 
                     if (cPointsAll[i].Count == 4 && (allLines[i] == BezierType.cPoints || allLines[i] == BezierType.LeastSquares || allLines[i] == BezierType.pPoints))
                     {
-                        e.Graphics.DrawBezier(Pens.Black, cPointsAll[i][0], cPointsAll[i][1], cPointsAll[i][2], cPointsAll[i][3]);
+                        e.Graphics.DrawBezier(bezierPen, cPointsAll[i][0], cPointsAll[i][1], cPointsAll[i][2], cPointsAll[i][3]);
                     }
 
                     else if (allLines[i] == BezierType.Composite)
                     {
                         for (int j = 0; j < cPointsAll[i].Count - 3; j += 3)
                         {
-                            e.Graphics.DrawBezier(Pens.Black, cPointsAll[i][j], cPointsAll[i][j + 1], cPointsAll[i][j + 2], cPointsAll[i][j + 3]);
+                            e.Graphics.DrawBezier(bezierPen, cPointsAll[i][j], cPointsAll[i][j + 1], cPointsAll[i][j + 2], cPointsAll[i][j + 3]);
                         }
                     }
                 }
