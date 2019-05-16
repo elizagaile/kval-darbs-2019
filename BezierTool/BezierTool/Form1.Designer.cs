@@ -331,7 +331,7 @@
             this.btnChangeParam.Name = "btnChangeParam";
             this.btnChangeParam.Size = new System.Drawing.Size(134, 37);
             this.btnChangeParam.TabIndex = 2;
-            this.btnChangeParam.Text = "Choose line";
+            this.btnChangeParam.Text = "Choose Line";
             this.btnChangeParam.UseVisualStyleBackColor = true;
             this.btnChangeParam.Click += new System.EventHandler(this.btnChangeParam_Click);
             // 
@@ -455,7 +455,7 @@
             this.btnDeleteLine.Name = "btnDeleteLine";
             this.btnDeleteLine.Size = new System.Drawing.Size(314, 37);
             this.btnDeleteLine.TabIndex = 31;
-            this.btnDeleteLine.Text = "Choose a line to delete";
+            this.btnDeleteLine.Text = "Choose a Line to Delete";
             this.btnDeleteLine.UseVisualStyleBackColor = true;
             this.btnDeleteLine.Click += new System.EventHandler(this.btnDeleteLine_Click);
             // 
