@@ -359,7 +359,7 @@ namespace BezierTool
                 if (cPointsAll[i] != null)
                 {
                     //Drawing control points:
-                    /*
+                    
                     if (allLines[i] == BezierType.cPoints || allLines[i] == BezierType.LeastSquares)
                     // for <4 cPoints> and <Least Squares> draw all control points
                     {
@@ -407,23 +407,8 @@ namespace BezierTool
                             }
                         }
                     }
-                    */
+                    
                     Pen bezierPen = new Pen(Brushes.Black);
-                    if (parametrization[i] == ParamType.Centripetal)
-                    {
-                        bezierPen.Color = Color.Blue;
-                    }
-
-                    else if (parametrization[i] == ParamType.Chord)
-                    {
-                        bezierPen.Color = Color.Red;
-                    }
-
-                    else if (parametrization[i] == ParamType.Uniform)
-                    {
-                        bezierPen.Color = Color.Green;
-                    }
-
 
                     //Drawing all bezier lines:
 

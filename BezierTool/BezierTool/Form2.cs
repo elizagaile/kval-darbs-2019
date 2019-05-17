@@ -69,6 +69,7 @@ namespace BezierTool
             if (lineType == FormMain.BezierType.cPoints || lineType == FormMain.BezierType.pPoints)
             //<4 cPoint> and <4 pPoint> lines have exactly 4 input points; no need to add or delete input lines 
             {
+                gbCoordinates.Text = "Input <" + lineType + "> control point coordinates:";
                 btnAddRow.Visible = false;
                 btnDeleteRow.Visible = false;
             }
@@ -76,6 +77,7 @@ namespace BezierTool
             if (lineType == FormMain.BezierType.LeastSquares || lineType == FormMain.BezierType.Composite)
             //<Least Squares> and <Composite> line input point count can vary; its possible to add and delete input lines
             {
+                gbCoordinates.Text = "Input <" + lineType + "> knot point coordinates:";
                 btnAddRow.Visible = true;
                 btnDeleteRow.Visible = true;
             }
@@ -103,7 +105,7 @@ namespace BezierTool
 
             else if (FormMain.modifyPointType == FormMain.BezierType.pPoints)
             {
-                gbCoordinates.Text = "Modify <" + lineType + "> line point coordinates:";
+                gbCoordinates.Text = "Modify <" + lineType + "> knot point coordinates:";
                 labelType = "P";
                 pointList = FormMain.pPointsAll[i];
             }
@@ -152,14 +154,14 @@ namespace BezierTool
 
             if (FormMain.outputPointType == FormMain.BezierType.cPoints)
             {
-                gbCoordinates.Text = "List of <" + lineType + "> control points:";
+                gbCoordinates.Text = "List of <" + lineType + "> control point coordinates:";
                 labelType = "C";
                 pointList = FormMain.cPointsAll[i];
             }
 
             else if (FormMain.outputPointType == FormMain.BezierType.pPoints)
             {
-                gbCoordinates.Text = "List of <" + lineType + "> line points:";
+                gbCoordinates.Text = "List of <" + lineType + "> knot point coordinates:";
                 labelType = "P";
                 pointList = FormMain.pPointsAll[i];
             }
