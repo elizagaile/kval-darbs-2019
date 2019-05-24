@@ -55,7 +55,7 @@ namespace BezierTool
 
         private Point cPointNew; // location of a new control point for <4 cPoints> curve 
 
-        const int maxPointCount = 25; // maximum count of points for <Least Squares> and <Composite> curves; chosen arbitrary
+        public const int maxPointCount = 12; // maximum count of points for <Least Squares> and <Composite> curves; chosen arbitrary
 
         bool isCompositeDone = false; // indicates if the last line of type <Composite> needs to be finished
         bool canChangeParam = false; // indicates if option to change parametrization is enabled
@@ -931,16 +931,6 @@ namespace BezierTool
         // Used when a curve was deleted or when adding a curve by keyboard had an error or cancelation.
         private void DeleteLine(int i)
         {
-            string message = "Do you want to delete this line?"; // šo nevajag jautāt aizverot formu 2 ???
-            string title = "Delete line";
-            MessageBoxButtons buttons = MessageBoxButtons.OKCancel;
-            DialogResult result = MessageBox.Show(message, title, buttons);
-
-            if (result != DialogResult.OK)
-            {
-                return;
-            }
-
             addType = BezierType.Nothing;
             allLines.RemoveAt(i);
             movedLine.RemoveAt(i);
