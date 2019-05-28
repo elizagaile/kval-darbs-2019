@@ -1,6 +1,6 @@
 ﻿/*
  * Programma "BezierTool"
- * Izveidota xx.xx.2019 ???
+ * Izveidota 05.04.2019
  * Autors Elīza Gaile eg17035
  * Programma izstrādāta kvalifikāciojas darba ietvaros
 */ 
@@ -56,7 +56,7 @@ namespace BezierTool
 
         private Point cPointNew; // location of a new control point for <4 cPoints> curve 
 
-        public const int maxPointCount = 12; // maximum count of points for <Least Squares> and <Composite> curves; chosen arbitrary
+        public const int maxPointCount = 500; // maximum count of points for <Least Squares> and <Composite> curves; chosen arbitrary
 
         bool isCompositeDone = false; // indicates if the last segment of type <Composite> needs to be finished
         bool canChangeParam = false; // indicates if option to change parametrization is enabled
@@ -489,18 +489,19 @@ namespace BezierTool
             lblError.Top = formHeight - 55;
         }
 
-        // ???
+        // Zoom in and out of pbCanva. If zoom == true zoom in, if zoom == false, zoom out.
+        //Change all point coordinets according to zoom.
         private void ZoomCanva(bool zoom)
         {
-            double zoomRatio = 0.05;
+            double zoomRatio = 1.1;
 
             if (zoom == false)
             {
-                zoomRatio *= -1;
+                zoomRatio = 1 / zoomRatio;
             }
 
-            pbCanva.Width += Convert.ToInt32(zoomRatio * pbCanva.Width);
-            pbCanva.Height += Convert.ToInt32(zoomRatio * pbCanva.Height);
+            pbCanva.Width = Convert.ToInt32(zoomRatio * pbCanva.Width);
+            pbCanva.Height = Convert.ToInt32(zoomRatio * pbCanva.Height);
 
             if (cPointsAll != null)
             {
@@ -511,12 +512,13 @@ namespace BezierTool
                         for (int j = 0; j < cPointsAll[i].Count; j++)
                         {
                             Point tmp = new Point();
-                            tmp.X = cPointsAll[i][j].X + Convert.ToInt32(cPointsAll[i][j].X * zoomRatio);
-                            tmp.Y = cPointsAll[i][j].Y + Convert.ToInt32(cPointsAll[i][j].Y * zoomRatio);
+                            tmp.X = Convert.ToInt32(cPointsAll[i][j].X * zoomRatio);
+                            tmp.Y = Convert.ToInt32(cPointsAll[i][j].Y * zoomRatio);
                             cPointsAll[i][j] = tmp;
                         }
                     }
                 }
+
             }
 
             if (pPointsAll != null)
@@ -528,28 +530,30 @@ namespace BezierTool
                         for (int j = 0; j < pPointsAll[i].Count; j++)
                         {
                             Point tmp = new Point();
-                            tmp.X = pPointsAll[i][j].X + Convert.ToInt32(pPointsAll[i][j].X * zoomRatio);
-                            tmp.Y = pPointsAll[i][j].Y + Convert.ToInt32(pPointsAll[i][j].Y * zoomRatio);
+                            tmp.X = Convert.ToInt32(pPointsAll[i][j].X * zoomRatio);
+                            tmp.Y = Convert.ToInt32(pPointsAll[i][j].Y * zoomRatio);
                             pPointsAll[i][j] = tmp;
                         }
                     }
                 }
             }
-
-
-
             return;
         }
-        //???
+
+
+        // Zoom out of pbCanva.
         private void btnZoomOut_Click(object sender, EventArgs e)
         {
             ZoomCanva(false);
         }
-        //???
+
+
+        //Zoom in on pbCanva.
         private void btnZoomIn_Click(object sender, EventArgs e)
         {
             ZoomCanva(true);
         }
+
 
         // Uploads background image for pbCanva.
         private void btnUploadBackground_Click(object sender, EventArgs e)
@@ -968,6 +972,8 @@ namespace BezierTool
             imageLocation = "";
             lblError.Text = "";
             cbShowBackground.Checked = false;
+
+            FormMain_Resize(sender, e);
 
             pbCanva.Invalidate();
         }

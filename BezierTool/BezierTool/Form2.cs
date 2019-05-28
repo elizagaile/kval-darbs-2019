@@ -185,7 +185,7 @@ namespace BezierTool
         private void AddRow()
             //add new row of coordinates to form
         {
-            if (tlpCoordinates.RowCount > FormMain.maxPointCount + 4)
+            if (formType == FormMain.FormType.Add && (tlpCoordinates.RowCount > FormMain.maxPointCount + 4))
             {
                 MessageBox.Show("Maximum count of input points is " + FormMain.maxPointCount + "!");
                 return;

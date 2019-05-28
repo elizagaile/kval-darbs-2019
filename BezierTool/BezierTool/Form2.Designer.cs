@@ -31,7 +31,6 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.gbCoordinates = new System.Windows.Forms.GroupBox();
-            this.error = new System.Windows.Forms.Label();
             this.btnDeleteRow = new System.Windows.Forms.Button();
             this.flpCoordinates = new System.Windows.Forms.FlowLayoutPanel();
             this.tlpCoordinates = new System.Windows.Forms.TableLayoutPanel();
@@ -67,7 +66,6 @@
             // 
             // gbCoordinates
             // 
-            this.gbCoordinates.Controls.Add(this.error);
             this.gbCoordinates.Controls.Add(this.btnDeleteRow);
             this.gbCoordinates.Controls.Add(this.flpCoordinates);
             this.gbCoordinates.Controls.Add(this.btnSubmitInput);
@@ -79,15 +77,6 @@
             this.gbCoordinates.TabIndex = 7;
             this.gbCoordinates.TabStop = false;
             this.gbCoordinates.Text = "Set control point coordinates:";
-            // 
-            // error
-            // 
-            this.error.AutoSize = true;
-            this.error.Location = new System.Drawing.Point(348, 273);
-            this.error.Name = "error";
-            this.error.Size = new System.Drawing.Size(18, 20);
-            this.error.TabIndex = 12;
-            this.error.Text = "+";
             // 
             // btnDeleteRow
             // 
@@ -185,7 +174,6 @@
             this.Controls.Add(this.gbCoordinates);
             this.Name = "FormCoordinates";
             this.gbCoordinates.ResumeLayout(false);
-            this.gbCoordinates.PerformLayout();
             this.flpCoordinates.ResumeLayout(false);
             this.tlpCoordinates.ResumeLayout(false);
             this.tlpCoordinates.PerformLayout();
@@ -205,6 +193,5 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnDeleteRow;
-        private System.Windows.Forms.Label error;
     }
 }
