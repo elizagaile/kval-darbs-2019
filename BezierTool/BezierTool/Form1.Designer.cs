@@ -38,7 +38,7 @@
             this.rbMouseInput = new System.Windows.Forms.RadioButton();
             this.rbKeyboardInput = new System.Windows.Forms.RadioButton();
             this.rbFileInput = new System.Windows.Forms.RadioButton();
-            this.error = new System.Windows.Forms.Label();
+            this.lblError = new System.Windows.Forms.Label();
             this.cbShowBackground = new System.Windows.Forms.CheckBox();
             this.btnModifycPoints = new System.Windows.Forms.Button();
             this.btnModifypPoints = new System.Windows.Forms.Button();
@@ -62,7 +62,10 @@
             this.rbScreenOutput = new System.Windows.Forms.RadioButton();
             this.panel_bottom = new System.Windows.Forms.Panel();
             this.panel_tools = new System.Windows.Forms.Panel();
-            this.btnDeleteLine = new System.Windows.Forms.Button();
+            this.btnDeleteCurve = new System.Windows.Forms.Button();
+            this.pnlCanva = new System.Windows.Forms.Panel();
+            this.btnZoomIn = new System.Windows.Forms.Button();
+            this.btnZoomOut = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pbCanva)).BeginInit();
             this.groupAddInputType.SuspendLayout();
             this.groupAddType.SuspendLayout();
@@ -73,14 +76,15 @@
             this.groupOutput.SuspendLayout();
             this.panel_bottom.SuspendLayout();
             this.panel_tools.SuspendLayout();
+            this.pnlCanva.SuspendLayout();
             this.SuspendLayout();
             // 
             // pbCanva
             // 
             this.pbCanva.BackColor = System.Drawing.SystemColors.Window;
-            this.pbCanva.Location = new System.Drawing.Point(13, 13);
+            this.pbCanva.Location = new System.Drawing.Point(3, 3);
             this.pbCanva.Name = "pbCanva";
-            this.pbCanva.Size = new System.Drawing.Size(1096, 1035);
+            this.pbCanva.Size = new System.Drawing.Size(1091, 997);
             this.pbCanva.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbCanva.TabIndex = 0;
             this.pbCanva.TabStop = false;
@@ -91,7 +95,7 @@
             // 
             // btnUploadBackground
             // 
-            this.btnUploadBackground.Location = new System.Drawing.Point(3, 27);
+            this.btnUploadBackground.Location = new System.Drawing.Point(6, 3);
             this.btnUploadBackground.Name = "btnUploadBackground";
             this.btnUploadBackground.Size = new System.Drawing.Size(317, 36);
             this.btnUploadBackground.TabIndex = 1;
@@ -101,7 +105,7 @@
             // 
             // btnResetAll
             // 
-            this.btnResetAll.Location = new System.Drawing.Point(3, 116);
+            this.btnResetAll.Location = new System.Drawing.Point(6, 88);
             this.btnResetAll.Name = "btnResetAll";
             this.btnResetAll.Size = new System.Drawing.Size(317, 37);
             this.btnResetAll.TabIndex = 2;
@@ -181,19 +185,20 @@
             this.rbFileInput.Text = "From .txt file";
             this.rbFileInput.UseVisualStyleBackColor = true;
             // 
-            // error
+            // lblError
             // 
-            this.error.AutoSize = true;
-            this.error.Location = new System.Drawing.Point(3, 4);
-            this.error.Name = "error";
-            this.error.Size = new System.Drawing.Size(18, 20);
-            this.error.TabIndex = 12;
-            this.error.Text = "+";
+            this.lblError.AutoSize = true;
+            this.lblError.ForeColor = System.Drawing.Color.Red;
+            this.lblError.Location = new System.Drawing.Point(12, 1021);
+            this.lblError.Name = "lblError";
+            this.lblError.Size = new System.Drawing.Size(107, 20);
+            this.lblError.TabIndex = 12;
+            this.lblError.Text = "errorMessage";
             // 
             // cbShowBackground
             // 
             this.cbShowBackground.AutoSize = true;
-            this.cbShowBackground.Location = new System.Drawing.Point(6, 69);
+            this.cbShowBackground.Location = new System.Drawing.Point(6, 45);
             this.cbShowBackground.Name = "cbShowBackground";
             this.cbShowBackground.Size = new System.Drawing.Size(165, 24);
             this.cbShowBackground.TabIndex = 13;
@@ -425,18 +430,19 @@
             // 
             // panel_bottom
             // 
+            this.panel_bottom.Controls.Add(this.btnZoomOut);
             this.panel_bottom.Controls.Add(this.btnResetAll);
+            this.panel_bottom.Controls.Add(this.btnZoomIn);
             this.panel_bottom.Controls.Add(this.cbShowBackground);
             this.panel_bottom.Controls.Add(this.btnUploadBackground);
-            this.panel_bottom.Controls.Add(this.error);
-            this.panel_bottom.Location = new System.Drawing.Point(1115, 892);
+            this.panel_bottom.Location = new System.Drawing.Point(1118, 886);
             this.panel_bottom.Name = "panel_bottom";
-            this.panel_bottom.Size = new System.Drawing.Size(330, 156);
+            this.panel_bottom.Size = new System.Drawing.Size(330, 132);
             this.panel_bottom.TabIndex = 31;
             // 
             // panel_tools
             // 
-            this.panel_tools.Controls.Add(this.btnDeleteLine);
+            this.panel_tools.Controls.Add(this.btnDeleteCurve);
             this.panel_tools.Controls.Add(this.groupAddType);
             this.panel_tools.Controls.Add(this.groupAddInputType);
             this.panel_tools.Controls.Add(this.groupParamType);
@@ -449,24 +455,53 @@
             this.panel_tools.Size = new System.Drawing.Size(330, 541);
             this.panel_tools.TabIndex = 32;
             // 
-            // btnDeleteLine
+            // btnDeleteCurve
             // 
-            this.btnDeleteLine.Location = new System.Drawing.Point(6, 501);
-            this.btnDeleteLine.Name = "btnDeleteLine";
-            this.btnDeleteLine.Size = new System.Drawing.Size(314, 37);
-            this.btnDeleteLine.TabIndex = 31;
-            this.btnDeleteLine.Text = "Choose a Line to Delete";
-            this.btnDeleteLine.UseVisualStyleBackColor = true;
-            this.btnDeleteLine.Click += new System.EventHandler(this.btnDeleteLine_Click);
+            this.btnDeleteCurve.Location = new System.Drawing.Point(6, 501);
+            this.btnDeleteCurve.Name = "btnDeleteCurve";
+            this.btnDeleteCurve.Size = new System.Drawing.Size(314, 37);
+            this.btnDeleteCurve.TabIndex = 31;
+            this.btnDeleteCurve.Text = "Choose Curve to Delete";
+            this.btnDeleteCurve.UseVisualStyleBackColor = true;
+            this.btnDeleteCurve.Click += new System.EventHandler(this.btnDeleteCurve_Click);
+            // 
+            // pnlCanva
+            // 
+            this.pnlCanva.Controls.Add(this.pbCanva);
+            this.pnlCanva.Location = new System.Drawing.Point(12, 12);
+            this.pnlCanva.Name = "pnlCanva";
+            this.pnlCanva.Size = new System.Drawing.Size(1097, 1003);
+            this.pnlCanva.TabIndex = 35;
+            // 
+            // btnZoomIn
+            // 
+            this.btnZoomIn.Location = new System.Drawing.Point(287, 45);
+            this.btnZoomIn.Name = "btnZoomIn";
+            this.btnZoomIn.Size = new System.Drawing.Size(36, 37);
+            this.btnZoomIn.TabIndex = 33;
+            this.btnZoomIn.Text = "+";
+            this.btnZoomIn.UseVisualStyleBackColor = true;
+            this.btnZoomIn.Click += new System.EventHandler(this.btnZoomIn_Click);
+            // 
+            // btnZoomOut
+            // 
+            this.btnZoomOut.Location = new System.Drawing.Point(248, 45);
+            this.btnZoomOut.Name = "btnZoomOut";
+            this.btnZoomOut.Size = new System.Drawing.Size(36, 37);
+            this.btnZoomOut.TabIndex = 34;
+            this.btnZoomOut.Text = "-";
+            this.btnZoomOut.UseVisualStyleBackColor = true;
+            this.btnZoomOut.Click += new System.EventHandler(this.btnZoomOut_Click);
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1450, 1060);
+            this.ClientSize = new System.Drawing.Size(1450, 1050);
+            this.Controls.Add(this.pnlCanva);
+            this.Controls.Add(this.lblError);
             this.Controls.Add(this.panel_tools);
             this.Controls.Add(this.panel_bottom);
-            this.Controls.Add(this.pbCanva);
             this.Name = "FormMain";
             this.Text = "Bezier Tool";
             this.Resize += new System.EventHandler(this.FormMain_Resize);
@@ -485,7 +520,9 @@
             this.panel_bottom.ResumeLayout(false);
             this.panel_bottom.PerformLayout();
             this.panel_tools.ResumeLayout(false);
+            this.pnlCanva.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -501,7 +538,7 @@
         private System.Windows.Forms.RadioButton rbMouseInput;
         private System.Windows.Forms.RadioButton rbKeyboardInput;
         private System.Windows.Forms.RadioButton rbFileInput;
-        private System.Windows.Forms.Label error;
+        private System.Windows.Forms.Label lblError;
         private System.Windows.Forms.CheckBox cbShowBackground;
         private System.Windows.Forms.Button btnModifycPoints;
         private System.Windows.Forms.Button btnModifypPoints;
@@ -525,7 +562,10 @@
         private System.Windows.Forms.Panel panel_bottom;
         private System.Windows.Forms.Panel panel_tools;
         private System.Windows.Forms.RadioButton rbCentripetal;
-        private System.Windows.Forms.Button btnDeleteLine;
+        private System.Windows.Forms.Button btnDeleteCurve;
+        private System.Windows.Forms.Panel pnlCanva;
+        private System.Windows.Forms.Button btnZoomOut;
+        private System.Windows.Forms.Button btnZoomIn;
     }
 }
 

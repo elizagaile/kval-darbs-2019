@@ -8,14 +8,14 @@ namespace BezierTool
     public partial class FormCoordinates : Form
     {
         FormMain.FormType formType; // reason for opening this form
-        FormMain.BezierType lineType; // type of line being used in this form
+        FormMain.BezierType curveType; // type of curve being used in this form
 
         private List<TextBox> coordinates = new List<TextBox>(); //list of textBoxes for point coordinates
-        string labelType = ""; //point type for labels - "C" for control points, "P" for line points
+        string labelType = ""; //point type for labels - "C" for control points, "P" for knot points
         int namingCounter = 1; //count of point coordinates, used for naming textboxes and labels
-        public static bool lineAdded = false; //to determine if a line was added successfully
+        public static bool curveAdded = false; //to determine if a curve was added successfully
 
-        public FormCoordinates( FormMain.FormType thisFormType, FormMain.BezierType thisLineType)
+        public FormCoordinates( FormMain.FormType thisFormType, FormMain.BezierType thisCurveType)
             //initialization
         {
             InitializeComponent();
@@ -26,7 +26,7 @@ namespace BezierTool
             tlpCoordinates.VerticalScroll.Visible = false;
             tlpCoordinates.AutoScroll = true;
 
-            lineType = thisLineType;
+            curveType = thisCurveType;
             formType = thisFormType;
 
             if (formType == FormMain.FormType.Add)
@@ -46,38 +46,38 @@ namespace BezierTool
         }
 
         private void InitializeAdd()
-            //initialize form for adding a new line
+            //initialize form for adding a new curve
         {
-            this.Text = "New <" + lineType + "> line";
+            this.Text = "New <" + curveType + "> curve";
 
-            if (lineType == FormMain.BezierType.cPoints)
+            if (curveType == FormMain.BezierType.cPoints)
             {
                 labelType = "C";
             }
 
-            else if (lineType == FormMain.BezierType.pPoints || lineType == FormMain.BezierType.LeastSquares || lineType == FormMain.BezierType.Composite)
+            else if (curveType == FormMain.BezierType.pPoints || curveType == FormMain.BezierType.LeastSquares || curveType == FormMain.BezierType.Composite)
             {
                 labelType = "P";
             }
 
             for (int i = 0; i < 4; i++)
-            //start with 4 points for every line type
+            //start with 4 points for every curve type
             {
                 AddRow();
             }
 
-            if (lineType == FormMain.BezierType.cPoints || lineType == FormMain.BezierType.pPoints)
-            //<4 cPoint> and <4 pPoint> lines have exactly 4 input points; no need to add or delete input lines 
+            if (curveType == FormMain.BezierType.cPoints || curveType == FormMain.BezierType.pPoints)
+            //<4 cPoint> and <4 pPoint> curves have exactly 4 input points; no need to add or delete input lines
             {
-                gbCoordinates.Text = "Input <" + lineType + "> control point coordinates:";
+                gbCoordinates.Text = "Input <" + curveType + "> control point coordinates:";
                 btnAddRow.Visible = false;
                 btnDeleteRow.Visible = false;
             }
 
-            if (lineType == FormMain.BezierType.LeastSquares || lineType == FormMain.BezierType.Composite)
-            //<Least Squares> and <Composite> line input point count can vary; its possible to add and delete input lines
+            if (curveType == FormMain.BezierType.LeastSquares || curveType == FormMain.BezierType.Composite)
+            //Count of <Least Squares> and <Composite> input point count can vary; its possible to add and delete input lines
             {
-                gbCoordinates.Text = "Input <" + lineType + "> knot point coordinates:";
+                gbCoordinates.Text = "Input <" + curveType + "> knot point coordinates:";
                 btnAddRow.Visible = true;
                 btnDeleteRow.Visible = true;
             }
@@ -86,11 +86,11 @@ namespace BezierTool
         }
 
         private void InitializeModify()
-            //initialize form for modifying a line
+            //initialize form for modifying a curve
         {
-            this.Text = "Modify <" + lineType + "> line";
+            this.Text = "Modify <" + curveType + "> curve";
 
-            btnAddRow.Visible = false; // can't add or delete input lines when modifying a line
+            btnAddRow.Visible = false; // can't add or delete input lines when modifying a curve
             btnDeleteRow.Visible = false;
 
             List<Point> pointList = new List<Point>();
@@ -98,22 +98,22 @@ namespace BezierTool
 
             if (FormMain.modifyPointType == FormMain.BezierType.cPoints)
             {
-                gbCoordinates.Text = "Modify <" + lineType + "> control point coordinates:";
+                gbCoordinates.Text = "Modify <" + curveType + "> control point coordinates:";
                 labelType = "C";
                 pointList = FormMain.cPointsAll[i];
             }
 
             else if (FormMain.modifyPointType == FormMain.BezierType.pPoints)
             {
-                gbCoordinates.Text = "Modify <" + lineType + "> knot point coordinates:";
+                gbCoordinates.Text = "Modify <" + curveType + "> knot point coordinates:";
                 labelType = "P";
                 pointList = FormMain.pPointsAll[i];
             }
 
-            if (lineType == FormMain.BezierType.Composite)
-            // its possible to modify only one <Composite> line point at a time
+            if (curveType == FormMain.BezierType.Composite)
+            // its possible to modify only one <Composite> knot point at a time
             {
-                int j = FormMain.localPoint.Item2; //get which line point is being modified
+                int j = FormMain.localPoint.Item2; //get which knot point is being modified
                 namingCounter = j + 1; //labels start at 1, lists at 0
                 AddRow();
 
@@ -142,7 +142,7 @@ namespace BezierTool
         private void InitializeOutput()
         //initialize form for outputting line coordinates
         {
-            this.Text = "Output <" + lineType + "> line";
+            this.Text = "Output <" + curveType + "> curve";
 
             btnAddRow.Visible = false; // can't add or delete input lines when viewing point coordinates
             btnDeleteRow.Visible = false;
@@ -154,14 +154,14 @@ namespace BezierTool
 
             if (FormMain.outputPointType == FormMain.BezierType.cPoints)
             {
-                gbCoordinates.Text = "List of <" + lineType + "> control point coordinates:";
+                gbCoordinates.Text = "List of <" + curveType + "> control point coordinates:";
                 labelType = "C";
                 pointList = FormMain.cPointsAll[i];
             }
 
             else if (FormMain.outputPointType == FormMain.BezierType.pPoints)
             {
-                gbCoordinates.Text = "List of <" + lineType + "> knot point coordinates:";
+                gbCoordinates.Text = "List of <" + curveType + "> knot point coordinates:";
                 labelType = "P";
                 pointList = FormMain.pPointsAll[i];
             }
@@ -266,7 +266,7 @@ namespace BezierTool
             if (formType == FormMain.FormType.Add)
             // if adding new line, its the last line in representitive lists
             {
-                i = FormMain.allLines.Count - 1;
+                i = FormMain.allCurves.Count - 1;
             }
 
             else if (formType == FormMain.FormType.Modify)
@@ -275,25 +275,25 @@ namespace BezierTool
                 i = FormMain.localPoint.Item1;
             }
 
-            if (lineType == FormMain.BezierType.cPoints)
+            if (curveType == FormMain.BezierType.cPoints)
             {
                 FormMain.cPointsAll[i] = pointList;
-                lineAdded = true; //line was added successfully
+                curveAdded = true; //line was added successfully
             }
 
-            else if (lineType == FormMain.BezierType.pPoints || lineType == FormMain.BezierType.LeastSquares)
+            else if (curveType == FormMain.BezierType.pPoints || curveType == FormMain.BezierType.LeastSquares)
             {
                 FormMain.pPointsAll[i] = pointList;
-                lineAdded = true; //line was added successfully
+                curveAdded = true; //curve was added successfully
             }
 
-            else if (lineType == FormMain.BezierType.Composite && formType == FormMain.FormType.Add)
+            else if (curveType == FormMain.BezierType.Composite && formType == FormMain.FormType.Add)
             {
                 FormMain.pPointsAll[i] = pointList;
-                lineAdded = true; //line was added successfully
+                curveAdded = true; //curve was added successfully
             }
 
-            else if (lineType == FormMain.BezierType.Composite && formType == FormMain.FormType.Modify)
+            else if (curveType == FormMain.BezierType.Composite && formType == FormMain.FormType.Modify)
             {
                 FormMain.ModifypPointComposite(pointList[0]);
             }
@@ -304,15 +304,15 @@ namespace BezierTool
         private void btnDeleteRow_Click(object sender, EventArgs e)
             //delete input row
         {
-            if (lineType == FormMain.BezierType.LeastSquares && tlpCoordinates.RowCount <= 9) //4 rows minimum plus 5 rows from table design equals 9 rows
+            if (curveType == FormMain.BezierType.LeastSquares && tlpCoordinates.RowCount <= 9) //4 rows minimum plus 5 rows from table design equals 9 rows
             {
-                MessageBox.Show("<Least Squares> lines can't have less than 4 points!");
+                MessageBox.Show("<Least Squares> curves can't have less than 4 knot points!");
                 return;
             }
 
-            if (lineType == FormMain.BezierType.Composite && tlpCoordinates.RowCount <= 7) //2 rows minimum plus 5 rows from design equals 7 rows
+            if (curveType == FormMain.BezierType.Composite && tlpCoordinates.RowCount <= 7) //2 rows minimum plus 5 rows from design equals 7 rows
             {
-                MessageBox.Show("<Composite> lines can't have less than 2 points!");
+                MessageBox.Show("<Composite> curves can't have less than 2 knot points!");
                 return;
             }
 

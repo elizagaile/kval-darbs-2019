@@ -1,9 +1,10 @@
 ﻿/*
  * Programma "BezierTool"
- * Izveidota xx.xx.2019
+ * Izveidota xx.xx.2019 ???
  * Autors Elīza Gaile eg17035
  * Programma izstrādāta kvalifikāciojas darba ietvaros
 */ 
+
 
 using System;
 using System.Collections.Generic;
@@ -18,16 +19,16 @@ namespace BezierTool
     public partial class FormMain : Form // contains form, all its atributes and functions
     {
         // each Bezier curve is represented in several "representitive" lists: 
-        // list of construction type of each curve; "allLines"
+        // list of construction type of each curve; "allCurves"
         // list of control points of each curve; "cPoints"
         // list of knot points of each curve (if the curve has knot points); "pPoints"
         // list of parametrization method of each curve (if the curve was interpolated); "parametrization"
-        // list of type a composite curve was moved; "movedLine"
+        // list of type a <Composite> curve was moved; "movedCurve"
         // the i-th drawn curve is represented by the i-th position in all of the lists
 
         // all possible construction types of curves:
         public enum BezierType { cPoints, pPoints, LeastSquares, Composite, Nothing }; 
-        public static List<BezierType> allLines = new List<BezierType>();
+        public static List<BezierType> allCurves = new List<BezierType>();
 
         public static List<List<Point>> cPointsAll = new List<List<Point>>();
         public static List<List<Point>> pPointsAll = new List<List<Point>>();
@@ -36,15 +37,15 @@ namespace BezierTool
         enum ParamType { Uniform, Chord, Centripetal, Nothing };
         private List<ParamType> parametrization = new List<ParamType>(); //contains parametrization types for drawn curves
 
-        // all possible ways to move a composite line
+        // all possible ways to move a <Composite> curve
         private enum MoveType { LeftClick, RightClick, pPoints, Nothing };
-        private List<MoveType> movedLine = new List<MoveType>();
+        private List<MoveType> movedCurve = new List<MoveType>();
 
         // all possible reasons for initialization of coordination form
         public enum FormType { Add, Modify, Output };
 
         public static BezierType addType = BezierType.Nothing; // type of curve to be or being added
-        public static BezierType modifyLineType = BezierType.Nothing; // type of curve to be or being modified
+        public static BezierType modifyCurveType = BezierType.Nothing; // type of curve to be or being modified
         public static BezierType modifyPointType = BezierType.Nothing; // type of point to be or being draged by mouse
         public static BezierType outputPointType = BezierType.Nothing; // type of points to output
         
@@ -57,10 +58,10 @@ namespace BezierTool
 
         public const int maxPointCount = 12; // maximum count of points for <Least Squares> and <Composite> curves; chosen arbitrary
 
-        bool isCompositeDone = false; // indicates if the last line of type <Composite> needs to be finished
+        bool isCompositeDone = false; // indicates if the last segment of type <Composite> needs to be finished
         bool canChangeParam = false; // indicates if option to change parametrization is enabled
         bool isChangingParam = false; // indicates if parametrization of a curve is being changed
-        bool canDeleteLine = false; // indicates if option to delete a line is enabled
+        bool canDeleteCurve = false; // indicates if option to delete a curve is enabled
 
         String imageLocation = ""; //path of background image
 
@@ -69,6 +70,11 @@ namespace BezierTool
             InitializeComponent();
             this.Width = Convert.ToInt32(0.75 * Screen.PrimaryScreen.Bounds.Width);
             this.Height = Convert.ToInt32(0.75 * Screen.PrimaryScreen.Bounds.Height);
+            lblError.Text = "";
+            
+            pnlCanva.AutoScroll = false;
+            pnlCanva.VerticalScroll.Visible = false;
+            pnlCanva.AutoScroll = true;
         }
 
 
@@ -142,7 +148,7 @@ namespace BezierTool
                 // output on screen, initialize the form of coordinates
                 if (rbScreenOutput.Checked == true)
                 {
-                    FormCoordinates form_KeyboardAdd = new FormCoordinates(FormType.Output, allLines[i]);
+                    FormCoordinates form_KeyboardAdd = new FormCoordinates(FormType.Output, allCurves[i]);
                     form_KeyboardAdd.ShowDialog();
                 }
 
@@ -153,7 +159,7 @@ namespace BezierTool
                 }
 
                 outputPointType = BezierType.Nothing;
-                modifyLineType = BezierType.Nothing; // why is this needed ???
+                modifyCurveType = BezierType.Nothing; // why is this needed ???
                 localPoint = null;
 
                 pbCanva.Invalidate();
@@ -174,7 +180,7 @@ namespace BezierTool
                 // output on screen, initialize the form of coordinates
                 if (rbScreenOutput.Checked == true)
                 {
-                    FormCoordinates form_KeyboardAdd = new FormCoordinates(FormType.Output, allLines[i]);
+                    FormCoordinates form_KeyboardAdd = new FormCoordinates(FormType.Output, allCurves[i]);
                     form_KeyboardAdd.ShowDialog();
                 }
 
@@ -185,20 +191,20 @@ namespace BezierTool
                 }
 
                 outputPointType = BezierType.Nothing;
-                modifyLineType = BezierType.Nothing; // why is this needed ???
+                modifyCurveType = BezierType.Nothing; // why is this needed ???
                 localPoint = null;
 
                 pbCanva.Invalidate();
             }
 
             // deleting a curve
-            if (cPointsAll != null && canDeleteLine == true)
+            if (cPointsAll != null && canDeleteCurve == true)
             {
                 FindLocalPoint(cPointsAll, e.Location);
 
                 if (localPoint != null)
                 {
-                    DeleteLine(localPoint.Item1);
+                    DeleteCurve(localPoint.Item1);
                     pbCanva.Invalidate();
                 }
             }
@@ -228,14 +234,14 @@ namespace BezierTool
             }
 
             // when modifiying <4 cPoints> curve, we can just change point coordinets
-            if (modifyLineType == BezierType.cPoints)
+            if (modifyCurveType == BezierType.cPoints)
             {
                 cPointsAll[i][j] = e.Location;
                 pbCanva.Invalidate();
             }
 
             // when modifiying knot points of <4 pPoints> or <Least Squares> curves, we need to re-calculates control points of the curve
-            else if ((modifyLineType == BezierType.pPoints || modifyLineType == BezierType.LeastSquares) && modifyPointType == BezierType.pPoints)
+            else if ((modifyCurveType == BezierType.pPoints || modifyCurveType == BezierType.LeastSquares) && modifyPointType == BezierType.pPoints)
             {
                 pPointsAll[i][j] = e.Location;
                 AddcPointsInterpolation(i);
@@ -243,11 +249,11 @@ namespace BezierTool
             }
 
             // when modifiying control points of <Composite> curves, we need to make sure the curve stays C2 continuous
-            else if (modifyLineType == BezierType.Composite && modifyPointType == BezierType.cPoints)
+            else if (modifyCurveType == BezierType.Composite && modifyPointType == BezierType.cPoints)
             {
                 // using left click, we can drag the control point anywhere, but the 'opposite' control point moves
                 // aswell - to maintain continuity
-                if (movedLine[i] == MoveType.LeftClick)
+                if (movedCurve[i] == MoveType.LeftClick)
                 {
                     cPointsAll[i][j] = e.Location;
 
@@ -267,7 +273,7 @@ namespace BezierTool
 
                 // using right click to drag a control point, no other control points will move, but to maintain  C2 continuity
                 // we can only move the control point in straight line away from its opposite point
-                if (movedLine[i] == MoveType.RightClick)
+                if (movedCurve[i] == MoveType.RightClick)
                 {
                     //starting from the fifth control point, every third point's opposite control point is two points before
                     if (j % 3 == 1 && j != 1)
@@ -285,11 +291,11 @@ namespace BezierTool
             }
 
             // when modifiying knot points of <Composite> curves, we need to re-calculates control points of the curve 
-            else if (modifyLineType == BezierType.Composite && modifyPointType == BezierType.pPoints)
+            else if (modifyCurveType == BezierType.Composite && modifyPointType == BezierType.pPoints)
             {
                 ModifypPointComposite(e.Location);
                 
-                movedLine[i] = MoveType.pPoints;
+                movedCurve[i] = MoveType.pPoints;
                 pbCanva.Invalidate();
             }
         }
@@ -301,7 +307,7 @@ namespace BezierTool
         {
             if (modifyPointType != BezierType.Nothing)
             {
-                modifyLineType = BezierType.Nothing;
+                modifyCurveType = BezierType.Nothing;
                 localPoint = null;
             }
             pbCanva.Invalidate();
@@ -352,19 +358,19 @@ namespace BezierTool
                     }
                     
                     // if <4 pPoints> curve has 4 knot points, but control points haven't been calculated yet, calculate them
-                    if (allLines[i] == BezierType.pPoints && pPointsAll[i].Count == 4 && cPointsAll[i] == null)
+                    if (allCurves[i] == BezierType.pPoints && pPointsAll[i].Count == 4 && cPointsAll[i] == null)
                     {
                         AddcPointsInterpolation(i);
                     }
 
                     // if <Least Squares> curve has atleast 4 knot points, calculate control points
-                    if (allLines[i] == BezierType.LeastSquares && pPointsAll[i].Count >= 4)
+                    if (allCurves[i] == BezierType.LeastSquares && pPointsAll[i].Count >= 4)
                     {
                         AddcPointsInterpolation(i);
                     }
 
                     // draw <Composite> curve which hasn't been moved
-                    if (allLines[i] == BezierType.Composite && movedLine[i] == MoveType.Nothing)
+                    if (allCurves[i] == BezierType.Composite && movedCurve[i] == MoveType.Nothing)
                     {
                         if (isCompositeDone == true && pPointsAll[i].Count == 2)
                         {
@@ -392,7 +398,7 @@ namespace BezierTool
                     // Drawing red circle for control points:
 
                     // for <4 cPoints> and <Least Squares> curves draw all control points
-                    if (allLines[i] == BezierType.cPoints || allLines[i] == BezierType.LeastSquares)
+                    if (allCurves[i] == BezierType.cPoints || allCurves[i] == BezierType.LeastSquares)
                     {
                         foreach (Point cPoint in cPointsAll[i])
                         {
@@ -401,15 +407,15 @@ namespace BezierTool
                     }
                     
                     //for <4 pPoints> curves draw only middle control points, because end are also points knot points
-                    else if (allLines[i] == BezierType.pPoints)
+                    else if (allCurves[i] == BezierType.pPoints)
                     {
                         e.Graphics.DrawEllipse(Pens.Red, cPointsAll[i][1].X - pointRadius, cPointsAll[i][1].Y - pointRadius, 2 * pointRadius, 2 * pointRadius);
                         e.Graphics.DrawEllipse(Pens.Red, cPointsAll[i][2].X - pointRadius, cPointsAll[i][2].Y - pointRadius, 2 * pointRadius, 2 * pointRadius);
                     }
 
-                    // for <Composite> curves draw only those control points which are not line points -
-                    // - every third line point starting from the first is also a control point
-                    else if (allLines[i] == BezierType.Composite)
+                    // for <Composite> curves draw only those control points which are not knot points -
+                    // - every third knot point starting from the first is also a control point
+                    else if (allCurves[i] == BezierType.Composite)
                     {
                         for (int j = 0; j < cPointsAll[i].Count - 1; j++)
                         {
@@ -423,13 +429,13 @@ namespace BezierTool
 
                     //Drawing control point polygons / handle lines:
 
-                    if (cPointsAll[i].Count > 1 && (allLines[i] == BezierType.cPoints || allLines[i] == BezierType.LeastSquares || allLines[i] == BezierType.pPoints))
+                    if (cPointsAll[i].Count > 1 && (allCurves[i] == BezierType.cPoints || allCurves[i] == BezierType.LeastSquares || allCurves[i] == BezierType.pPoints))
                     {
                         e.Graphics.DrawLines(Pens.LightGray, cPointsAll[i].ToArray());
                     }
 
-                    //for <Composite> lines, draw only handle lines
-                    else if (allLines[i] == BezierType.Composite)
+                    //for <Composite> curves, draw only handle lines
+                    else if (allCurves[i] == BezierType.Composite)
                     {
                         for (int j = 0; j < cPointsAll[i].Count - 1; j++)
                         {
@@ -443,18 +449,18 @@ namespace BezierTool
                     }
 
 
-                    //Drawing all bezier lines:
+                    //Drawing all bezier curves:
 
                     Pen bezierPen = new Pen(Brushes.Black);
 
                     // <4 cPoints>, <4 pPoints> and <Least Squares> curves have 4 control points
-                    if (cPointsAll[i].Count == 4 && (allLines[i] == BezierType.cPoints || allLines[i] == BezierType.LeastSquares || allLines[i] == BezierType.pPoints))
+                    if (cPointsAll[i].Count == 4 && (allCurves[i] == BezierType.cPoints || allCurves[i] == BezierType.LeastSquares || allCurves[i] == BezierType.pPoints))
                     {
                         e.Graphics.DrawBezier(bezierPen, cPointsAll[i][0], cPointsAll[i][1], cPointsAll[i][2], cPointsAll[i][3]);
                     }
 
                     // draw each segment of <Composite> curve
-                    else if (allLines[i] == BezierType.Composite)
+                    else if (allCurves[i] == BezierType.Composite)
                     {
                         for (int j = 0; j < cPointsAll[i].Count - 3; j += 3)
                         {
@@ -472,18 +478,84 @@ namespace BezierTool
             int formWidth = this.Width;
             int formHeight = this.Height;
 
-            // 20px, 50px, 35 px and 55px makes margins for panels and pbCanva
+            // 20px, 35 px, 55px, 65px are used to make margins
             panel_tools.Left = formWidth - panel_tools.Width - 20; 
             panel_bottom.Left = formWidth - panel_bottom.Width - 20;
-            panel_bottom.Top = formHeight - panel_bottom.Height - 50;
-            pbCanva.Width = formWidth - panel_tools.Width - 35;
-            pbCanva.Height = formHeight - 55;
+            panel_bottom.Top = formHeight - panel_bottom.Height - 55;
+            pnlCanva.Width = formWidth - panel_tools.Width - 35;
+            pnlCanva.Height = formHeight - 65;
+            pbCanva.Width = pnlCanva.Width-10;
+            pbCanva.Height = pnlCanva.Height-10;
+            lblError.Top = formHeight - 55;
         }
 
+        // ???
+        private void ZoomCanva(bool zoom)
+        {
+            double zoomRatio = 0.05;
+
+            if (zoom == false)
+            {
+                zoomRatio *= -1;
+            }
+
+            pbCanva.Width += Convert.ToInt32(zoomRatio * pbCanva.Width);
+            pbCanva.Height += Convert.ToInt32(zoomRatio * pbCanva.Height);
+
+            if (cPointsAll != null)
+            {
+                for (int i = 0; i < cPointsAll.Count; i++)
+                {
+                    if (cPointsAll[i] != null)
+                    {
+                        for (int j = 0; j < cPointsAll[i].Count; j++)
+                        {
+                            Point tmp = new Point();
+                            tmp.X = cPointsAll[i][j].X + Convert.ToInt32(cPointsAll[i][j].X * zoomRatio);
+                            tmp.Y = cPointsAll[i][j].Y + Convert.ToInt32(cPointsAll[i][j].Y * zoomRatio);
+                            cPointsAll[i][j] = tmp;
+                        }
+                    }
+                }
+            }
+
+            if (pPointsAll != null)
+            {
+                for (int i = 0; i < pPointsAll.Count; i++)
+                {
+                    if (pPointsAll[i] != null)
+                    {
+                        for (int j = 0; j < pPointsAll[i].Count; j++)
+                        {
+                            Point tmp = new Point();
+                            tmp.X = pPointsAll[i][j].X + Convert.ToInt32(pPointsAll[i][j].X * zoomRatio);
+                            tmp.Y = pPointsAll[i][j].Y + Convert.ToInt32(pPointsAll[i][j].Y * zoomRatio);
+                            pPointsAll[i][j] = tmp;
+                        }
+                    }
+                }
+            }
+
+
+
+            return;
+        }
+        //???
+        private void btnZoomOut_Click(object sender, EventArgs e)
+        {
+            ZoomCanva(false);
+        }
+        //???
+        private void btnZoomIn_Click(object sender, EventArgs e)
+        {
+            ZoomCanva(true);
+        }
 
         // Uploads background image for pbCanva.
         private void btnUploadBackground_Click(object sender, EventArgs e)
         {
+            lblError.Text = "";
+
             try
             {
                 OpenFileDialog dialog = new OpenFileDialog 
@@ -524,6 +596,8 @@ namespace BezierTool
         // Start a new <4 cPoints> curve.
         private void btnNew4cPoints_Click(object sender, EventArgs e)
         {
+            lblError.Text = "";
+
             addType = BezierType.cPoints;
 
             if (rbMouseInput.Checked == true)
@@ -533,7 +607,7 @@ namespace BezierTool
 
             if (rbKeyboardInput.Checked == true)
             {
-                NewLine(BezierType.cPoints);
+                NewCurve(BezierType.cPoints);
 
                 // when inputting points by keyboard, intialize the form of coordinates
                 FormCoordinates form_KeyboardAdd = new FormCoordinates(FormType.Add, addType);
@@ -541,9 +615,9 @@ namespace BezierTool
 
 
                 // an error or cancelation occured in the form of coordinates and no curves were added
-                if (FormCoordinates.lineAdded == false)
+                if (FormCoordinates.curveAdded == false)
                 {
-                    DeleteLine(allLines.Count - 1); // reverse the actions of newLine() function
+                    DeleteCurve(allCurves.Count - 1); // reverse the actions of newCurve() function
                     return;
                 }
 
@@ -556,8 +630,7 @@ namespace BezierTool
 
                 if (cPoints.Count != 4)
                 {
-                    error.Text = ".txt file was not correct!";
-                    DeleteLine(allLines.Count - 1); // reverse the actions of newLine() function
+                    lblError.Text = ".txt file was not correct!";
                     return;
                 }
 
@@ -570,6 +643,8 @@ namespace BezierTool
         // Start a new <4 pPoints> curve.
         private void btnNew4pPoints_Click(object sender, EventArgs e)
         {
+            lblError.Text = "";
+
             addType = BezierType.pPoints;
 
             if (rbMouseInput.Checked == true)
@@ -579,16 +654,16 @@ namespace BezierTool
 
             if (rbKeyboardInput.Checked == true)
             {
-                NewLine(BezierType.pPoints);
+                NewCurve(BezierType.pPoints);
 
                 // when inputting points by keyboard, intialize the form of coordinates
                 FormCoordinates form_KeyboardAdd = new FormCoordinates(FormType.Add, addType);
                 form_KeyboardAdd.ShowDialog();
 
                 // an error or cancelation occured in the form of coordinates and no curves were added
-                if (FormCoordinates.lineAdded == false)
+                if (FormCoordinates.curveAdded == false)
                 {
-                    DeleteLine(allLines.Count - 1); 
+                    DeleteCurve(allCurves.Count - 1); 
                     return;
                 }
 
@@ -601,8 +676,7 @@ namespace BezierTool
 
                 if (pPoints.Count != 4)
                 {
-                    error.Text = ".txt file was not correct!";
-                    DeleteLine(allLines.Count - 1);  // reverse the actions of newLine() function
+                    lblError.Text = ".txt file was not correct!";
                     return;
                 }
 
@@ -615,6 +689,8 @@ namespace BezierTool
         // Start a new <Least Squares> curve.
         private void btnNewLeastSquares_Click(object sender, EventArgs e)
         {
+            lblError.Text = "";
+
             addType = BezierType.LeastSquares;
 
             if (rbMouseInput.Checked == true)
@@ -624,16 +700,16 @@ namespace BezierTool
 
             if (rbKeyboardInput.Checked == true)
             {
-                NewLine(BezierType.LeastSquares);
+                NewCurve(BezierType.LeastSquares);
 
                 // when inputting points by keyboard, intialize the form of coordinates
                 FormCoordinates form_KeyboardAdd = new FormCoordinates(FormType.Add, addType);
                 form_KeyboardAdd.ShowDialog();
 
                 // an error or cancelation occured in the form of coordinates and no curves were added
-                if (FormCoordinates.lineAdded == false)
+                if (FormCoordinates.curveAdded == false)
                 {
-                    DeleteLine(allLines.Count - 1); // reverse the actions of newLine() function
+                    DeleteCurve(allCurves.Count - 1); // reverse the actions of newCurve() function
                     return;
                 }
 
@@ -646,8 +722,8 @@ namespace BezierTool
 
                 if (pPoints.Count < 4 || pPoints.Count > maxPointCount)
                 {
-                    error.Text = ".txt file was not correct!";
-                    DeleteLine(allLines.Count - 1);  // reverse the actions of newLine() function
+                    lblError.Text = ".txt file was not correct!";
+                    DeleteCurve(allCurves.Count - 1);  // reverse the actions of newCurve() function
                     return;
                 }
 
@@ -660,6 +736,8 @@ namespace BezierTool
         // Start a new <Composite> curve.
         private void btnNewComposite_Click(object sender, EventArgs e)
         {
+            lblError.Text = "";
+
             addType = BezierType.Composite;
 
             if (rbMouseInput.Checked == true)
@@ -669,16 +747,16 @@ namespace BezierTool
 
             if (rbKeyboardInput.Checked == true)
             {
-                NewLine(BezierType.Composite);
+                NewCurve(BezierType.Composite);
 
                 // when inputting points by keyboard, intialize the form of coordinates
                 FormCoordinates form_KeyboardAdd = new FormCoordinates(FormType.Add, addType);
                 form_KeyboardAdd.ShowDialog();
 
                 // an error or cancelation occured in the form of coordinates and no curves were added
-                if (FormCoordinates.lineAdded == false)
+                if (FormCoordinates.curveAdded == false)
                 {
-                    DeleteLine(allLines.Count - 1); // reverse the actions of newLine() function
+                    DeleteCurve(allCurves.Count - 1); // reverse the actions of newCurve() function
                     return;
                 }
 
@@ -693,8 +771,8 @@ namespace BezierTool
 
                 if (pPoints.Count < 2 || pPoints.Count > maxPointCount)
                 {
-                    error.Text = ".txt file was not correct!";
-                    DeleteLine(allLines.Count - 1);  // reverse the actions of newLine() function
+                    lblError.Text = ".txt file was not correct!";
+                    DeleteCurve(allCurves.Count - 1);  // reverse the actions of newCurve() function
                     return;
                 }
 
@@ -708,6 +786,8 @@ namespace BezierTool
         // When a <Composite> curve is indicated as done, draw the last segment of it. 
         private void btnDoneComposite_Click(object sender, EventArgs e)
         {
+            lblError.Text = "";
+
             isCompositeDone = true;
             pbCanva.Invalidate();
         }
@@ -716,7 +796,9 @@ namespace BezierTool
         // Allow to drag control points by mouse.
         private void btnModifycPoints_Click(object sender, EventArgs e)
         {
-            canDeleteLine = false;
+            lblError.Text = "";
+
+            canDeleteCurve = false;
             canChangeParam = false;
             isChangingParam = false;
             addType = BezierType.Nothing;
@@ -729,7 +811,9 @@ namespace BezierTool
         // Allow to drag knot points by mouse.
         private void btnModifypPoints_Click(object sender, EventArgs e)
         {
-            canDeleteLine = false;
+            lblError.Text = "";
+
+            canDeleteCurve = false;
             canChangeParam = false;
             isChangingParam = false;
             addType = BezierType.Nothing;
@@ -742,11 +826,13 @@ namespace BezierTool
         // Allow to change curve parametrization method.
         private void btnChangeParam_Click(object sender, EventArgs e)
         {
+            lblError.Text = "";
+
             isChangingParam = false;
-            canDeleteLine = false;
+            canDeleteCurve = false;
             addType = BezierType.Nothing;
             modifyPointType = BezierType.Nothing;
-            modifyLineType = BezierType.Nothing; // šo vajag ???
+            modifyCurveType = BezierType.Nothing; // šo vajag ???
             outputPointType = BezierType.Nothing;
 
             canChangeParam = true;
@@ -756,6 +842,8 @@ namespace BezierTool
         // Change parametrization method and redraw the curve.
         private void rbUniform_CheckedChanged(object sender, EventArgs e)
         {
+            lblError.Text = "";
+
             if (isChangingParam == false)
             {
                 return;
@@ -793,12 +881,14 @@ namespace BezierTool
         // Enable option to output control point coordinates.
         private void btnOutputcPoints_Click(object sender, EventArgs e)
         {
-            canDeleteLine = false;
+            lblError.Text = "";
+
+            canDeleteCurve = false;
             canChangeParam = false;
             isChangingParam = false;
             addType = BezierType.Nothing;
             modifyPointType = BezierType.Nothing;
-            modifyLineType = BezierType.Nothing;
+            modifyCurveType = BezierType.Nothing;
 
             outputPointType = BezierType.cPoints;
         }
@@ -807,34 +897,40 @@ namespace BezierTool
         // Enable option to output knot point coordinates.
         private void btnOutputpPoints_Click(object sender, EventArgs e)
         {
-            canDeleteLine = false;
+            lblError.Text = "";
+
+            canDeleteCurve = false;
             canChangeParam = false;
             isChangingParam = false;
             addType = BezierType.Nothing;
             modifyPointType = BezierType.Nothing;
-            modifyLineType = BezierType.Nothing;
+            modifyCurveType = BezierType.Nothing;
 
             outputPointType = BezierType.pPoints;
         }
 
 
         // Enable option to delete a curve.
-        private void btnDeleteLine_Click(object sender, EventArgs e)
+        private void btnDeleteCurve_Click(object sender, EventArgs e)
         {
+            lblError.Text = "";
+
             canChangeParam = false;
             isChangingParam = false;
             addType = BezierType.Nothing;
             modifyPointType = BezierType.Nothing;
-            modifyLineType = BezierType.Nothing;
+            modifyCurveType = BezierType.Nothing;
             outputPointType = BezierType.Nothing;
 
-            canDeleteLine = true;
+            canDeleteCurve = true;
         }
 
 
         // Reset main form to its inial state, clean pbCanva and reset all variables.
         private void btnResetAll_Click(object sender, EventArgs e)
         {
+            lblError.Text = "";
+
             string message = "Do you want to reset this form?";
             string title = "Reset all";
             MessageBoxButtons buttons = MessageBoxButtons.OKCancel;
@@ -845,8 +941,8 @@ namespace BezierTool
                 return;
             }
 
-            allLines = new List<BezierType>();
-            movedLine = new List<MoveType>();
+            allCurves = new List<BezierType>();
+            movedCurve = new List<MoveType>();
             parametrization = new List<ParamType>();
 
             cPointsAll = new List<List<Point>>();
@@ -857,31 +953,30 @@ namespace BezierTool
             localPoint = null;
 
             addType = BezierType.Nothing;
-            modifyLineType = BezierType.Nothing;
+            modifyCurveType = BezierType.Nothing;
             modifyPointType = BezierType.Nothing;
             outputPointType = BezierType.Nothing;
 
             isCompositeDone = false;
             canChangeParam = false;
             isChangingParam = false;
-            canDeleteLine = false;
+            canDeleteCurve = false;
 
             rbMouseInput.Checked = true;
             rbMouseModify.Checked = true;
 
             imageLocation = "";
-            error.Text = "";
+            lblError.Text = "";
             cbShowBackground.Checked = false;
 
             pbCanva.Invalidate();
         }
 
 
-        // Start a new line, add its parametrs to representitive lists.
-        private void NewLine(BezierType lineType)
-
+        // Start a new curve, add its parametrs to representitive lists.
+        private void NewCurve(BezierType curveType)
         {
-            allLines.Add(lineType);
+            allCurves.Add(curveType);
 
             cPoints = null;
             pPoints = null;
@@ -890,22 +985,22 @@ namespace BezierTool
 
             isChangingParam = false;
             isCompositeDone = false;
-            canDeleteLine = false;
+            canDeleteCurve = false;
 
             modifyPointType = BezierType.Nothing;
-            modifyLineType = BezierType.Nothing;
+            modifyCurveType = BezierType.Nothing;
             outputPointType = BezierType.Nothing;
 
             cPointsAll.Add(null);
             pPointsAll.Add(null);
-            movedLine.Add(MoveType.Nothing);
+            movedCurve.Add(MoveType.Nothing);
 
-            if (lineType == BezierType.cPoints || lineType == BezierType.Composite)
+            if (curveType == BezierType.cPoints || curveType == BezierType.Composite)
             {
                 parametrization.Add(ParamType.Nothing);
             }
 
-            else if (lineType == BezierType.pPoints || lineType == BezierType.LeastSquares)
+            else if (curveType == BezierType.pPoints || curveType == BezierType.LeastSquares)
             {
                 if (rbUniform.Checked == true)
                 {
@@ -927,18 +1022,18 @@ namespace BezierTool
         }
 
 
-        // Reverse action of newLine() function.
+        // Reverse action of newCurve() function.
         // Used when a curve was deleted or when adding a curve by keyboard had an error or cancelation.
-        private void DeleteLine(int i)
+        private void DeleteCurve(int i)
         {
             addType = BezierType.Nothing;
-            allLines.RemoveAt(i);
-            movedLine.RemoveAt(i);
+            allCurves.RemoveAt(i);
+            movedCurve.RemoveAt(i);
             cPointsAll.RemoveAt(i);
             pPointsAll.RemoveAt(i);
             parametrization.RemoveAt(i);
 
-            canDeleteLine = false;
+            canDeleteCurve = false;
 
             return;
         }
@@ -950,7 +1045,7 @@ namespace BezierTool
             // adding the first control point of curve
             if (cPoints == null)
             {
-                NewLine(addType);
+                NewCurve(addType);
                 cPoints = new List<Point> { mouseLocation };
                 cPointsAll[cPointsAll.Count - 1] = cPoints;
             }
@@ -971,7 +1066,7 @@ namespace BezierTool
             // adding the first control point of curve
             if (pPoints == null)
             {
-                NewLine(addType);
+                NewCurve(addType);
                 pPoints = new List<Point> { mouseLocation };
                 pPointsAll[pPointsAll.Count - 1] = pPoints;
                 
@@ -1030,10 +1125,10 @@ namespace BezierTool
                 cPointsAll[i].Add(GetSecondHandle(pPointsAll[i][j - 2], pPointsAll[i][j - 1], pPointsAll[i][j]));
             }
 
-            // every <Composite> line except the last one always needs to be finished
+            // every <Composite> curve except the last one always needs to be finished
             // that means, it should have three times (every point is a control point and has two handles) 
             // minus two (each end point doesn't have one handle) more control points than knot points
-            if ((i != allLines.Count - 1 && cPointsAll[i].Count < pCount * 3 - 2) || (i == allLines.Count - 1 && isCompositeDone == true))
+            if ((i != allCurves.Count - 1 && cPointsAll[i].Count < pCount * 3 - 2) || (i == allCurves.Count - 1 && isCompositeDone == true))
             {
                 Point veryLastHandle;
                 veryLastHandle = GetVeryLastHandle(pPointsAll[i][pCount - 2], cPointsAll[i][cPointsAll[i].Count - 1], pPointsAll[i][pCount - 1]);
@@ -1060,7 +1155,7 @@ namespace BezierTool
             double sin60 = Math.Sin(Math.PI / 3);
             double cos60 = Math.Cos(Math.PI / 3);
 
-            // each control point will be the midpoint of firstcPoint-lastcPoint line segment, rotated by 60 degrees
+            // each control point will be the midpoint of firstcPoint-lastcPoint curve segment, rotated by 60 degrees
             // first we find oordinates of the midpoint:
             double xMidpoint = 0.5 * (lastcPoint.X - firstcPoint.X);
             double yMidpoint = 0.5 * (lastcPoint.Y - firstcPoint.Y);
@@ -1084,7 +1179,7 @@ namespace BezierTool
         }
 
 
-        // Add the very first control point that's not a line point for <Composite> curve with at least three line points.
+        // Add the very first control point that's not a knot point for <Composite> curve with at least three knot points.
         private Point GetVeryFirstHandle(Point firstpPoint, Point nextHandle, Point secondpPoint)
         {
             Point veryFirstHandle = new Point();
@@ -1110,13 +1205,13 @@ namespace BezierTool
             veryFirstHandle.X = Convert.ToInt32(nextHandle.X + prop * (firstpPoint.X - secondpPoint.X));
             veryFirstHandle.Y = Convert.ToInt32(nextHandle.Y + prop * (firstpPoint.Y - secondpPoint.Y));
 
-            // We have achieved a "symmetrical" point to nextHandle; both of these points are on the same side of the bezier line.
+            // We have achieved a "symmetrical" point to nextHandle; both of these points are on the same side of the bezier curve.
 
             return veryFirstHandle;
         }
 
 
-        // Calculate coordinates of first handle for <Composite> lines in a way to ensure C2 continuity.
+        // Calculate coordinates of first handle for <Composite> curves in a way to ensure C2 continuity.
         private Point GetFirstHandle(Point prevpPoint, Point thispPoint, Point nextpPoint)
         {
             Point firstHandle = new Point();
@@ -1137,7 +1232,7 @@ namespace BezierTool
         }
 
 
-        // Calculate coordinates of second handle for <Composite> lines in a way to ensure C2 continuity.
+        // Calculate coordinates of second handle for <Composite> curves in a way to ensure C2 continuity.
         private Point GetSecondHandle(Point prevpPoint, Point thispPoint, Point nextpPoint)
         {
             Point secondHandle = new Point();
@@ -1155,7 +1250,7 @@ namespace BezierTool
         }
 
 
-        // Add two last control points of a <Composite> line that is indicated as finished and has at least three knot points
+        // Add two last control points of a <Composite> curve that is indicated as finished and has at least three knot points
         private Point GetVeryLastHandle(Point prevpPoint, Point prevHandle, Point lastpPoint)
         {
             Point veryLastHandle = new Point();
@@ -1175,7 +1270,7 @@ namespace BezierTool
             veryLastHandle.X = Convert.ToInt32(proportion * (prevpPoint.X - lastpPoint.X) + prevHandle.X);
             veryLastHandle.Y = Convert.ToInt32(proportion * (prevpPoint.Y - lastpPoint.Y) + prevHandle.Y);
 
-            // We have achieved a "symmetrical" point to prevHandle; both of these points are on the same side of the bezier line.
+            // We have achieved a "symmetrical" point to prevHandle; both of these points are on the same side of the bezier curve.
 
             return veryLastHandle;
         }
@@ -1187,39 +1282,39 @@ namespace BezierTool
             int i = localPoint.Item1;
             int j = localPoint.Item2;
 
-            modifyLineType = allLines[i];
+            modifyCurveType = allCurves[i];
 
-            if (modifyLineType == BezierType.pPoints || modifyLineType == BezierType.LeastSquares)
+            if (modifyCurveType == BezierType.pPoints || modifyCurveType == BezierType.LeastSquares)
             {
-                error.Text = "It's not allowed to move curve's " + modifyLineType + " control points!";
-                modifyLineType = BezierType.Nothing;
+                lblError.Text = "Not allowed to move control points of <" + modifyCurveType + "> curve!";
+                modifyCurveType = BezierType.Nothing;
                 localPoint = null;
             }
 
-            else if (modifyLineType == BezierType.Composite)
+            else if (modifyCurveType == BezierType.Composite)
             {
                 if (rbKeyboardModify.Checked == true)
                 {
-                    error.Text = "It's not allowed to move curve's " + modifyLineType + " points by keyboard!!";
+                    lblError.Text = "Not allowed to move control points of <Composite> curve by keyboard!";
                     localPoint = null;
-                    modifyLineType = BezierType.Nothing;
+                    modifyCurveType = BezierType.Nothing;
                 }
 
-                // every third control point on a composite line is also a knot point therefore moved as a knot point
+                // every third control point on a <Composite> curve is also a knot point therefore moved as a knot point
                 else if (j % 3 == 0)
                 {
                     localPoint = null;
-                    modifyLineType = BezierType.Nothing;
+                    modifyCurveType = BezierType.Nothing;
                 }
 
                 else if (e.Button == MouseButtons.Left)
                 {
-                    movedLine[i] = MoveType.LeftClick;
+                    movedCurve[i] = MoveType.LeftClick;
                 }
 
                 else if (e.Button == MouseButtons.Right)
                 {
-                    movedLine[i] = MoveType.RightClick;
+                    movedCurve[i] = MoveType.RightClick;
                 }
 
                 return;
@@ -1228,11 +1323,11 @@ namespace BezierTool
             else if (rbKeyboardModify.Checked == true)
             {
                 // when modifying points by keyboard, intialize the form of coordinates
-                FormCoordinates form_KeyboardAdd = new FormCoordinates(FormType.Modify, modifyLineType);
+                FormCoordinates form_KeyboardAdd = new FormCoordinates(FormType.Modify, modifyCurveType);
                 form_KeyboardAdd.ShowDialog();
 
-                movedLine[i] = MoveType.pPoints;
-                modifyLineType = BezierType.Nothing;
+                movedCurve[i] = MoveType.pPoints;
+                modifyCurveType = BezierType.Nothing;
                 localPoint = null;
             }
 
@@ -1241,24 +1336,24 @@ namespace BezierTool
         }
 
 
-        // Modify coordinates of a chosen line point.
+        // Modify coordinates of a chosen knot point.
         private void ModifypPoint()
         {
             int i = localPoint.Item1;
-            modifyLineType = allLines[i];
+            modifyCurveType = allCurves[i];
 
             if (rbKeyboardModify.Checked == true)
             {
                 // when modifying points by keyboard, intialize the form of coordinates
-                FormCoordinates form_KeyboardAdd = new FormCoordinates(FormType.Modify, modifyLineType);
+                FormCoordinates form_KeyboardAdd = new FormCoordinates(FormType.Modify, modifyCurveType);
                 form_KeyboardAdd.ShowDialog();
 
-                if (modifyLineType == BezierType.pPoints || modifyLineType == BezierType.LeastSquares)
+                if (modifyCurveType == BezierType.pPoints || modifyCurveType == BezierType.LeastSquares)
                 {
                     AddcPointsInterpolation(i);
                 }
 
-                modifyLineType = BezierType.Nothing;
+                modifyCurveType = BezierType.Nothing;
                 localPoint = null;
             }
 
@@ -1312,7 +1407,7 @@ namespace BezierTool
             Point result = new Point();
 
             // To move the control point in straight line, we take unit vector from the middlepPoint to 
-            // the place control point was before moving (modifyHandle). It's known that modifyHandle was on the needed line. 
+            // the place control point was before moving (modifyHandle). It's known that modifyHandle was on the needed curve. 
             // Than we scale this unit vector by the distance mouse is from the middlepPoint and at last add this vector to the middlepPoint.
 
             double prop = GetLength(middlepPoint, modifyHandle) / GetLength(oppositeHandle, middlepPoint);
@@ -1368,16 +1463,18 @@ namespace BezierTool
         // Change parametrization method and show the method being used now.
         private void ChangeParametrization()
         {
+            lblError.Text = "";
+
             int i = localPoint.Item1;
             ParamType paramType = parametrization[i];
 
-            if (allLines[i] == BezierType.cPoints || allLines[i] == BezierType.Composite)
+            if (allCurves[i] == BezierType.cPoints || allCurves[i] == BezierType.Composite)
             {
-                error.Text = "<" + allLines[i] + "> lines doesn't use parametrization!";
+                lblError.Text = "<" + allCurves[i] + "> curves does not use parametrization!";
                 return;
             }
 
-            // Show the real parametrization type of the selected line:
+            // Show the real parametrization type of the selected curve:
 
             if (paramType == ParamType.Uniform)
             {
@@ -1426,7 +1523,7 @@ namespace BezierTool
         {
             List<Point> pList = pPointsAll[i];
 
-            // This method of curve fitting uses least squares method, so that distance errors from given line points to the Bezier curve 
+            // This method of curve fitting uses least squares method, so that distance errors from given knot points to the Bezier curve 
             // at respective t values is the smallest possible. 
             // To get control point coordinates, we will use formula C = M^1 * ( T^T * T )^1 * T^T * P
             // For more calculation information see documentation.
@@ -1613,21 +1710,29 @@ namespace BezierTool
             string path = "";
             string textLine = "";
 
-            OpenFileDialog dialog = new OpenFileDialog
+            try
             {
-                Title = "Open Text File",
-                Filter = "TXT files|*.txt", // only .txt files are supported
-                InitialDirectory = @"C:\"
-            };
+                OpenFileDialog dialog = new OpenFileDialog
+                {
+                    Title = "Open Text File",
+                    Filter = "TXT files|*.txt", // only .txt files are supported
+                    InitialDirectory = @"C:\"
+                };
 
-            if (dialog.ShowDialog() == DialogResult.OK)
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    path = dialog.FileName;
+                }
+            }
+
+            catch (Exception)
             {
-                path = dialog.FileName;
+                MessageBox.Show("File upload error!");
             }
 
             if (File.Exists(path))
             {
-                NewLine(addType);
+                NewCurve(addType);
                 using (StreamReader file = new StreamReader(path))
                 {
                     while ((textLine = file.ReadLine()) != null)
@@ -1636,12 +1741,26 @@ namespace BezierTool
                         string xCoordinate = textLine.Substring(0, index);
                         string yCoordinate = textLine.Substring(index + 1);
 
-                        point.X = Convert.ToInt32(xCoordinate);
-                        point.Y = Convert.ToInt32(yCoordinate);
+                        try
+                        {
+                            point.X = Convert.ToInt32(xCoordinate);
+                            point.Y = Convert.ToInt32(yCoordinate);
+                        }
+
+                        catch (Exception)
+                        {
+                            lblError.Text = ".txt file was not correct!";
+                            return pointList;
+                        }
 
                         pointList.Add(point);
                     }
                 }
+            }
+
+            else
+            {
+                MessageBox.Show("File upload error!");
             }
 
             return pointList;
@@ -1661,15 +1780,20 @@ namespace BezierTool
                 folderPath = dialog.SelectedPath;
             }
 
+            else
+            {
+                lblError.Text = "Output error!";
+            }
+
             string path = Path.Combine(folderPath, "points.txt");
             using (var file = new StreamWriter(path, true))
             {
-                file.WriteLine(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss")); // write date and time in the first line
-                file.WriteLine("<" + allLines[i] + "> line: \n");
+                file.WriteLine(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss")); // write date and time in the first curve
+                file.WriteLine("<" + allCurves[i] + "> curve: \n");
 
                 for (int j = 0; j < cPointsAll[i].Count; j++)
                 {
-                    string tmp = "C" + (j + 1) + ": (" + cPointsAll[i][j].X + "; " + cPointsAll[i][j].Y + ")"; // in each line write coordinates of one control point
+                    string tmp = "C" + (j + 1) + ": (" + cPointsAll[i][j].X + "; " + cPointsAll[i][j].Y + ")"; // in each curve write coordinates of one control point
                     file.WriteLine(tmp);
                 }
 
@@ -1691,20 +1815,27 @@ namespace BezierTool
                 folderPath = dialog.SelectedPath;
             }
 
+            else
+            {
+                lblError.Text = "Output error!";
+            }
+
             string path = Path.Combine(folderPath, "points.txt");
             using (var file = new StreamWriter(path, true))
             {
-                file.WriteLine(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss")); // write date and time in the first line
-                file.WriteLine("<" + allLines[i] + "> line: \n");
+                file.WriteLine(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss")); // write date and time in the first curve
+                file.WriteLine("<" + allCurves[i] + "> curve: \n");
 
                 for (int j = 0; j < pPointsAll[i].Count; j++)
                 {
-                    string tmp = "P" + (j + 1) + ": (" + pPointsAll[i][j].X + "; " + pPointsAll[i][j].Y + ")"; // in each line write coordinates of one knot point
+                    string tmp = "P" + (j + 1) + ": (" + pPointsAll[i][j].X + "; " + pPointsAll[i][j].Y + ")"; // in each curve write coordinates of one knot point
                     file.WriteLine(tmp);
                 }
 
                 file.WriteLine("\n \n");
             }
+
+            return;
         }
 
     }
