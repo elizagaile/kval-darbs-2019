@@ -10,13 +10,13 @@ namespace BezierTool
         FormMain.FormType formType; // reason for opening this form
         FormMain.BezierType curveType; // type of curve being used in this form
 
-        private List<TextBox> coordinates = new List<TextBox>(); //list of textBoxes for point coordinates
-        string labelType = ""; //point type for labels - "C" for control points, "P" for knot points
-        int namingCounter = 1; //count of point coordinates, used for naming textboxes and labels
-        public static bool curveAdded = false; //to determine if a curve was added successfully
+        private List<TextBox> coordinates = new List<TextBox>(); // list of textBoxes for point coordinates
+        string labelType = ""; // point type for labels - "C" for control points, "P" for knot points
+        int namingCounter = 1; // count of points, used for naming textboxes and labels
+        public static bool curveAdded = false; // to determine if a curve was added successfully
 
+        // Initialization
         public FormCoordinates( FormMain.FormType thisFormType, FormMain.BezierType thisCurveType)
-            //initialization
         {
             InitializeComponent();
 
@@ -45,8 +45,9 @@ namespace BezierTool
             }
         }
 
+
+        // Initialize form for adding a new curve
         private void InitializeAdd()
-            //initialize form for adding a new curve
         {
             this.Text = "New <" + curveType + "> curve";
 
@@ -60,22 +61,22 @@ namespace BezierTool
                 labelType = "P";
             }
 
+            // Start with 4 points for every curve type
             for (int i = 0; i < 4; i++)
-            //start with 4 points for every curve type
             {
                 AddRow();
             }
 
+            // <4 cPoint> and <4 pPoint> curves have exactly 4 input points; no need to add or delete input lines
             if (curveType == FormMain.BezierType.cPoints || curveType == FormMain.BezierType.pPoints)
-            //<4 cPoint> and <4 pPoint> curves have exactly 4 input points; no need to add or delete input lines
             {
                 gbCoordinates.Text = "Input <" + curveType + "> control point coordinates:";
                 btnAddRow.Visible = false;
                 btnDeleteRow.Visible = false;
             }
 
+            // Count of <Least Squares> and <Composite> input points can vary; its possible to add and delete input lines
             if (curveType == FormMain.BezierType.LeastSquares || curveType == FormMain.BezierType.Composite)
-            //Count of <Least Squares> and <Composite> input point count can vary; its possible to add and delete input lines
             {
                 gbCoordinates.Text = "Input <" + curveType + "> knot point coordinates:";
                 btnAddRow.Visible = true;
@@ -85,8 +86,9 @@ namespace BezierTool
             return;
         }
 
+
+        // Initialize form for modifying a curve
         private void InitializeModify()
-            //initialize form for modifying a curve
         {
             this.Text = "Modify <" + curveType + "> curve";
 
@@ -110,10 +112,10 @@ namespace BezierTool
                 pointList = FormMain.pPointsAll[i];
             }
 
+            // It is possible to modify only one <Composite> knot point at a time
             if (curveType == FormMain.BezierType.Composite)
-            // its possible to modify only one <Composite> knot point at a time
             {
-                int j = FormMain.localPoint.Item2; //get which knot point is being modified
+                int j = FormMain.localPoint.Item2;
                 namingCounter = j + 1; //labels start at 1, lists at 0
                 AddRow();
 
@@ -124,13 +126,12 @@ namespace BezierTool
             }
 
             for (int j = 0; j < pointList.Count; j++) 
-            // make new input row for each point
             {
                 AddRow();
             }
 
+            // After making input rows, fill each textBox with appropriate coordinates
             for (int j = 0; j < pointList.Count; j++)
-            // after making input rows, fill each textbox with appropriate coordinate
             {
                 coordinates[2 * j].Text = "" + pointList[j].X;
                 coordinates[2 * j + 1].Text = "" + pointList[j].Y;
@@ -139,8 +140,9 @@ namespace BezierTool
             return;
         }
 
+
+        // Initialize form for outputting points of a curve
         private void InitializeOutput()
-        //initialize form for outputting line coordinates
         {
             this.Text = "Output <" + curveType + "> curve";
 
@@ -167,13 +169,12 @@ namespace BezierTool
             }
 
             for (int j = 0; j < pointList.Count; j++)
-            // make new input row for each point
             {
                 AddRow();
             }
 
+            // After making input rows, fill each textBox with appropriate coordinate
             for (int j = 0; j < pointList.Count; j++)
-            // after making input rows, fill each textbox with appropriate coordinate
             {
                 coordinates[2 * j].Text = "" + pointList[j].X;
                 coordinates[2 * j + 1].Text = "" + pointList[j].Y;
@@ -182,8 +183,9 @@ namespace BezierTool
             return;
         }
 
+
+        // Add new row to form for coordinates 
         private void AddRow()
-            //add new row of coordinates to form
         {
             if (formType == FormMain.FormType.Add && (tlpCoordinates.RowCount > FormMain.maxPointCount + 4))
             {
@@ -191,43 +193,42 @@ namespace BezierTool
                 return;
             }
 
-            tlpCoordinates.RowCount = tlpCoordinates.RowCount + 1;//add new empty row
+            tlpCoordinates.RowCount = tlpCoordinates.RowCount + 1;// add new empty row
 
-            Label newLabel = new Label //new label for coordinates
+            Label newLabel = new Label // new label for coordinates
             {
                 Text = "" + labelType + namingCounter
             };
             tlpCoordinates.Controls.Add(newLabel);
 
-            TextBox xCoordinate = new TextBox //new textbox for x coordinate
+            TextBox xCoordinate = new TextBox // new textbox for x coordinate
             {
                 Name = "x" + namingCounter
             };
             tlpCoordinates.Controls.Add(xCoordinate);
             coordinates.Add(xCoordinate);
 
-            TextBox yCoordinate = new TextBox //new textbox for y coordinate
+            TextBox yCoordinate = new TextBox // new textbox for y coordinate
             {
                 Name = "y" + namingCounter
             };
             tlpCoordinates.Controls.Add(yCoordinate);
             coordinates.Add(yCoordinate);
             
-            Label newEmpty = new Label //table has an empty column where scroll bar goes
+            Label newEmpty = new Label // table has an empty column where scroll bar goes
             {
                 Text = ""
             };
             tlpCoordinates.Controls.Add(newEmpty);
-
-            newLabel.Anchor = AnchorStyles.Bottom; //need to fix anchors, this doeasn work
 
             namingCounter++;
 
             return;
         }
 
+
+        // Clear all coordinates from textBoxes
         private void btnResetInput_Click(object sender, EventArgs e)
-            //clear all coordinates in textboxes
         {
             for (int i = 0; i < coordinates.Count; i++)
             {
@@ -235,11 +236,12 @@ namespace BezierTool
             }
         }
 
+
+        // Submit input to FormMain
         private void btnSubmitInput_Click(object sender, EventArgs e)
-            //submit input to FormMain
         {
+            // Check if all textboxes are filled
             foreach (TextBox coordinate in coordinates)
-            //check if all textboxes are filled
             {
                 if (coordinate.Text == "")
                 {
@@ -251,8 +253,8 @@ namespace BezierTool
             List<Point> pointList = new List<Point>();
             int x, y;
 
+            // Put all values from textBoxes in a list of points
             for (int j = 0; j < coordinates.Count; j += 2)
-            //put all values from textboxes to list of control points
             {
                 x = Convert.ToInt32(coordinates[j].Text);
                 y = Convert.ToInt32(coordinates[j + 1].Text);
@@ -263,14 +265,14 @@ namespace BezierTool
 
             int i = 0;//describes where to save new list of coordinates; need to set value for code to work; chosen arbitrary
 
+            // If adding a new curve, it is the last line in the representitive lists
             if (formType == FormMain.FormType.Add)
-            // if adding new line, its the last line in representitive lists
             {
                 i = FormMain.allCurves.Count - 1;
             }
 
+            // If modifying a curve, get its location in the representitive lists
             else if (formType == FormMain.FormType.Modify)
-            // if modifying a line, get its location in representitive lists
             {
                 i = FormMain.localPoint.Item1;
             }
@@ -278,19 +280,19 @@ namespace BezierTool
             if (curveType == FormMain.BezierType.cPoints)
             {
                 FormMain.cPointsAll[i] = pointList;
-                curveAdded = true; //line was added successfully
+                curveAdded = true; // curve was added successfully
             }
 
             else if (curveType == FormMain.BezierType.pPoints || curveType == FormMain.BezierType.LeastSquares)
             {
                 FormMain.pPointsAll[i] = pointList;
-                curveAdded = true; //curve was added successfully
+                curveAdded = true; // curve was added successfully
             }
 
             else if (curveType == FormMain.BezierType.Composite && formType == FormMain.FormType.Add)
             {
                 FormMain.pPointsAll[i] = pointList;
-                curveAdded = true; //curve was added successfully
+                curveAdded = true; //c urve was added successfully
             }
 
             else if (curveType == FormMain.BezierType.Composite && formType == FormMain.FormType.Modify)
@@ -301,37 +303,40 @@ namespace BezierTool
             this.Close();
         }
 
+
+        // Delete a row of input textBoxes
         private void btnDeleteRow_Click(object sender, EventArgs e)
-            //delete input row
         {
-            if (curveType == FormMain.BezierType.LeastSquares && tlpCoordinates.RowCount <= 9) //4 rows minimum plus 5 rows from table design equals 9 rows
+            if (curveType == FormMain.BezierType.LeastSquares && tlpCoordinates.RowCount <= 9) // 4 rows minimum plus 5 rows from table design
             {
                 MessageBox.Show("<Least Squares> curves can't have less than 4 knot points!");
                 return;
             }
 
-            if (curveType == FormMain.BezierType.Composite && tlpCoordinates.RowCount <= 7) //2 rows minimum plus 5 rows from design equals 7 rows
+            if (curveType == FormMain.BezierType.Composite && tlpCoordinates.RowCount <= 7) // 2 rows minimum plus 5 rows from table design
             {
                 MessageBox.Show("<Composite> curves can't have less than 2 knot points!");
                 return;
             }
 
+
+            // Remove all controls from last row
             for (int i = 0; i < tlpCoordinates.ColumnCount; i ++)
-            // remove all controls from last row
             {
                 tlpCoordinates.Controls.RemoveAt(tlpCoordinates.Controls.Count - 1);
             }
 
-            //remove textboxes from input list
+            // Remove both textBoxes from input list
             coordinates.RemoveAt(coordinates.Count - 1);
             coordinates.RemoveAt(coordinates.Count - 1);
 
-            tlpCoordinates.RowCount --; //remove last row
+            tlpCoordinates.RowCount --; // Remove last row
             namingCounter--;
         }
 
+
+        // Add new row of coordinates
         private void btnAddRow_Click(object sender, EventArgs e)
-            //add new row
         {
             AddRow();
         }

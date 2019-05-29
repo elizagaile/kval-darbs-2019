@@ -159,7 +159,7 @@ namespace BezierTool
                 }
 
                 outputPointType = BezierType.Nothing;
-                modifyCurveType = BezierType.Nothing; // why is this needed ???
+                modifyCurveType = BezierType.Nothing;
                 localPoint = null;
 
                 pbCanva.Invalidate();
@@ -191,7 +191,7 @@ namespace BezierTool
                 }
 
                 outputPointType = BezierType.Nothing;
-                modifyCurveType = BezierType.Nothing; // why is this needed ???
+                modifyCurveType = BezierType.Nothing;
                 localPoint = null;
 
                 pbCanva.Invalidate();
@@ -564,7 +564,7 @@ namespace BezierTool
             {
                 OpenFileDialog dialog = new OpenFileDialog 
                 { 
-                    Filter = "jpg files(.*jpg)|*.jpg| PNG files(.*png)|*.png| All Files(*.*)|*.*" // types of files allowed ???
+                    Filter = "jpg files(.*jpg)|*.jpg| PNG files(.*png)|*.png| All Files(*.*)|*.*" // types of files allowed
                 };
 
                 if (dialog.ShowDialog() == DialogResult.OK)
@@ -836,7 +836,7 @@ namespace BezierTool
             canDeleteCurve = false;
             addType = BezierType.Nothing;
             modifyPointType = BezierType.Nothing;
-            modifyCurveType = BezierType.Nothing; // šo vajag ???
+            modifyCurveType = BezierType.Nothing;
             outputPointType = BezierType.Nothing;
 
             canChangeParam = true;
